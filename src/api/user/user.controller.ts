@@ -1,38 +1,69 @@
 import {
   Controller,
   Post,
-  Request,
+  Body,
   Logger,
-  NotFoundException,
-  UseGuards,
+  ConflictException,
   Get,
-
+  Param,
+  Delete,
+  NotFoundException,
+  Put,
 } from '@nestjs/common';
-import { ConflictException } from '@nestjs/common';
-import { JwtAuthGuard } from '../auth/jwt-auth.gaurd';
 import { UserService } from './user.service';
+import { CreateUserRequest, UpdateUserRequest } from 'src/payload/request/users.request';
+import { UserResponse } from 'src/payload/response/users.request';
+import { User } from 'src/payload/schema/user.schema';
 
 @Controller('user')
 export class UserController {
-  logger: Logger;
-  constructor(private readonly userService: UserService) {
-    this.logger = new Logger(UserController.name);
-  }
+  private readonly logger = new Logger(UserController.name);
+
+  constructor(private readonly userService: UserService) {}
 
   @Post('create')
-  async create(@Request() req): Promise<any> {
-    const newUser = req.body;
+  async create(@Body() req: CreateUserRequest): Promise<User> {
     try {
-      const query = { email: newUser.email };
-      const isUser = await this.userService.findOne(query);
-      if (isUser) throw new ConflictException('User Already Exist');
-      const user = await this.userService.create(newUser);
+      const user = await this.userService.create(req);
       return user;
     } catch (err) {
-      this.logger.error('Something went wrong in signup:', err);
+      this.logger.error('Error in create user:', err);
       throw err;
     }
   }
 
+  @Put(':id')
+  async update(
+    @Param('id') userId: string,
+    @Body() UpdateUserRequest: UpdateUserRequest,
+  ): Promise<User> {
+    try {
+      const user = await this.userService.update(userId, UpdateUserRequest);
+      return user;
+    } catch (err) {
+      this.logger.error('Error in update user:', err);
+      throw err;
+    }
+  }
 
+  @Get(':id')
+  async findByUserId(@Param('id') userId: string): Promise<User> {
+    try {
+      const user = await this.userService.findByUserId(userId);
+      return user;
+    } catch (err) {
+      this.logger.error('Error in find user by id:', err);
+      throw err;
+    }
+  }
+
+  @Delete(':id')
+  async delete(@Param('id') userId: string): Promise<void> {
+    try {
+      await this.userService.delete(userId);
+    } catch (err) {
+      this.logger.error('Error in delete user:', err);
+      throw err;
+    }
+  }
 }

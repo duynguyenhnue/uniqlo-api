@@ -19,10 +19,11 @@ export class AuthService {
   ) { }
 
   async validateUser(email: string, pass: string): Promise<any> {
-    const query = { email: email };
-    const user = await this.UserService.findOne(query);
+    const user = await this.UserService.findByEmail(email);
     if (!user) throw new NotFoundException('Email Does not exist');
+
     const isMatched = await this.comparePasswords(pass, user.password);
+  
     if (!isMatched) throw new UnauthorizedException('Invalid Password');
     return user;
   }
@@ -34,17 +35,6 @@ export class AuthService {
     return {
       access_token: this.jwtService.sign(payload),
     };
-  }
-
-  async getHashedPassword(password: string): Promise<any> {
-    return new Promise((resolve, reject) => {
-      bcrypt.hash(password, 10, (err, hash) => {
-        if (err) {
-          reject(err);
-        }
-        resolve(hash);
-      });
-    });
   }
 
   async comparePasswords(

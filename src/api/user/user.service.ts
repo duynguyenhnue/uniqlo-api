@@ -1,49 +1,62 @@
-import { Injectable, forwardRef, Inject, Logger } from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { FilterQuery, Model } from 'mongoose';
-import { User, UserDocument } from './model/user.model';
-import { AuthService } from '../auth/auth.service';
+import { Model } from 'mongoose';
+import { CreateUserRequest, UpdateUserRequest } from 'src/payload/request/users.request';
+import { User } from 'src/payload/schema/user.schema';
+import * as bcrypt from 'bcrypt';
+
 
 @Injectable()
 export class UserService {
-  logger: Logger;
   constructor(
-    @InjectModel(User.name) private userModel: Model<UserDocument>,
-    @Inject(forwardRef(() => AuthService))
-    private AuthService: AuthService
-  ) {
-    this.logger = new Logger(UserService.name);
-  }
+    @InjectModel(User.name) private userModel: Model<User>,
+  ) {}
 
-  async findOne(query: any): Promise<any> {
-    return await this.userModel.findOne(query).select('+password');
-  }
+  async create(createUserRequest: CreateUserRequest): Promise<User> {
 
-  async find(usersFilterQuery: FilterQuery<User>): Promise<User[]> {
-    return this.userModel.find({ usersFilterQuery });
-  }
-
-  async create(user: any): Promise<any> {
-    this.logger.log('Creating user.');
-    if (user.facebookId || user.googleId) return this.userModel.create(user);
-
-    const hashedPassword = await this.AuthService.getHashedPassword(
-      user.password
+    const isUser = await this.findByEmail(createUserRequest.email);
+    if (isUser) throw new ConflictException('User Already Exists');
+    
+    const hash: string = await bcrypt.hash(
+      createUserRequest.password,
+      10,
     );
-    user.password = hashedPassword;
-    const newUser = new this.userModel(user);
-    return newUser.save();
+    createUserRequest.password = hash;
+    const newUser = this.userModel.create(createUserRequest);
+
+    return newUser;
   }
 
-  async findOneAndUpdate(query: any, payload: any): Promise<User> {
-    this.logger.log('Updating User.');
-    return this.userModel.findOneAndUpdate(query, payload, {
-      new: true,
-      upsert: true,
-    });
+  async update(userId: string, updateUserRequest: UpdateUserRequest): Promise<User> {
+
+    const isUser = await this.userModel.findById(userId);
+    if (isUser) throw new ConflictException('User Already Exists');
+
+    const updatedUser = await this.userModel.findByIdAndUpdate(userId, updateUserRequest, { new: true });
+
+    return updatedUser;
   }
 
-  async findOneAndRemove(query: any): Promise<any> {
-    return this.userModel.findOneAndRemove(query);
+  async findByUserId(userId: string): Promise<User> {
+    const user = await this.userModel.findOne({userId: userId}).exec();
+    if (!user) {
+      throw new NotFoundException(`User with userId ${userId} not found`);
+    }
+    return user;
   }
+
+  async findByEmail(email: string): Promise<User> {
+    const user = await this.userModel.findOne({email: email}).exec();;
+    console.log(user);
+    
+    return user;
+  }
+
+  async delete(userId: string): Promise<void> {
+    const result = await this.userModel.findByIdAndDelete(userId);
+    if (!result) {
+      throw new NotFoundException(`User with id ${userId} not found`);
+    }
+  }
+
 }
