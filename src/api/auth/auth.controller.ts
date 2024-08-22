@@ -7,8 +7,8 @@ import {
   Get,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { JwtAuthGuard } from './jwt-auth.gaurd';
-import { LocalAuthGuard } from './local-auth.gaurd';
+import { LocalAuthGuard } from './strategy/local-auth.gaurd';
+import { JwtAuthGuard } from './jwt/jwt-auth.gaurd';
 
 @Controller('auth')
 export class AuthController {
@@ -23,7 +23,6 @@ export class AuthController {
   @UseGuards(LocalAuthGuard)
   async login(@Request() req): Promise<any> {
     try {
-      //return req.user;
       return await this.authService.generateJwtToken(req.user);
     } catch (error) {
       throw error;
