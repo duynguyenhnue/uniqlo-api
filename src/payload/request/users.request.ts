@@ -1,67 +1,51 @@
-import { IsString, IsEmail, IsOptional, IsArray } from 'class-validator';
+import { IsEmail, IsString, IsNotEmpty, IsOptional, IsUrl, Length } from 'class-validator';
 
 export class CreateUserRequest {
-    @IsString()
-    firstName: string;
-  
-    @IsString()
-    lastName: string;
-  
-    @IsEmail()
-    email: string;
-  
-    @IsString()
-    password: string;
-  
-    @IsOptional()
-    @IsString()
-    profilePictureUrl?: string;
-  
-    @IsOptional()
-    @IsString()
-    bio?: string;
-  
-    @IsOptional()
-    @IsString()
-    location?: string;
-  
-    @IsOptional()
-    @IsArray()
-    @IsString({ each: true })
-    interests?: string[];
+  @IsEmail()
+  @IsNotEmpty()
+  email: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @Length(8, 32)
+  password: string;
+
+  @IsString()
+  @IsNotEmpty()
+  fullName: string;
+
+  @IsUrl()
+  @IsNotEmpty()
+  avatar: string;
+
+  @IsUrl()
+  @IsNotEmpty()
+  photoCover: string;
+
+  @IsString()
+  @IsNotEmpty()
+  bio: string;
 }
 
 export class UpdateUserRequest {
-    @IsOptional()
-    @IsString()
-    firstName?: string;
-  
-    @IsOptional()
-    @IsString()
-    lastName?: string;
-  
-    @IsOptional()
-    @IsEmail()
-    email?: string;
-  
-    @IsOptional()
-    @IsString()
-    password?: string;
-  
-    @IsOptional()
-    @IsString()
-    profilePictureUrl?: string;
-  
-    @IsOptional()
-    @IsString()
-    bio?: string;
-  
-    @IsOptional()
-    @IsString()
-    location?: string;
-  
-    @IsOptional()
-    @IsArray()
-    @IsString({ each: true })
-    interests?: string[];
-  }
+  @IsString()
+  @IsOptional()
+  @Length(8, 32)
+  password?: string;
+
+  @IsString()
+  @IsOptional()
+  fullName?: string;
+
+  @IsUrl()
+  @IsOptional()
+  avatar?: string;
+
+  @IsUrl()
+  @IsOptional()
+  photoCover?: string;
+
+  @IsString()
+  @IsOptional()
+  bio?: string;
+}

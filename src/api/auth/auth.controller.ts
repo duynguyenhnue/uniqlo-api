@@ -1,37 +1,32 @@
-import {
-  Controller,
-  Post,
-  Logger,
-  Request,
-  UseGuards,
-  Get,
-} from '@nestjs/common';
+import { Controller, Post, Body, UseGuards, InternalServerErrorException } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { LocalAuthGuard } from './strategy/local-auth.gaurd';
-import { JwtAuthGuard } from './jwt/jwt-auth.gaurd';
+import { RefreshTokenRequest } from 'src/payload/request/refresh-token.request';
+import { SkipAuth } from 'src/config/skip.auth';
+import { CreateUserRequest } from 'src/payload/request/users.request';
+import { User } from 'src/payload/schema/user.schema';
 
 @Controller('auth')
 export class AuthController {
-  logger: Logger;
-  constructor(
-    private readonly authService: AuthService,
-  ) {
-    this.logger = new Logger(AuthController.name);
+  constructor(private readonly authService: AuthService) {}
+
+  @SkipAuth()
+  @Post('login')
+  async login(@Body() loginUserRequest: any): Promise<any> {
+    return this.authService.login(loginUserRequest.email, loginUserRequest.password);
   }
 
-  @Post('login')
-  @UseGuards(LocalAuthGuard)
-  async login(@Request() req): Promise<any> {
+  @SkipAuth()
+  @Post('register')
+  async register(@Body() createUserRequest: CreateUserRequest): Promise<User> {
     try {
-      return await this.authService.generateJwtToken(req.user);
+      return await this.authService.registerUser(createUserRequest);
     } catch (error) {
-      throw error;
+      throw new InternalServerErrorException('Failed to create user');
     }
   }
 
-  @UseGuards(JwtAuthGuard)
-  @Get('viewProfile')
-  async getUser(@Request() req): Promise<any> {
-    return req.user;
+  @Post('refresh-token')
+  async refreshToken(@Body() refreshTokenRequest: RefreshTokenRequest): Promise<any> {
+    return this.authService.refreshToken(refreshTokenRequest);
   }
 }
