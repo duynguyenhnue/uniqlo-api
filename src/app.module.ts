@@ -1,17 +1,43 @@
-import { Module } from "@nestjs/common";
+import { MiddlewareConsumer, Module, NestModule } from "@nestjs/common";
 import { MongooseModule } from "@nestjs/mongoose";
-import { UserModule } from "./api/user/user.module";
+import { UserModule } from "./api/users/users.module";
 import { AuthModule } from "./api/auth/auth.module";
+import { PhotoModule } from "./api/photo/photo.module";
+import { DestinationModule } from "./api/destination/destination.module";
+import { ReviewModule } from "./api/review/review.module";
+import { FollowerModule } from "./api/follower/follower.module";
+import { MessageModule } from "./api/message/message.module";
+import { ActivityModule } from "./api/activity/activity.module";
+import { TripsModule } from "./api/trips/trips.module";
+import { ConfigModule } from "@nestjs/config";
+import { APP_GUARD, Reflector } from "@nestjs/core";
+import { JwtAuthGuard } from "./api/auth/jwt/jwt-auth.gaurd";
 
 @Module({
   imports: [
-    MongooseModule.forRoot(
-    "mongodb+srv://stu715105064:ZeClf5THTVJyp5Jr@cluster0.yyq3k.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
-    ),
+    ConfigModule.forRoot({
+      envFilePath: ".env",
+      isGlobal: true,
+    }),
+    MongooseModule.forRoot(process.env.MONGO_URL),
     UserModule,
     AuthModule,
+    TripsModule,
+    PhotoModule,
+    DestinationModule,
+    ReviewModule,
+    FollowerModule,
+    MessageModule,
+    ActivityModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
+    },
+  ],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {}
+}
