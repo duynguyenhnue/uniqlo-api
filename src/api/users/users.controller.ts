@@ -19,7 +19,7 @@ import {
   CreateUserRequest,
   UpdateUserRequest,
 } from "src/payload/request/users.request";
-import { JwtAuthGuard } from "../auth/jwt/jwt-auth.gaurd";
+import { JwtAuthGuard } from "../../common/guard/jwt/jwt-auth.gaurd";
 import { CommonException } from "src/common/exception/common.exception";
 import { successResponse } from "src/common/dto/response.dto";
 

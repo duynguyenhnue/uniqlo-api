@@ -11,7 +11,7 @@ import { ActivityModule } from "./api/activity/activity.module";
 import { TripsModule } from "./api/trips/trips.module";
 import { ConfigModule } from "@nestjs/config";
 import { APP_GUARD, Reflector } from "@nestjs/core";
-import { JwtAuthGuard } from "./api/auth/jwt/jwt-auth.gaurd";
+import { JwtAuthGuard } from "./common/guard/jwt/jwt-auth.gaurd";
 import { RefreshTokenModule } from "./api/refresh-token/refresh-token.module";
 
 @Module({
