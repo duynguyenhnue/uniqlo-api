@@ -8,7 +8,7 @@ import {
   Delete,
   UseGuards,
 } from "@nestjs/common";
-import { Trip } from "src/payload/schema/trip.schema";
+import { Trip } from "src/schema/trip.schema";
 import { TripsService } from "./trips.service";
 import { JwtAuthGuard } from "../auth/jwt/jwt-auth.gaurd";
 import {

@@ -4,7 +4,7 @@ import { UserModule } from "src/api/users/users.module";
 import {
   RefreshToken,
   RefreshTokenSchema,
-} from "src/payload/schema/refresh-token.schema";
+} from "src/schema/refresh-token.schema";
 import { RefreshTokenService } from "./refresh-token.service";
 import { JwtService } from "@nestjs/jwt";
 

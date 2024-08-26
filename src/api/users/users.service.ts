@@ -6,7 +6,7 @@ import {
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 import * as bcrypt from "bcrypt";
-import { User } from "src/payload/schema/user.schema";
+import { User } from "src/schema/user.schema";
 import {
   CreateUserRequest,
   UpdateUserRequest,

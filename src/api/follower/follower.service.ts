@@ -1,14 +1,18 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
-import { CreateFollowerRequest } from 'src/payload/request/follower.request';
-import { Follower } from 'src/payload/schema/follower.schema';
+import { Injectable, NotFoundException } from "@nestjs/common";
+import { InjectModel } from "@nestjs/mongoose";
+import { Model } from "mongoose";
+import { CreateFollowerRequest } from "src/payload/request/follower.request";
+import { Follower } from "src/schema/follower.schema";
 
 @Injectable()
 export class FollowerService {
-  constructor(@InjectModel(Follower.name) private readonly followerModel: Model<Follower>) {}
+  constructor(
+    @InjectModel(Follower.name) private readonly followerModel: Model<Follower>
+  ) {}
 
-  async followUser(followUserRequest: CreateFollowerRequest): Promise<Follower> {
+  async followUser(
+    followUserRequest: CreateFollowerRequest
+  ): Promise<Follower> {
     const createdFollower = new this.followerModel(followUserRequest);
     return createdFollower.save();
   }
@@ -18,7 +22,9 @@ export class FollowerService {
   }
 
   async unfollowUser(followerId: string): Promise<void> {
-    const result = await this.followerModel.findByIdAndDelete(followerId).exec();
+    const result = await this.followerModel
+      .findByIdAndDelete(followerId)
+      .exec();
     if (!result) {
       throw new NotFoundException(`Follower with ID ${followerId} not found`);
     }

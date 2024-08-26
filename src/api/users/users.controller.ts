@@ -14,7 +14,7 @@ import {
   HttpStatus,
 } from "@nestjs/common";
 import { UserService } from "./users.service";
-import { User } from "src/payload/schema/user.schema";
+import { User } from "src/schema/user.schema";
 import {
   CreateUserRequest,
   UpdateUserRequest,
