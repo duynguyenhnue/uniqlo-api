@@ -1,4 +1,6 @@
+import { IsString } from "class-validator";
+
 export class RefreshTokenRequest {
-    readonly refreshToken: string;
-  }
-  
+  @IsString()
+  refresh_token: string;
+}

@@ -1,57 +1,73 @@
-import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
-import { JwtService } from '@nestjs/jwt';
-import * as bcrypt from 'bcrypt';
-import { RefreshTokenRequest } from 'src/payload/request/refresh-token.request';
-import { User } from 'src/payload/schema/user.schema';
-import { RefreshToken } from 'src/payload/schema/refresh-token.schema';
-import { UserService } from '../users/users.service';
-import { CreateUserRequest } from 'src/payload/request/users.request';
+import { HttpStatus, Injectable } from "@nestjs/common";
+import { InjectModel } from "@nestjs/mongoose";
+import { Model } from "mongoose";
+import { JwtService } from "@nestjs/jwt";
+import * as bcrypt from "bcrypt";
+import { RefreshTokenRequest } from "src/payload/request/refresh-token.request";
+import { User } from "src/payload/schema/user.schema";
+import { RefreshToken } from "src/payload/schema/refresh-token.schema";
+import { UserService } from "../users/users.service";
+import { CreateUserRequest } from "src/payload/request/users.request";
+import {
+  AuthLogoutRequest,
+  AuthRequest,
+} from "src/payload/request/auth.request";
+import { CommonException } from "src/common/exception/common.exception";
+import { RefreshTokenService } from "../refresh-token/refresh-token.service";
+import * as crypto from "crypto";
+import { RefreshTokenResponse } from "src/payload/response/refresh-token.request";
 
 @Injectable()
 export class AuthService {
   constructor(
     @InjectModel(User.name) private readonly userModel: Model<User>,
-    @InjectModel(RefreshToken.name) private readonly refreshTokenModel: Model<RefreshToken>,
+    @InjectModel(RefreshToken.name)
+    private readonly refreshTokenModel: Model<RefreshToken>,
     private readonly jwtService: JwtService,
     private readonly userService: UserService,
+    private readonly refreshTokenService: RefreshTokenService
   ) {}
 
-  async validateUser(email: string, password: string): Promise<any> {
-    const user = await this.userModel.findOne({ email }).exec();
-    if (user && await bcrypt.compare(password, user.password)) {
+  async validateUser(authRequest: AuthRequest): Promise<any> {
+    const user = await this.userService.findUserByEmail(authRequest.email);
+    if (user && (await bcrypt.compare(authRequest.password, user.password))) {
       const { password, ...result } = user.toObject();
       return result;
     }
     return null;
   }
 
-  async login(email: string, password: string): Promise<any> {
-    const user = await this.validateUser(email, password);
+  async login(authRequest: AuthRequest): Promise<any> {
+    const user = await this.validateUser(authRequest);
+
     if (!user) {
-      throw new UnauthorizedException('Invalid credentials');
+      throw new CommonException("Unauthorized", HttpStatus.UNAUTHORIZED);
     }
+
     const payload = { email: user.email, sub: user._id };
     const access_token = this.jwtService.sign(payload, {
-      secret: process.env.JWT_SECRET || 'JWT_SECRET',
+      secret: process.env.JWT_SECRET || "JWT_SECRET",
+      expiresIn: "15m",
     });
-    const refreshToken = this.jwtService.sign(payload, { secret: process.env.JWT_REFRESH_SECRET || 'refreshSecretKey', expiresIn: '7d' });
-    
-    await this.refreshTokenModel.create({
-      user: user._id,
-      refreshToken,
-      expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
-    });
-    
-    return { access_token, refreshToken };
+    const refresh_token = crypto.randomBytes(16).toString("hex");
+
+    await this.refreshTokenService.storeToken(user._id, refresh_token);
+
+    return { access_token, refresh_token };
   }
 
   async registerUser(createUserRequest: CreateUserRequest): Promise<User> {
-    const user = await this.userService.findUserByEmail(createUserRequest.email);
-    if (user) {
-      throw new NotFoundException(`User with Email ${createUserRequest.email} exists`);
+    const existingAuth = await this.userService.findUserByEmail(
+      createUserRequest.email
+    );
+
+    if (existingAuth) {
+      throw new CommonException(
+        `User width { Email: ${createUserRequest.email} } exists`,
+        HttpStatus.CONFLICT
+      );
     }
+
     const hashedPassword = await bcrypt.hash(createUserRequest.password, 10);
     const createdUser = new this.userModel({
       ...createUserRequest,
@@ -60,24 +76,13 @@ export class AuthService {
     return createdUser.save();
   }
 
-  async refreshToken(refreshTokenRequest: RefreshTokenRequest): Promise<any> {
-    const { refreshToken } = refreshTokenRequest;
-    const token = await this.refreshTokenModel.findOne({ refreshToken }).exec();
-  
-    if (!token || new Date() > token.expiresAt) {
-      throw new UnauthorizedException('Refresh token is invalid or expired');
-    }
-  
-    const user = await this.userService.findUserById(token.userId);
-    if (!user) {
-      throw new UnauthorizedException('User not found');
-    }
-  
-    const payload = { email: user.email, sub: user._id};
-    const access_token = this.jwtService.sign(payload);
-    
-    return { access_token };
+  async refreshToken(
+    refreshTokenRequest: RefreshTokenRequest
+  ): Promise<RefreshTokenResponse> {
+    return await this.refreshTokenService.refreshToken(refreshTokenRequest);
   }
-  
-  
+
+  async logout(refresh_token: AuthLogoutRequest) {
+    await this.refreshTokenService.deleteToken(refresh_token);
+  }
 }

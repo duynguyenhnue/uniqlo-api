@@ -11,6 +11,7 @@ import {
   InternalServerErrorException,
   NotFoundException,
   UseGuards,
+  HttpStatus,
 } from "@nestjs/common";
 import { UserService } from "./users.service";
 import { User } from "src/payload/schema/user.schema";
@@ -19,24 +20,23 @@ import {
   UpdateUserRequest,
 } from "src/payload/request/users.request";
 import { JwtAuthGuard } from "../auth/jwt/jwt-auth.gaurd";
+import { CommonException } from "src/common/exception/common.exception";
+import { successResponse } from "src/common/dto/response.dto";
 
 @Controller("users")
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get(":id")
-  async getUser(@Param("id") id: string): Promise<User> {
+  async getUser(@Param("id") id: string) {
     try {
-      const user = await this.userService.findUserById(id);
-      if (!user) {
-        throw new NotFoundException(`User with id ${id} not found`);
-      }
-      return user;
+      const result = await this.userService.findUserById(id);
+      return successResponse(result);
     } catch (error) {
-      if (error instanceof NotFoundException) {
-        throw error;
-      }
-      throw new InternalServerErrorException("Failed to retrieve user");
+      throw new CommonException(
+        error.message,
+        error.status || HttpStatus.INTERNAL_SERVER_ERROR
+      );
     }
   }
 
