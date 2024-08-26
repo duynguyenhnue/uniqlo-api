@@ -3,7 +3,7 @@ import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 import { JwtService } from "@nestjs/jwt";
 import { UserService } from "src/api/users/users.service";
-import { RefreshToken } from "src/schema/refresh-token.schema";
+import { RefreshToken } from "src/schema/refresh.schema";
 import { RefreshTokenRequest } from "src/payload/request/refresh-token.request";
 import { RefreshTokenResponse } from "src/payload/response/refresh-token.request";
 import { AuthLogoutRequest } from "src/payload/request/auth.request";

@@ -5,7 +5,7 @@ import { JwtService } from "@nestjs/jwt";
 import * as bcrypt from "bcrypt";
 import { RefreshTokenRequest } from "src/payload/request/refresh-token.request";
 import { User } from "src/schema/user.schema";
-import { RefreshToken } from "src/schema/refresh-token.schema";
+import { RefreshToken } from "src/schema/refresh.schema";
 import { UserService } from "../users/users.service";
 import { CreateUserRequest } from "src/payload/request/users.request";
 import {
