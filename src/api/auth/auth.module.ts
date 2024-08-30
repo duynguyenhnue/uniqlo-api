@@ -17,7 +17,7 @@ import { RefreshTokenStrategy } from "../refresh-token/refresh-token.strategy";
       signOptions: { expiresIn: "15m" },
     }),
     forwardRef(() => UserModule),
-    RefreshTokenModule,
+    forwardRef(() => RefreshTokenModule),
   ],
 
   controllers: [AuthController],
