@@ -1,9 +1,9 @@
-import { forwardRef, Module } from '@nestjs/common';
-import { PhotoService } from './photo.service';
-import { PhotoController } from './photo.controller';
-import { MongooseModule } from '@nestjs/mongoose';
-import { Photo, PhotoSchema } from 'src/payload/schema/photo.schema';
-import { AuthModule } from '../auth/auth.module';
+import { forwardRef, Module } from "@nestjs/common";
+import { PhotoService } from "./photo.service";
+import { PhotoController } from "./photo.controller";
+import { MongooseModule } from "@nestjs/mongoose";
+import { Photo, PhotoSchema } from "src/schema/photo.schema";
+import { AuthModule } from "../auth/auth.module";
 
 @Module({
   imports: [
@@ -12,6 +12,6 @@ import { AuthModule } from '../auth/auth.module';
   ],
   controllers: [PhotoController],
   providers: [PhotoService],
-  exports: [PhotoService]
+  exports: [PhotoService],
 })
 export class PhotoModule {}

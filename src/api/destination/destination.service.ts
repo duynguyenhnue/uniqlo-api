@@ -1,15 +1,25 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
-import { CreateDestinationRequest, UpdateDestinationRequest } from 'src/payload/request/destination.request';
-import { Destination } from 'src/payload/schema/destination.schema';
+import { Injectable, NotFoundException } from "@nestjs/common";
+import { InjectModel } from "@nestjs/mongoose";
+import { Model } from "mongoose";
+import {
+  CreateDestinationRequest,
+  UpdateDestinationRequest,
+} from "src/payload/request/destination.request";
+import { Destination } from "src/schema/destination.schema";
 
 @Injectable()
 export class DestinationService {
-  constructor(@InjectModel(Destination.name) private readonly destinationModel: Model<Destination>) {}
+  constructor(
+    @InjectModel(Destination.name)
+    private readonly destinationModel: Model<Destination>
+  ) {}
 
-  async createDestination(createDestinationRequest: CreateDestinationRequest): Promise<Destination> {
-    const createdDestination = new this.destinationModel(createDestinationRequest);
+  async createDestination(
+    createDestinationRequest: CreateDestinationRequest
+  ): Promise<Destination> {
+    const createdDestination = new this.destinationModel(
+      createDestinationRequest
+    );
     return createdDestination.save();
   }
 
@@ -21,8 +31,13 @@ export class DestinationService {
     return destination;
   }
 
-  async updateDestination(id: string, updateDestinationRequest: UpdateDestinationRequest): Promise<Destination> {
-    const destination = await this.destinationModel.findByIdAndUpdate(id, updateDestinationRequest, { new: true }).exec();
+  async updateDestination(
+    id: string,
+    updateDestinationRequest: UpdateDestinationRequest
+  ): Promise<Destination> {
+    const destination = await this.destinationModel
+      .findByIdAndUpdate(id, updateDestinationRequest, { new: true })
+      .exec();
     if (!destination) {
       throw new NotFoundException(`Destination with ID ${id} not found`);
     }
