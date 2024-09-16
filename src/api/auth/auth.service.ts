@@ -44,7 +44,7 @@ export class AuthService {
       throw new CommonException("Unauthorized", HttpStatus.UNAUTHORIZED);
     }
 
-    const payload = { email: user.email, sub: user._id };
+    const payload = { email: user.email, sub: user._id, role: user.role };
     const access_token = this.jwtService.sign(payload, {
       secret: process.env.JWT_SECRET || "JWT_SECRET",
       expiresIn: "15m",

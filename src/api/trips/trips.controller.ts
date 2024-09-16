@@ -10,7 +10,7 @@ import {
 } from "@nestjs/common";
 import { Trip } from "src/schema/trip.schema";
 import { TripsService } from "./trips.service";
-import { JwtAuthGuard } from "../../common/guard/jwt/jwt-auth.gaurd";
+import { JwtAuthGuard } from "../../common/guards/jwt-auth.gaurd";
 import {
   CreateTripsRequest,
   UpdateTripsRequest,
