@@ -4,10 +4,9 @@ import { JwtModule } from "@nestjs/jwt";
 import { AuthController } from "./auth.controller";
 import { AuthService } from "./auth.service";
 import { UserModule } from "../users/users.module";
-import { JwtStrategy } from "../../common/guard/jwt/jwtStratergy";
+import { JwtStrategy } from "../../common/guards/jwtStratergy";
 import { RefreshTokenModule } from "../refresh-token/refresh-token.module";
 import { UserService } from "../users/users.service";
-import { RefreshTokenStrategy } from "../refresh-token/refresh-token.strategy";
 
 @Module({
   imports: [

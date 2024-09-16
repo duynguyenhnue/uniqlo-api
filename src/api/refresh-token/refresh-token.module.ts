@@ -1,7 +1,7 @@
 import { Module, forwardRef } from "@nestjs/common";
 import { MongooseModule } from "@nestjs/mongoose";
-import { UserModule } from "src/api/users/users.module";
-import { RefreshToken, RefreshTokenSchema } from "src/schema/refresh.schema";
+import { UserModule } from "../../api/users/users.module";
+import { RefreshToken, RefreshTokenSchema } from "../../schema/refresh.schema";
 import { RefreshTokenService } from "./refresh-token.service";
 import { JwtService } from "@nestjs/jwt";
 

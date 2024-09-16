@@ -1,0 +1,8 @@
+export enum AUTH_PERMISSIONS {
+  ROLE_CREATE = "ROLE_CREATE",
+  ROLE_UPDATE = "ROLE_UPDATE",
+  ROLE_VIEW = "ROLE_VIEW",
+  ROLE_DELETE = "ROLE_DELETE",
+}
+
+export const AUTH_PERMISSION_META_KEY = "auth_permission_meta_key";
