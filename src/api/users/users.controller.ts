@@ -1,25 +1,17 @@
 import {
   Controller,
-  Post,
   Body,
   Get,
   Param,
   Put,
   Delete,
-  UsePipes,
-  ValidationPipe,
   InternalServerErrorException,
   NotFoundException,
-  UseGuards,
   HttpStatus,
 } from "@nestjs/common";
 import { UserService } from "./users.service";
 import { User } from "src/schema/user.schema";
-import {
-  CreateUserRequest,
-  UpdateUserRequest,
-} from "src/payload/request/users.request";
-import { JwtAuthGuard } from "../../common/guard/jwt/jwt-auth.gaurd";
+import { UpdateUserRequest } from "src/payload/request/users.request";
 import { CommonException } from "src/common/exception/common.exception";
 import { successResponse } from "src/common/dto/response.dto";
 
