@@ -8,14 +8,12 @@
   ],
   "routes": [
     {
+      "src": "/api/(.*)",
+      "dest": "https://api.travel-vietnamese.me/$1"
+    },
+    {
       "src": "/(.*)",
       "dest": "src/main.ts"
-    }
-  ],
-  "rewrites": [
-    {
-      "source": "/api/(.*)",
-      "destination": "https://api.travel-vietnamese.me/$1"
     }
   ]
 }
