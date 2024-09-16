@@ -1,13 +1,13 @@
 import { Controller, Post, Body } from "@nestjs/common";
 import { AuthService } from "./auth.service";
-import { RefreshTokenRequest } from "src/payload/request/refresh-token.request";
-import { SkipAuth } from "src/config/skip.auth";
-import { CreateUserRequest } from "src/payload/request/users.request";
-import { successResponse } from "src/common/dto/response.dto";
+import { RefreshTokenRequest } from "../../payload/request/refresh-token.request";
+import { SkipAuth } from "../../config/skip.auth";
+import { CreateUserRequest } from "../../payload/request/users.request";
+import { successResponse } from "../../common/dto/response.dto";
 import {
   AuthLogoutRequest,
   AuthRequest,
-} from "src/payload/request/auth.request";
+} from "../../payload/request/auth.request";
 
 @Controller("auth")
 export class AuthController {

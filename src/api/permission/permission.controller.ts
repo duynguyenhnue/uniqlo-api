@@ -10,15 +10,15 @@ import {
   Query,
   UseFilters,
 } from "@nestjs/common";
-import { CommonExceptionFilter } from "src/common/exception/http-exception.filter";
-import { CommonException } from "src/common/exception/common.exception";
-import { successResponse } from "src/common/dto/response.dto";
+import { CommonExceptionFilter } from "../../common/exception/http-exception.filter";
+import { CommonException } from "../../common/exception/common.exception";
+import { successResponse } from "../../common/dto/response.dto";
 import { PermissionService } from "./permission.service";
 import {
   CreateAndUpdatePermissionRequest,
   GetListPermissionCommonRequest,
-} from "src/payload/request/permission.request";
-import { SkipAuth } from "src/config/skip.auth";
+} from "../../payload/request/permission.request";
+import { SkipAuth } from "../../config/skip.auth";
 
 @Controller("permission")
 @UseFilters(CommonExceptionFilter)

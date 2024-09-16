@@ -1,7 +1,7 @@
 import { IsEnum, IsInt, IsOptional, IsString, Min } from "class-validator";
 import { Type } from "class-transformer";
-import { GroupPermission, Status } from "src/enums/permission.enum";
-import { AUTH_PERMISSIONS } from "src/enums/auth.enum";
+import { GroupPermission, Status } from "../../enums/permission.enum";
+import { AUTH_PERMISSIONS } from "../../enums/auth.enum";
 
 export class CreateAndUpdatePermissionRequest {
   @IsString()

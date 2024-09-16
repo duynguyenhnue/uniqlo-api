@@ -1,8 +1,8 @@
 import { Injectable } from "@nestjs/common";
-import { CreateAndUpdatePermissionRequest } from "src/payload/request/permission.request";
-import { GetListPermissionResponse } from "src/payload/response/permission.response";
-import { PermissionRepository } from "src/repositories/permission.repository";
-import { PermissionDocument } from "src/schema/permission.schema";
+import { CreateAndUpdatePermissionRequest } from "../../payload/request/permission.request";
+import { GetListPermissionResponse } from "../../payload/response/permission.response";
+import { PermissionRepository } from "../../repositories/permission.repository";
+import { PermissionDocument } from "../../schema/permission.schema";
 
 @Injectable()
 export class PermissionService {

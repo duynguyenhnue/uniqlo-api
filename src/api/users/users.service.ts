@@ -6,11 +6,11 @@ import {
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 import * as bcrypt from "bcrypt";
-import { User } from "src/schema/user.schema";
+import { User } from "../../schema/user.schema";
 import {
   CreateUserRequest,
   UpdateUserRequest,
-} from "src/payload/request/users.request";
+} from "../../payload/request/users.request";
 
 @Injectable()
 export class UserService {

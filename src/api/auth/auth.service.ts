@@ -3,19 +3,19 @@ import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 import { JwtService } from "@nestjs/jwt";
 import * as bcrypt from "bcrypt";
-import { RefreshTokenRequest } from "src/payload/request/refresh-token.request";
-import { User } from "src/schema/user.schema";
-import { RefreshToken } from "src/schema/refresh.schema";
+import { RefreshTokenRequest } from "../../payload/request/refresh-token.request";
+import { User } from "../../schema/user.schema";
+import { RefreshToken } from "../../schema/refresh.schema";
 import { UserService } from "../users/users.service";
-import { CreateUserRequest } from "src/payload/request/users.request";
+import { CreateUserRequest } from "../../payload/request/users.request";
 import {
   AuthLogoutRequest,
   AuthRequest,
-} from "src/payload/request/auth.request";
-import { CommonException } from "src/common/exception/common.exception";
+} from "../../payload/request/auth.request";
+import { CommonException } from "../../common/exception/common.exception";
 import { RefreshTokenService } from "../refresh-token/refresh-token.service";
 import * as crypto from "crypto";
-import { RefreshTokenResponse } from "src/payload/response/refresh-token.request";
+import { RefreshTokenResponse } from "../../payload/response/refresh-token.request";
 
 @Injectable()
 export class AuthService {
