@@ -1,4 +1,4 @@
-import { RoleDocument } from "src/schema/role.schema";
+import { RoleDocument } from "../../schema/role.schema";
 
 export class GetListRoleResponse {
   data: RoleDocument[];

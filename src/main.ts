@@ -1,6 +1,5 @@
 import { NestFactory } from "@nestjs/core";
 import { AppModule } from "./app.module";
-import "./mongoose-extensions";
 import { ValidationPipe } from "@nestjs/common";
 
 async function bootstrap() {

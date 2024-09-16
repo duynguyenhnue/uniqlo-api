@@ -2,10 +2,10 @@ import { Module } from "@nestjs/common";
 import { MongooseModule } from "@nestjs/mongoose";
 import { RoleController } from "./role.controller";
 import { RoleService } from "./role.service";
-import { Role, RoleSchema } from "src/schema/role.schema";
-import { RoleRepository } from "src/repositories/role.repository";
+import { Role, RoleSchema } from "../../schema/role.schema";
+import { RoleRepository } from "../../repositories/role.repository";
 import { JwtModule } from "@nestjs/jwt";
-import { AuthJwtRoleGuard } from "src/common/guards/role.guard";
+import { AuthJwtRoleGuard } from "../../common/guards/role.guard";
 import { PermissionModule } from "../permission/permission.module";
 
 @Module({

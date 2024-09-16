@@ -10,16 +10,16 @@ import {
   Query,
   UseFilters,
 } from "@nestjs/common";
-import { CommonException } from "src/common/exception/common.exception";
-import { CommonExceptionFilter } from "src/common/exception/http-exception.filter";
+import { CommonException } from "../../common/exception/common.exception";
+import { CommonExceptionFilter } from "../../common/exception/http-exception.filter";
 import { RoleService } from "./role.service";
-import { AuthJwtAccessProtected } from "src/common/guards/role.guard";
-import { AUTH_PERMISSIONS } from "src/enums/auth.enum";
+import { AuthJwtAccessProtected } from "../../common/guards/role.guard";
+import { AUTH_PERMISSIONS } from "../../enums/auth.enum";
 import {
   CreateAndUpdateRoleRequest,
   GetListRoleCommonRequest,
-} from "src/payload/request/role.request";
-import { successResponse } from "src/common/dto/response.dto";
+} from "../../payload/request/role.request";
+import { successResponse } from "../../common/dto/response.dto";
 
 @Controller("role")
 @UseFilters(CommonExceptionFilter)

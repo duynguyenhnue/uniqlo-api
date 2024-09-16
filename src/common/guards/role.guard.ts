@@ -12,11 +12,11 @@ import { CommonException } from "../exception/common.exception";
 import {
   AUTH_PERMISSIONS,
   AUTH_PERMISSION_META_KEY,
-} from "src/enums/auth.enum";
-import { RoleRepository } from "src/repositories/role.repository";
-import { Role } from "src/schema/role.schema";
-import { PermissionRepository } from "src/repositories/permission.repository";
-import { Permission } from "src/schema/permission.schema";
+} from "../../enums/auth.enum";
+import { RoleRepository } from "../../repositories/role.repository";
+import { Role } from "../../schema/role.schema";
+import { PermissionRepository } from "../../repositories/permission.repository";
+import { Permission } from "../../schema/permission.schema";
 import { JwtAuthGuard } from "./jwt-auth.gaurd";
 
 @Injectable()

@@ -1,8 +1,8 @@
 import { Injectable } from "@nestjs/common";
-import { CreateAndUpdateRoleRequest } from "src/payload/request/role.request";
-import { GetListRoleResponse } from "src/payload/response/role.response";
-import { RoleRepository } from "src/repositories/role.repository";
-import { RoleDocument } from "src/schema/role.schema";
+import { CreateAndUpdateRoleRequest } from "../../payload/request/role.request";
+import { GetListRoleResponse } from "../../payload/response/role.response";
+import { RoleRepository } from "../../repositories/role.repository";
+import { RoleDocument } from "../../schema/role.schema";
 
 @Injectable()
 export class RoleService {

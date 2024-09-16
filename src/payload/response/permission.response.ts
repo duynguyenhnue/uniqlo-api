@@ -1,4 +1,4 @@
-import { PermissionDocument } from "src/schema/permission.schema";
+import { PermissionDocument } from "../../schema/permission.schema";
 
 export class GetListPermissionResponse {
   data: PermissionDocument[];
