@@ -16,7 +16,7 @@ import {
 export class UserService {
   constructor(
     @InjectModel(User.name) private readonly userModel: Model<User>
-  ) {}
+  ) { }
 
   async login(loginUserRequest: any): Promise<User> {
     const user = await this.userModel
