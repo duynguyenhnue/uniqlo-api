@@ -85,10 +85,10 @@ jobs:
 
             docker run -d --restart unless-stopped \
               -p 8000:8000 \
-              -env JWT_SECRET=$JWT_SECRET \
-              -env JWT_REFRESH_SECRET=$JWT_REFRESH_SECRET \
-              -env DATABASE_MONGO_SRC=$DATABASE_MONGO_SRC \
-              -env PORT=$PORT \
+              -e JWT_SECRET=$JWT_SECRET \
+              -e JWT_REFRESH_SECRET=$JWT_REFRESH_SECRET \
+              -e DATABASE_MONGO_SRC=$DATABASE_MONGO_SRC \
+              -e PORT=$PORT \
               --name my_container ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
           EOF
 
