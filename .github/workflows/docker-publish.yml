@@ -88,7 +88,7 @@ jobs:
             echo "DATABASE_MONGO_SRC: $DATABASE_MONGO_SRC"
             echo "PORT: $PORT"
 
-            docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+            docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
             docker stop my_container || true
             docker rm my_container || true
             docker run -d --restart unless-stopped \
@@ -97,7 +97,7 @@ jobs:
               -e JWT_REFRESH_SECRET=$JWT_REFRESH_SECRET \
               -e DATABASE_MONGO_SRC=$DATABASE_MONGO_SRC \
               -e PORT=$PORT \
-              --name my_container ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+              --name my_container ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           EOF
 
           rm private_key.pem
