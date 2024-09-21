@@ -76,20 +76,25 @@ jobs:
 
           ssh -o StrictHostKeyChecking=no -i private_key.pem $SERVER_USER@$SERVER_IP << 'EOF'
 
-            # Pull image Docker
-            docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
-
-            # Dừng và xóa container cũ
-            docker stop my_container || true
-            docker rm my_container || true
-
-            docker run -d --restart unless-stopped \
-              -p 8000:8000 \
-              -e JWT_SECRET=$JWT_SECRET \
-              -e JWT_REFRESH_SECRET=$JWT_REFRESH_SECRET \
-              -e DATABASE_MONGO_SRC=$DATABASE_MONGO_SRC \
-              -e PORT=$PORT \
-              --name my_container ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+          export JWT_SECRET="${JWT_SECRET}"
+          export JWT_REFRESH_SECRET="${JWT_REFRESH_SECRET}"
+          export DATABASE_MONGO_SRC="${DATABASE_MONGO_SRC}"
+          export PORT="${PORT}"
+        
+          # Pull image Docker
+          docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+        
+          # Dừng và xóa container cũ
+          docker stop my_container || true
+          docker rm my_container || true
+        
+          docker run -d --restart unless-stopped \
+            -p 8000:8000 \
+            -e JWT_SECRET=$JWT_SECRET \
+            -e JWT_REFRESH_SECRET=$JWT_REFRESH_SECRET \
+            -e DATABASE_MONGO_SRC=$DATABASE_MONGO_SRC \
+            -e PORT=$PORT \
+            --name my_container ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
           EOF
 
           rm private_key.pem
