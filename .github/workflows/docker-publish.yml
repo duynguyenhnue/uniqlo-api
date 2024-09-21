@@ -92,10 +92,10 @@ jobs:
             # Chạy container mới với cổng 8000
             docker run -d --restart unless-stopped \
               -p 8000:8000 \
-              -e JWT_SECRET=$JWT_SECRET \
-              -e JWT_REFRESH_SECRET=$JWT_REFRESH_SECRET \
-              -e DATABASE_MONGO_SRC=$DATABASE_MONGO_SRC \
-              -e PORT=$PORT \
+              -e JWT_SECRET="$JWT_SECRET" \
+              -e JWT_REFRESH_SECRET="$JWT_REFRESH_SECRET" \
+              -e DATABASE_MONGO_SRC="$DATABASE_MONGO_SRC" \
+              -e PORT="$PORT" \
               --name my_container ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
           EOF
 
