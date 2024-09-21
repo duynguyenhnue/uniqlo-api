@@ -10,9 +10,7 @@ on:
     branches: ["master"]  # Khi có pull request tới nhánh master
 
 env:
-  # Sử dụng docker.io cho Docker Hub
   REGISTRY: docker.io
-  # github.repository như <account>/<repo>
   IMAGE_NAME: duynguyenhnue/${{ github.event.repository.name }}
 
 jobs:
@@ -33,18 +31,15 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # Cài đặt công cụ cosign (trừ PR)
       - name: Install cosign
         if: github.event_name != 'pull_request'
         uses: sigstore/cosign-installer@59acb6260d9c0ba8f4a2f9d9b48431a222b68e20 # v3.5.0
         with:
           cosign-release: "v2.2.4"
 
-      # Thiết lập Docker Buildx
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@f95db51fddba0c2d1ec667646a06c2ce06100226 # v3.0.0
 
-      # Đăng nhập vào Docker Hub
       - name: Log into Docker Hub
         if: github.event_name != 'pull_request'
         uses: docker/login-action@343f7c4344506bcbf9b4de18042ae17996df046d # v3.0.0
@@ -53,26 +48,23 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
-      # Trích xuất metadata (tags, labels) cho Docker
       - name: Extract Docker metadata
         id: meta
         uses: docker/metadata-action@96383f45573cb7f253c731d3b3ab81c87ef81934 # v5.0.0
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
 
-      # Xây dựng và đẩy hình ảnh Docker với Buildx
       - name: Build and push Docker image
         id: build-and-push
         uses: docker/build-push-action@0565240e2d4ab88bba5387d719585280857ece09 # v5.0.0
         with:
           context: .
-          push: true  # Luôn đẩy hình ảnh khi có thay đổi
+          push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      # Ký hình ảnh Docker đã xuất bản
       - name: Sign the published Docker image
         if: ${{ github.event_name != 'pull_request' }}
         env:
@@ -80,30 +72,32 @@ jobs:
           DIGEST: ${{ steps.build-and-push.outputs.digest }}
         run: echo "${TAGS}" | xargs -I {} cosign sign --yes {}@${DIGEST}
 
-      # Triển khai lên máy chủ Ubuntu
       - name: Deploy to server
         env:
-          PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}  # Private key cho SSH
-          SERVER_USER: ${{ secrets.SERVER_USER }}      # Tên người dùng SSH
-          SERVER_IP: ${{ secrets.SERVER_IP }}          # Địa chỉ IP máy chủ
+          PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          SERVER_USER: ${{ secrets.SERVER_USER }}
+          SERVER_IP: ${{ secrets.SERVER_IP }}
         run: |
-          # Tạo file tạm thời để chứa private key
           echo "${PRIVATE_KEY}" > private_key.pem
-          chmod 600 private_key.pem  # Đặt quyền truy cập cho file key
+          chmod 600 private_key.pem
 
-          # Kết nối và triển khai
           ssh -o StrictHostKeyChecking=no -i private_key.pem $SERVER_USER@$SERVER_IP << 'EOF'
+            # Kiểm tra biến môi trường
+            echo "JWT_SECRET: $JWT_SECRET"
+            echo "JWT_REFRESH_SECRET: $JWT_REFRESH_SECRET"
+            echo "DATABASE_MONGO_SRC: $DATABASE_MONGO_SRC"
+            echo "PORT: $PORT"
+
             docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
             docker stop my_container || true
             docker rm my_container || true
             docker run -d --restart unless-stopped \
               -p 8000:8000 \
-              -e JWT_SECRET=${{ secrets.JWT_SECRET }} \
-              -e JWT_REFRESH_SECRET=${{ secrets.JWT_REFRESH_SECRET }} \
-              -e DATABASE_MONGO_SRC=${{ secrets.DATABASE_MONGO_SRC }} \
-              -e PORT=${{ secrets.PORT }} \
+              -e JWT_SECRET=$JWT_SECRET \
+              -e JWT_REFRESH_SECRET=$JWT_REFRESH_SECRET \
+              -e DATABASE_MONGO_SRC=$DATABASE_MONGO_SRC \
+              -e PORT=$PORT \
               --name my_container ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
           EOF
 
-          # Xóa file key tạm thời
           rm private_key.pem
