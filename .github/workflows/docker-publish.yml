@@ -16,12 +16,6 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
-    env:
-      JWT_SECRET: ${{ secrets.JWT_SECRET }}
-      JWT_REFRESH_SECRET: ${{ secrets.JWT_REFRESH_SECRET }}
-      DATABASE_MONGO_SRC: ${{ secrets.DATABASE_MONGO_SRC }}
-      PORT: ${{ secrets.PORT }}
-
     permissions:
       contents: read
       packages: write
@@ -72,6 +66,10 @@ jobs:
           PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
           SERVER_USER: ${{ secrets.SERVER_USER }}
           SERVER_IP: ${{ secrets.SERVER_IP }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          JWT_REFRESH_SECRET: ${{ secrets.JWT_REFRESH_SECRET }}
+          DATABASE_MONGO_SRC: ${{ secrets.DATABASE_MONGO_SRC }}
+          PORT: ${{ secrets.PORT }}
         run: |
           echo "${PRIVATE_KEY}" > private_key.pem
           chmod 600 private_key.pem
