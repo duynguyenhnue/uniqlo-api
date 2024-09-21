@@ -89,12 +89,12 @@ jobs:
             docker stop my_container || true
             docker rm my_container || true
 
-           docker run -it --rm \
+            docker run -d --restart unless-stopped \
             --env JWT_SECRET="${JWT_SECRET}" \
             --env JWT_REFRESH_SECRET="${JWT_REFRESH_SECRET}" \
             --env DATABASE_MONGO_SRC="${DATABASE_MONGO_SRC}" \
             --env PORT="${PORT}" \
-            ${REGISTRY}/${IMAGE_NAME}:latest /bin/sh
+            --name my_container ${REGISTRY}/${IMAGE_NAME}:latest
 
           EOF
 
