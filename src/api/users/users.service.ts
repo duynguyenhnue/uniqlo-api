@@ -5,7 +5,7 @@ import {
 } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
-import * as bcrypt from "bcrypt";
+import * as bcrypt from "bcryptjs";
 import { User } from "../../schema/user.schema";
 import {
   CreateUserRequest,
@@ -16,7 +16,7 @@ import {
 export class UserService {
   constructor(
     @InjectModel(User.name) private readonly userModel: Model<User>
-  ) { }
+  ) {}
 
   async login(loginUserRequest: any): Promise<User> {
     const user = await this.userModel

@@ -2,7 +2,7 @@ import { HttpStatus, Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 import { JwtService } from "@nestjs/jwt";
-import * as bcrypt from "bcrypt";
+import * as bcrypt from "bcryptjs";
 import { RefreshTokenRequest } from "../../payload/request/refresh-token.request";
 import { User } from "../../schema/user.schema";
 import { RefreshToken } from "../../schema/refresh.schema";
