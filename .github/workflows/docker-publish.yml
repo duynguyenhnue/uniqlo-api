@@ -75,12 +75,6 @@ jobs:
           chmod 600 private_key.pem
 
           ssh -o StrictHostKeyChecking=no -i private_key.pem $SERVER_USER@$SERVER_IP << 'EOF'
-            # Kiểm tra biến môi trường
-            echo "PRIVATE_KEY: $PRIVATE_KEY"
-            echo "JWT_SECRET: $JWT_SECRET"
-            echo "JWT_REFRESH_SECRET: $JWT_REFRESH_SECRET"
-            echo "DATABASE_MONGO_SRC: $DATABASE_MONGO_SRC"
-            echo "PORT: $PORT"
 
             # Pull image Docker
             docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
@@ -96,7 +90,6 @@ jobs:
               -env DATABASE_MONGO_SRC=$DATABASE_MONGO_SRC \
               -env PORT=$PORT \
               --name my_container ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
-
           EOF
 
           rm private_key.pem
