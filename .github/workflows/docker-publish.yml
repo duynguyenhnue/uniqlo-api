@@ -2,12 +2,12 @@ name: Docker
 
 on:
   schedule:
-    - cron: "33 16 * * *" # Lịch trình chạy tự động
+    - cron: "33 16 * * *"  # Lịch trình chạy tự động
   push:
-    branches: ["master"] # Khi có đẩy lên nhánh master
-    tags: ["v*.*.*"] # Khi có nhãn theo định dạng semver
+    branches: ["master"]  # Khi có đẩy lên nhánh master
+    tags: ["v*.*.*"]  # Khi có nhãn theo định dạng semver
   pull_request:
-    branches: ["master"] # Khi có pull request tới nhánh master
+    branches: ["master"]  # Khi có pull request tới nhánh master
 
 env:
   # Sử dụng docker.io cho Docker Hub
@@ -50,8 +50,8 @@ jobs:
         uses: docker/login-action@343f7c4344506bcbf9b4de18042ae17996df046d # v3.0.0
         with:
           registry: ${{ env.REGISTRY }}
-          username: ${{ secrets.DOCKERHUB_USERNAME }} # Thay đổi này
-          password: ${{ secrets.DOCKERHUB_PASSWORD }} # Thay đổi này
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
       # Trích xuất metadata (tags, labels) cho Docker
       - name: Extract Docker metadata
@@ -66,7 +66,7 @@ jobs:
         uses: docker/build-push-action@0565240e2d4ab88bba5387d719585280857ece09 # v5.0.0
         with:
           context: .
-          push: ${{ github.event_name != 'pull_request' }}
+          push: true  # Luôn đẩy hình ảnh khi có thay đổi
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
@@ -79,3 +79,31 @@ jobs:
           TAGS: ${{ steps.meta.outputs.tags }}
           DIGEST: ${{ steps.build-and-push.outputs.digest }}
         run: echo "${TAGS}" | xargs -I {} cosign sign --yes {}@${DIGEST}
+
+      # Triển khai lên máy chủ Ubuntu
+      - name: Deploy to server
+        env:
+          PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}  # Private key cho SSH
+          SERVER_USER: ${{ secrets.SERVER_USER }}      # Tên người dùng SSH
+          SERVER_IP: ${{ secrets.SERVER_IP }}          # Địa chỉ IP máy chủ
+        run: |
+          # Tạo file tạm thời để chứa private key
+          echo "${PRIVATE_KEY}" > private_key.pem
+          chmod 600 private_key.pem  # Đặt quyền truy cập cho file key
+
+          # Kết nối và triển khai
+          ssh -o StrictHostKeyChecking=no -i private_key.pem $SERVER_USER@$SERVER_IP << 'EOF'
+            docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+            docker stop my_container || true
+            docker rm my_container || true
+            docker run -d --restart unless-stopped \
+              -p 8000:8000 \
+              -e JWT_SECRET=${{ secrets.JWT_SECRET }} \
+              -e JWT_REFRESH_SECRET=${{ secrets.JWT_REFRESH_SECRET }} \
+              -e DATABASE_MONGO_SRC=${{ secrets.DATABASE_MONGO_SRC }} \
+              -e PORT=${{ secrets.PORT }} \
+              --name my_container ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+          EOF
+
+          # Xóa file key tạm thời
+          rm private_key.pem
