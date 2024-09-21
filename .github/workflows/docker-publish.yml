@@ -89,12 +89,12 @@ jobs:
             docker stop my_container || true
             docker rm my_container || true
 
-            # Chạy container mới với cổng 8000
-            docker run -it --rm 
-            --env JWT_SECRET="${JWT_SECRET}"
-            --env JWT_REFRESH_SECRET="${JWT_REFRESH_SECRET}"
-            --env DATABASE_MONGO_SRC="${DATABASE_MONGO_SRC}"
-            --env PORT="${PORT}" ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest /bin/sh
+           docker run -it --rm \
+            --env JWT_SECRET="${JWT_SECRET}" \
+            --env JWT_REFRESH_SECRET="${JWT_REFRESH_SECRET}" \
+            --env DATABASE_MONGO_SRC="${DATABASE_MONGO_SRC}" \
+            --env PORT="${PORT}" \
+            ${REGISTRY}/${IMAGE_NAME}:latest /bin/sh
 
           EOF
 
