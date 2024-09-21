@@ -2,12 +2,12 @@ name: Docker
 
 on:
   schedule:
-    - cron: "33 16 * * *"  # Lịch trình chạy tự động
+    - cron: "33 16 * * *" # Lịch trình chạy tự động
   push:
-    branches: ["master"]  # Khi có đẩy lên nhánh master
-    tags: ["v*.*.*"]  # Khi có nhãn theo định dạng semver
+    branches: ["master"] # Khi có đẩy lên nhánh master
+    tags: ["v*.*.*"] # Khi có nhãn theo định dạng semver
   pull_request:
-    branches: ["master"]  # Khi có pull request tới nhánh master
+    branches: ["master"] # Khi có pull request tới nhánh master
 
 env:
   REGISTRY: docker.io
@@ -83,9 +83,14 @@ jobs:
             echo "DATABASE_MONGO_SRC: $DATABASE_MONGO_SRC"
             echo "PORT: $PORT"
 
+            # Pull image Docker
             docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+
+            # Dừng và xóa container cũ
             docker stop my_container || true
             docker rm my_container || true
+
+            # Chạy container mới với cổng 8000
             docker run -d --restart unless-stopped \
               -p 8000:8000 \
               -e JWT_SECRET=$JWT_SECRET \
