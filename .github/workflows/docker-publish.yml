@@ -89,6 +89,10 @@ jobs:
           # Pull image từ Docker Hub
           docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
 
+          # Stop and remove the old container if it exists
+          docker stop backend_container || true
+          docker rm backend_container || true
+
           # Chạy container mới, bind port 8000
           docker run -d --restart unless-stopped \
             -p 8000:8000 \
@@ -96,7 +100,7 @@ jobs:
             -e JWT_REFRESH_SECRET="travel-vietnam-refresh" \
             -e DATABASE_MONGO_SRC="mongodb+srv://stu715105064:ZeClf5THTVJyp5Jr@cluster0.yyq3k.mongodb.net/travel-social" \
             -e PORT=8000 \
-            --name my_container duynguyenhnue/travel-social-be:latest
+            --name backend_container duynguyenhnue/travel-social-be:latest
           EOF
 
           # Xóa file private key sau khi hoàn thành
