@@ -15,7 +15,7 @@ env:
   JWT_SECRET: ${{ secrets.JWT_SECRET }}
   JWT_REFRESH_SECRET: ${{ secrets.JWT_REFRESH_SECRET }}
   DATABASE_MONGO_SRC: ${{ secrets.DATABASE_MONGO_SRC }}
-  PORT: ${{ secrets.PORT }}
+  PORT: 8000 # Cổng mặc định của server, có thể điều chỉnh nếu cần
 
 jobs:
   build:
@@ -54,7 +54,6 @@ jobs:
           push: true
           tags: |
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
-          labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
@@ -72,31 +71,33 @@ jobs:
           SERVER_IP: ${{ secrets.SERVER_IP }}
         
         run: |
+          # Tạo file private key tạm thời
           echo "${PRIVATE_KEY}" > private_key.pem
           chmod 600 private_key.pem
 
+          # Kết nối tới server và triển khai Docker container
           ssh -o StrictHostKeyChecking=no -i private_key.pem $SERVER_USER@$SERVER_IP << 'EOF'
 
           export JWT_SECRET="${JWT_SECRET}"
           export JWT_REFRESH_SECRET="${JWT_REFRESH_SECRET}"
           export DATABASE_MONGO_SRC="${DATABASE_MONGO_SRC}"
           export PORT="${PORT}"
-        
-          # Pull image Docker
+
+          # Pull image từ Docker Hub
           docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
-        
+
           # Dừng và xóa container cũ
           docker stop my_container || true
           docker rm my_container || true
-        
-          # Expose port 8000 in the container to port 8000 on the host
+
+          # Chạy container mới, bind port host và container đều là 8000
           docker run -d --restart unless-stopped \
             -p 8000:${PORT} \
-            -e JWT_SECRET=${{ secrets.JWT_SECRET }} \
-            -e JWT_REFRESH_SECRET=${{ secrets.JWT_REFRESH_SECRET }} \
-            -e DATABASE_MONGO_SRC=${{ secrets.DATABASE_MONGO_SRC }} \
-            -e PORT=${{ secrets.PORT }}\
+            -e JWT_SECRET="${JWT_SECRET}" \
+            -e JWT_REFRESH_SECRET="${JWT_REFRESH_SECRET}" \
+            -e DATABASE_MONGO_SRC="${DATABASE_MONGO_SRC}" \
             --name my_container ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
           EOF
 
+          # Xóa file private key sau khi hoàn thành
           rm private_key.pem
