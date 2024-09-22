@@ -85,14 +85,17 @@ jobs:
           export JWT_SECRET="${JWT_SECRET}"
           export JWT_REFRESH_SECRET="${JWT_REFRESH_SECRET}"
           export DATABASE_MONGO_SRC="${DATABASE_MONGO_SRC}"
-          export PORT="${PORT}"
 
           # Pull image từ Docker Hub
           docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
 
-          # Chạy container mới, bind port host và container đều là 8000
+          # Dừng và xóa container cũ nếu có
+          docker stop my_container || true
+          docker rm my_container || true
+
+          # Chạy container mới, bind port 8000
           docker run -d --restart unless-stopped \
-            -p 8000:${PORT} \
+            -p 8000:8000 \
             -e JWT_SECRET="${JWT_SECRET}" \
             -e JWT_REFRESH_SECRET="${JWT_REFRESH_SECRET}" \
             -e DATABASE_MONGO_SRC="${DATABASE_MONGO_SRC}" \
