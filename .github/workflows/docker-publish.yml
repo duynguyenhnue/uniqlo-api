@@ -69,6 +69,10 @@ jobs:
           PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
           SERVER_USER: ${{ secrets.SERVER_USER }}
           SERVER_IP: ${{ secrets.SERVER_IP }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          JWT_REFRESH_SECRET: ${{ secrets.JWT_REFRESH_SECRET }}
+          DATABASE_MONGO_SRC: ${{ secrets.DATABASE_MONGO_SRC }}
+          PORT: 8000 # Cổng mặc định của server, có thể điều chỉnh nếu cần
         
         run: |
           # Tạo file private key tạm thời
