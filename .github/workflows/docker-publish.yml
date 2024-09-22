@@ -12,6 +12,10 @@ on:
 env:
   REGISTRY: docker.io
   IMAGE_NAME: duynguyenhnue/${{ github.event.repository.name }}
+  JWT_SECRET: ${{ secrets.JWT_SECRET }}
+  JWT_REFRESH_SECRET: ${{ secrets.JWT_REFRESH_SECRET }}
+  DATABASE_MONGO_SRC: ${{ secrets.DATABASE_MONGO_SRC }}
+  PORT: ${{ secrets.PORT }}
 
 jobs:
   build:
@@ -66,10 +70,7 @@ jobs:
           PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
           SERVER_USER: ${{ secrets.SERVER_USER }}
           SERVER_IP: ${{ secrets.SERVER_IP }}
-          JWT_SECRET: ${{ secrets.JWT_SECRET }}
-          JWT_REFRESH_SECRET: ${{ secrets.JWT_REFRESH_SECRET }}
-          DATABASE_MONGO_SRC: ${{ secrets.DATABASE_MONGO_SRC }}
-          PORT: ${{ secrets.PORT }}
+        
         run: |
           echo "${PRIVATE_KEY}" > private_key.pem
           chmod 600 private_key.pem
@@ -90,10 +91,10 @@ jobs:
         
           docker run -d --restart unless-stopped \
             -p 8000:8000 \
-            -e JWT_SECRET=$JWT_SECRET \
-            -e JWT_REFRESH_SECRET=$JWT_REFRESH_SECRET \
-            -e DATABASE_MONGO_SRC=$DATABASE_MONGO_SRC \
-            -e PORT=$PORT \
+            -e JWT_SECRET=${{ env.JWT_SECRET }} \
+            -e JWT_REFRESH_SECRET=${{ env.JWT_REFRESH_SECRET }} \
+            -e DATABASE_MONGO_SRC=${{ env.DATABASE_MONGO_SRC }} \
+            -e PORT=${{ env.PORT }} \
             --name my_container ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
           EOF
 
