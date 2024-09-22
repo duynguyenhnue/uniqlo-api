@@ -89,8 +89,9 @@ jobs:
           docker stop my_container || true
           docker rm my_container || true
         
+          # Expose port 8000 in the container to port 8000 on the host
           docker run -d --restart unless-stopped \
-            -p 8000:8000 \
+            -p 8000:${PORT} \
             -e JWT_SECRET=${{ env.JWT_SECRET }} \
             -e JWT_REFRESH_SECRET=${{ env.JWT_REFRESH_SECRET }} \
             -e DATABASE_MONGO_SRC=${{ env.DATABASE_MONGO_SRC }} \
