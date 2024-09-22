@@ -96,10 +96,11 @@ jobs:
           # Chạy container mới, bind port 8000
           docker run -d --restart unless-stopped \
             -p 8000:8000 \
-            -e JWT_SECRET="${JWT_SECRET}" \
-            -e JWT_REFRESH_SECRET="${JWT_REFRESH_SECRET}" \
-            -e DATABASE_MONGO_SRC="${DATABASE_MONGO_SRC}" \
-            --name my_container ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+            -e JWT_SECRET="travel-vietnam" \
+            -e JWT_REFRESH_SECRET="travel-vietnam-refresh" \
+            -e DATABASE_MONGO_SRC="mongodb+srv://stu715105064:ZeClf5THTVJyp5Jr@cluster0.yyq3k.mongodb.net/travel-social" \
+            -e PORT=8000 \
+            --name my_container duynguyenhnue/travel-social-be:latest
           EOF
 
           # Xóa file private key sau khi hoàn thành
