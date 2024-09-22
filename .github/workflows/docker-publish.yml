@@ -92,10 +92,10 @@ jobs:
           # Expose port 8000 in the container to port 8000 on the host
           docker run -d --restart unless-stopped \
             -p 8000:${PORT} \
-            -e JWT_SECRET=${JWT_SECRET} \
-            -e JWT_REFRESH_SECRET=${JWT_REFRESH_SECRET} \
-            -e DATABASE_MONGO_SRC=${DATABASE_MONGO_SRC} \
-            -e PORT=${PORT} \
+            -e JWT_SECRET=${{ secrets.JWT_SECRET }} \
+            -e JWT_REFRESH_SECRET=${{ secrets.JWT_REFRESH_SECRET }} \
+            -e DATABASE_MONGO_SRC=${{ secrets.DATABASE_MONGO_SRC }} \
+            -e PORT=${{ secrets.PORT }}\
             --name my_container ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
           EOF
 
