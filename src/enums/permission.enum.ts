@@ -5,6 +5,5 @@ export enum Status {
 }
 
 export enum GroupPermission {
-  DASHBOARD = "DASHBOARD",
   ROLES = "ROLES",
 }

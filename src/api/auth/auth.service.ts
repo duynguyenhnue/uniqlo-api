@@ -16,6 +16,8 @@ import { CommonException } from "../../common/exception/common.exception";
 import { RefreshTokenService } from "../refresh-token/refresh-token.service";
 import * as crypto from "crypto";
 import { RefreshTokenResponse } from "../../payload/response/refresh-token.request";
+import { FirebaseService } from "../firebase/firebase.service";
+import { Folder } from "src/enums/folder.enum";
 
 @Injectable()
 export class AuthService {
@@ -25,7 +27,8 @@ export class AuthService {
     private readonly refreshTokenModel: Model<RefreshToken>,
     private readonly jwtService: JwtService,
     private readonly userService: UserService,
-    private readonly refreshTokenService: RefreshTokenService
+    private readonly refreshTokenService: RefreshTokenService,
+    private readonly firebaseService: FirebaseService
   ) {}
 
   async validateUser(authRequest: AuthRequest): Promise<any> {
@@ -44,6 +47,10 @@ export class AuthService {
       throw new CommonException("Unauthorized", HttpStatus.UNAUTHORIZED);
     }
 
+    if (user.role === "USER") {
+      throw new CommonException("Unauthorized", HttpStatus.UNAUTHORIZED);
+    }
+
     const payload = { email: user.email, sub: user._id, role: user.role };
     const access_token = this.jwtService.sign(payload, {
       secret: process.env.JWT_SECRET || "JWT_SECRET",
@@ -56,7 +63,10 @@ export class AuthService {
     return { access_token, refresh_token };
   }
 
-  async registerUser(createUserRequest: CreateUserRequest): Promise<User> {
+  async registerUser(
+    createUserRequest: CreateUserRequest,
+    file?: Express.Multer.File
+  ): Promise<User> {
     const existingAuth = await this.userService.findUserByEmail(
       createUserRequest.email
     );
@@ -67,11 +77,17 @@ export class AuthService {
         HttpStatus.CONFLICT
       );
     }
+    let avatar = null;
+
+    if (file) {
+      avatar = await this.firebaseService.uploadImage(file, Folder.USERS);
+    }
 
     const hashedPassword = await bcrypt.hash(createUserRequest.password, 10);
     const createdUser = new this.userModel({
       ...createUserRequest,
       password: hashedPassword,
+      avatar,
     });
     return createdUser.save();
   }
