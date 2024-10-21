@@ -94,7 +94,7 @@ jobs:
             -p 8200:8200 \
             -e JWT_SECRET="uniqlo-secret" \
             -e JWT_REFRESH_SECRET="uniqlo-secret-refresh" \
-            -e DATABASE_MONGO_SRC="mongodb+srv://uniqlo:<db_password>@uniqlo.stdai.mongodb.net/uniqlo-database?retryWrites=true&w=majority&appName=uniqlo" \
+            -e DATABASE_MONGO_SRC="mongodb+srv://uniqlo:uuPWdNenRssvmUfc@uniqlo.stdai.mongodb.net/uniqlo-database?retryWrites=true&w=majority&appName=uniqlo" \
             -e PORT=8200 \
             --name uniqlo_container duynguyenhnue/uniqlo-api:latest
           EOF
