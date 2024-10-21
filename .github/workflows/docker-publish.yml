@@ -89,13 +89,13 @@ jobs:
           docker stop uniqlo_container || true
           docker rm uniqlo_container || true
 
-          # Chạy container mới, bind port 8000
+          # Chạy container mới, bind port 8200
           docker run -d --restart unless-stopped \
-            -p 8000:8000 \
+            -p 8200:8200 \
             -e JWT_SECRET="uniqlo-secret" \
             -e JWT_REFRESH_SECRET="uniqlo-secret-refresh" \
-            -e DATABASE_MONGO_SRC="mongodb+srv://vanduydec02:SEHKMn6lpx5V3Kga@uniqlo.pgsk0.mongodb.net/?retryWrites=true&w=majority&appName=uniqlo/uniqlo" \
-            -e PORT=8000 \
+            -e DATABASE_MONGO_SRC="mongodb+srv://uniqlo:<db_password>@uniqlo.stdai.mongodb.net/uniqlo-database?retryWrites=true&w=majority&appName=uniqlo" \
+            -e PORT=8200 \
             --name uniqlo_container duynguyenhnue/uniqlo-api:latest
           EOF
           # Xóa file private key sau khi hoàn thành
