@@ -1,3 +1,4 @@
+import { Type } from "class-transformer";
 import {
   IsEmail,
   IsString,
@@ -6,55 +7,68 @@ import {
   IsBoolean,
   IsDateString,
   Length,
+  ValidateNested,
+  IsInt,
+  IsPositive,
 } from "class-validator";
 
 export class Address {
-  @IsString()
-  @IsNotEmpty()
-  province: string;
+  @IsString({message:"homenumber phải là dạng chuỗi"})
+  @IsNotEmpty({message:"homenumber không được để trống"})
+  homenumber: string;
 
-  @IsString()
-  @IsNotEmpty()
-  district: string;
+  @IsString({message:"street phải là dạng chuỗi"})
+  @IsNotEmpty({message:"street không được để trống"})
+  street: string;
 
-  @IsString()
-  @IsNotEmpty()
-  ward: string;
+  @IsString({message:"city phải là dạng chuỗi"})
+  @IsNotEmpty({message:"city không được để trống"})
+  city: string;
+
+  @IsString({message:"country phải là dạng chuỗi"})
+  @IsNotEmpty({message:"country không được để trống"})
+  country: string;
 }
 
-export class Phone {
-  @IsString()
-  @IsNotEmpty()
-  country: string;
+export class userPhone {
+  @IsString({message:"phoneCountry phải là dạng chuỗi"})
+  @IsNotEmpty({message:"phoneCountry không được để trống"})
+  phoneCountry: string;
 
-  @IsString()
-  @IsNotEmpty()
-  number: string;
+  @IsString({message:"phonenumber phải là dạng chuỗi"})
+  @IsNotEmpty({message:"phonenumber không được để trống"})
+  phoneNumber: string;
 }
 
 export class CreateUserRequest {
   @IsEmail()
-  @IsNotEmpty()
+  @IsNotEmpty({message:"email không được để trống"})
   email: string;
 
-  @IsString()
-  @IsNotEmpty()
+  @IsString({message:"fullname phải là dạng chuỗi"})
+  @IsNotEmpty({message:"full name không được để trống"})
   fullName: string;
 
-  @IsString()
-  @IsNotEmpty()
+  @IsString({message:"mật khẩu phải là dạng chuỗi"})
+  @IsNotEmpty({message:"mật khẩu không được để trống"})
   @Length(8, 32)
   password: string;
 
   @IsDateString()
   @IsOptional()
-  dateOfBirth: string | null;
+  birthdate: string | null;
 
-  @IsNotEmpty()
-  address: Address;
+  @IsNotEmpty({message:"Địa chỉ không được để trống"})
+  @IsString({message:"địa chỉ phải là dạng chuỗi"})
+@ValidateNested({each:true})   
+@Type(()=>Address) 
+  address: Address[];
 
-  @IsNotEmpty()
-  phone: Phone;
+  @IsNotEmpty({message:"Số điện thoại không được để trống"})
+  @IsString({message:"phone phải là dạng chuỗi"})
+  @ValidateNested({each:true})   
+  @Type(()=>userPhone) 
+  phone: userPhone[];
 }
 
 export class UpdateUserRequest {
@@ -66,44 +80,46 @@ export class UpdateUserRequest {
   @IsOptional()
   email?: string;
 
-  @IsString()
+  @IsString({message:"fullname phải là dạng chuỗi"})
   @IsOptional()
   fullName?: string;
 
-  @IsString()
+  @IsString({message:"password phải là dạng chuỗi"})
   @IsOptional()
   @Length(8, 32)
   password?: string;
 
   @IsDateString()
   @IsOptional()
-  dateOfBirth?: string | null;
+  birthday?: string | null;
 
   @IsOptional()
   address?: Address;
 
   @IsOptional()
-  phone?: Phone;
+  phone?: userPhone;
 
-  @IsString()
+  @IsString({message:"status phải là dạng chuỗi"})
   @IsOptional()
   status?: string;
 }
 
 export class SearchUserRequest {
-  @IsString()
-  @IsNotEmpty()
-  page: number;
+  @IsOptional()
+  @IsInt()
+  @IsPositive()
+  page?: number;
 
-  @IsString()
-  @IsNotEmpty()
-  limit: number;
+  @IsOptional()
+  @IsInt()
+  @IsPositive()  
+  limit?: number;
 
-  @IsString()
+  @IsString({message:"fullname phải là dạng chuỗi"})
   @IsOptional()
   fullName?: string;
 
-  @IsString()
+  @IsString({message:"email phải là dạng chuỗi"})
   @IsOptional()
   email?: string;
 }

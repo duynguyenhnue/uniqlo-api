@@ -10,10 +10,12 @@ import {
   HttpStatus,
   Req,
   Query,
+  Post,
 } from "@nestjs/common";
 import { UserService } from "./users.service";
 import { User } from "../../schema/user.schema";
 import {
+  CreateUserRequest,
   SearchUserRequest,
   UpdateUserRequest,
 } from "../../payload/request/users.request";
@@ -25,6 +27,13 @@ import { AuthJwtAccessProtected } from "src/common/guards/role.guard";
 @Controller("users")
 export class UserController {
   constructor(private readonly userService: UserService) {}
+
+  // @Post()
+  // create(@Body()createUserRequest:CreateUserRequest){
+  //   console.log(">>user>>:");
+  //   return this.userService.create(createUserRequest);
+
+  // }
 
   @Get()
   async getUser(@Req() req) {
