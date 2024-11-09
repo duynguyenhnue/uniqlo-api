@@ -108,11 +108,13 @@ export class SearchUserRequest {
   @IsOptional()
   @IsInt()
   @IsPositive()
+  @Type(() => Number)
   page?: number;
 
   @IsOptional()
   @IsInt()
   @IsPositive()  
+  @Type(() => Number)
   limit?: number;
 
   @IsString({message:"fullname phải là dạng chuỗi"})
