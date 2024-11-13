@@ -14,6 +14,7 @@ import { ProductModel } from "./api/products/products.module";
 import { WarehouseModel } from "./api/warehouses/warehouse.module";
 import { InventoriesModel } from "./api/inventory/inventories.module";
 import { PromotionModel } from "./api/promotions/promotion.module";
+import { ReviewModule } from "./api/reviews/review.module";
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { PromotionModel } from "./api/promotions/promotion.module";
     WarehouseModel,
     InventoriesModel,
     PromotionModel,
+    ReviewModule,
     
 
   ],
