@@ -24,13 +24,14 @@ export class UserService {
   async onModuleInit() {
     await this.createDefaultUser();
   }
+  
 
   async createDefaultUser(): Promise<User> {
     const defaultUser = {
       email: "admin@travel.com",
       fullName: "Admin",
       password: await bcrypt.hash("Admin123", 10),
-      dateOfBirth: null,
+      birthday: null,
       address: null,
       phone: null,
       role: "ADMIN",
@@ -46,6 +47,7 @@ export class UserService {
     if (existingUser) {
       return existingUser;
     }
+
 
     const newUser = new this.userModel(defaultUser);
     return await newUser.save();
