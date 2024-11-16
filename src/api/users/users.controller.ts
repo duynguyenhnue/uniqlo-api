@@ -105,4 +105,10 @@ export class UserController {
       throw new InternalServerErrorException("Failed to delete user");
     }
   }
+
+  @Put("change-password/:id")
+  @AuthJwtAccessProtected(AUTH_PERMISSIONS.CUSTOMER_UPDATE)
+  async changePassword(@Param("id") id: string, @Body() changePasswordRequest: { oldPassword: string, newPassword: string }) {
+    return this.userService.changePassword(id, changePasswordRequest.oldPassword, changePasswordRequest.newPassword);
+  }
 }
