@@ -52,6 +52,4 @@ export class CategoryController {
     await this.categoryService.delete(id);
     return {message:`Delete Successfully`};
   }
-
-
 }

@@ -135,4 +135,19 @@ export class UserService {
       throw new NotFoundException(`User with ID ${id} not found`);
     }
   }
+
+  async changePassword(id: string, oldPassword: string, newPassword: string): Promise<void> {
+    const user = await this.userModel.findById(id).exec();
+    if (!user) {
+      throw new NotFoundException(`User with ID ${id} not found`);
+    }
+
+    const isMatch = await bcrypt.compare(oldPassword, user.password);
+    if (!isMatch) {
+      throw new UnauthorizedException("Old password is incorrect");
+    }
+
+    user.password = await bcrypt.hash(newPassword, 10);
+    await user.save();
+  }
 }
