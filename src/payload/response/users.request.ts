@@ -1,9 +1,9 @@
-import { Address, Phone } from "../request/users.request";
+import { Address, userPhone } from "../request/users.request";
 
 export class UserResponse {
   fullName: string;
   email: string;
-  dateOfBirth: string;
+  birthdate: string;
   address: Address;
-  phone: Phone;
+  phone: userPhone;
 }

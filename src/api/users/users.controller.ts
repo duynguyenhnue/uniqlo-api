@@ -10,10 +10,12 @@ import {
   HttpStatus,
   Req,
   Query,
+  Post,
 } from "@nestjs/common";
 import { UserService } from "./users.service";
 import { User } from "../../schema/user.schema";
 import {
+  CreateUserRequest,
   SearchUserRequest,
   UpdateUserRequest,
 } from "../../payload/request/users.request";
@@ -26,10 +28,30 @@ import { AuthJwtAccessProtected } from "src/common/guards/role.guard";
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
+  // @Post()
+  // create(@Body()createUserRequest:CreateUserRequest){
+  //   console.log(">>user>>:");
+  //   return this.userService.create(createUserRequest);
+
+  // }
+
   @Get()
   async getUser(@Req() req) {
     try {
       return successResponse(await this.userService.getUser(req.user));
+    } catch (error) {
+      throw new CommonException(
+        error.message,
+        error.status || HttpStatus.INTERNAL_SERVER_ERROR
+      );
+    }
+  }
+
+  @Get("find/:id")
+  @AuthJwtAccessProtected(AUTH_PERMISSIONS.CUSTOMER_VIEW)
+  async findUser(@Param("id") id: string) {
+    try {
+      return successResponse(await this.userService.findUserById(id));
     } catch (error) {
       throw new CommonException(
         error.message,
