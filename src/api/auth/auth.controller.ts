@@ -37,7 +37,7 @@ export class AuthController {
     const file = files && files.length > 0 ? files[0] : null;
     const result = await this.authService.registerUser(createUserRequest, file);
     return successResponse(result);
-  }
+  } 
 
   @SkipAuth()
   @Post("refresh-token")

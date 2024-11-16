@@ -72,7 +72,7 @@ export class UserService {
   async searchUsers(
     query: SearchUserRequest
   ): Promise<{ data: User[]; total: number }> {
-    const { limit = 6, page = 0 } = query;
+    const { limit = 6, page = 0 } = query; 
     const offset = page * limit;
     const filter: any = {};
 
