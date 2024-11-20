@@ -20,6 +20,7 @@ import {
   GetListRoleCommonRequest,
 } from "../../payload/request/role.request";
 import { successResponse } from "../../common/dto/response.dto";
+import { ApiBearerAuth } from "@nestjs/swagger";
 
 @Controller("roles")
 @UseFilters(CommonExceptionFilter)
@@ -27,6 +28,7 @@ export class RoleController {
   constructor(private readonly service: RoleService) {}
 
   @Post()
+  @ApiBearerAuth("access_token")
   @AuthJwtAccessProtected(AUTH_PERMISSIONS.ROLE_CREATE)
   async createRole(@Body() request: CreateAndUpdateRoleRequest) {
     try {
@@ -41,6 +43,7 @@ export class RoleController {
   }
 
   @Get("search")
+  @ApiBearerAuth("access_token")
   @AuthJwtAccessProtected(AUTH_PERMISSIONS.ROLE_VIEW)
   async getListRoles(@Query() query: GetListRoleCommonRequest) {
     try {
@@ -55,6 +58,7 @@ export class RoleController {
   }
 
   @Get("get/:roleId")
+  @ApiBearerAuth("access_token")
   @AuthJwtAccessProtected(AUTH_PERMISSIONS.ROLE_VIEW)
   async getRoleDetail(@Param("roleId") roleId: string) {
     try {
@@ -69,6 +73,7 @@ export class RoleController {
   }
 
   @Put(":roleId")
+  @ApiBearerAuth("access_token")
   @AuthJwtAccessProtected(AUTH_PERMISSIONS.ROLE_UPDATE)
   async updateRole(
     @Param("roleId") roleId: string,
@@ -86,6 +91,7 @@ export class RoleController {
   }
 
   @Post("/permissions")
+  @ApiBearerAuth("access_token")
   @AuthJwtAccessProtected(AUTH_PERMISSIONS.PERMISSION_VIEW)
   async getPermissionRoles(@Body() request: { role: string }) {
     try {
@@ -102,6 +108,7 @@ export class RoleController {
   }
 
   @Delete(":roleId")
+  @ApiBearerAuth("access_token")
   @AuthJwtAccessProtected(AUTH_PERMISSIONS.ROLE_DELETE)
   async deleteRole(@Param("roleId") roleId: string) {
     try {

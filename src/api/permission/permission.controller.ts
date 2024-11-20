@@ -21,6 +21,7 @@ import {
 import { SkipAuth } from "../../config/skip.auth";
 import { AuthJwtAccessProtected } from "src/common/guards/role.guard";
 import { AUTH_PERMISSIONS } from "src/enums/auth.enum";
+import { ApiBearerAuth } from "@nestjs/swagger";
 
 @Controller("permissions")
 @UseFilters(CommonExceptionFilter)
@@ -28,6 +29,7 @@ export class PermissionController {
   constructor(private readonly service: PermissionService) {}
 
   @Get()
+  @ApiBearerAuth("access_token")
   @AuthJwtAccessProtected(AUTH_PERMISSIONS.PERMISSION_VIEW)
   async getListPermissions() {
     try {
@@ -42,6 +44,7 @@ export class PermissionController {
   }
 
   @Get("get/:permissionId")
+  @ApiBearerAuth("access_token")
   @AuthJwtAccessProtected(AUTH_PERMISSIONS.PERMISSION_VIEW)
   async getPermissionDetail(@Param("permissionId") permissionId: string) {
     try {
@@ -56,6 +59,7 @@ export class PermissionController {
   }
 
   @Put("update/:permissionId")
+  @ApiBearerAuth("access_token")
   @AuthJwtAccessProtected(AUTH_PERMISSIONS.PERMISSION_UPDATE)
   async updatePermission(
     @Param("permissionId") permissionId: string,

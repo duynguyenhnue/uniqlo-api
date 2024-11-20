@@ -10,7 +10,7 @@ async function bootstrap() {
   app.enableCors();
 
   app.use(
-    "/api",
+    "/api*",
     basicAuth({
       users: { admin: "admin123" },
       challenge: true,
@@ -28,11 +28,14 @@ async function bootstrap() {
       },
       "access_token"
     )
+    .addSecurityRequirements("token")
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
 
-  SwaggerModule.setup("api", app, document);
+  SwaggerModule.setup("api", app, document, {
+    customSiteTitle: "Uniqlo documentation",
+  });
 
   await app.listen(process.env.PORT || 8200);
 }

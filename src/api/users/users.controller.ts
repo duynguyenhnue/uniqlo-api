@@ -23,6 +23,7 @@ import { CommonException } from "../../common/exception/common.exception";
 import { successResponse } from "../../common/dto/response.dto";
 import { AUTH_PERMISSIONS } from "src/enums/auth.enum";
 import { AuthJwtAccessProtected } from "src/common/guards/role.guard";
+import { ApiBearerAuth } from "@nestjs/swagger";
 
 @Controller("users")
 export class UserController {
@@ -36,6 +37,7 @@ export class UserController {
   // }
 
   @Get()
+  @ApiBearerAuth("access_token")
   async getUser(@Req() req) {
     try {
       return successResponse(await this.userService.getUser(req.user));
@@ -48,6 +50,7 @@ export class UserController {
   }
 
   @Get("find/:id")
+  @ApiBearerAuth("access_token")
   @AuthJwtAccessProtected(AUTH_PERMISSIONS.CUSTOMER_VIEW)
   async findUser(@Param("id") id: string) {
     try {
@@ -61,6 +64,7 @@ export class UserController {
   }
 
   @Get("search")
+  @ApiBearerAuth("access_token")
   @AuthJwtAccessProtected(AUTH_PERMISSIONS.CUSTOMER_VIEW)
   async search(@Query() query: SearchUserRequest) {
     try {
@@ -74,6 +78,7 @@ export class UserController {
   }
 
   @Put(":id")
+  @ApiBearerAuth("access_token")
   @AuthJwtAccessProtected(AUTH_PERMISSIONS.CUSTOMER_UPDATE)
   async updateUser(
     @Param("id") id: string,
@@ -94,6 +99,7 @@ export class UserController {
   }
 
   @Delete(":id")
+  @ApiBearerAuth("access_token")
   @AuthJwtAccessProtected(AUTH_PERMISSIONS.CUSTOMER_DELETE)
   async deleteUser(@Param("id") id: string): Promise<void> {
     try {
@@ -107,8 +113,16 @@ export class UserController {
   }
 
   @Put("change-password/:id")
+  @ApiBearerAuth("access_token")
   @AuthJwtAccessProtected(AUTH_PERMISSIONS.CUSTOMER_UPDATE)
-  async changePassword(@Param("id") id: string, @Body() changePasswordRequest: { oldPassword: string, newPassword: string }) {
-    return this.userService.changePassword(id, changePasswordRequest.oldPassword, changePasswordRequest.newPassword);
+  async changePassword(
+    @Param("id") id: string,
+    @Body() changePasswordRequest: { oldPassword: string; newPassword: string }
+  ) {
+    return this.userService.changePassword(
+      id,
+      changePasswordRequest.oldPassword,
+      changePasswordRequest.newPassword
+    );
   }
 }
