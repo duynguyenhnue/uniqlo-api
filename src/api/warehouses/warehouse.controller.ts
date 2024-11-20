@@ -1,58 +1,71 @@
 import {
-    Controller,
-    Body,
-    Post,
-    Get,
-    Param,
-    Put,
-    Delete,
-    Query,
-    NotFoundException,
-  } from "@nestjs/common";
+  Controller,
+  Body,
+  Post,
+  Get,
+  Param,
+  Put,
+  Delete,
+  Query,
+  NotFoundException,
+} from "@nestjs/common";
 import { WarehouseService } from "./warehouse.service";
-import { CreateWarehouseRequest, SearchWarehouseRequest, UpdateWarehouseRequest } from "src/payload/request/warehouse.request";
+import {
+  CreateWarehouseRequest,
+  SearchWarehouseRequest,
+  UpdateWarehouseRequest,
+} from "src/payload/request/warehouse.request";
 import { WarehouseResponse } from "src/payload/response/warehouse.respone";
 import { IResponse } from "src/common/interface/response.interface";
 import { successResponse } from "src/common/dto/response.dto";
+import { ApiBearerAuth } from "@nestjs/swagger";
 
-  @Controller("warehouses")
-  export class WarehouseController{
-    constructor(private readonly  warehouseService:WarehouseService){}
+@Controller("warehouses")
+export class WarehouseController {
+  constructor(private readonly warehouseService: WarehouseService) {}
 
-    @Post()
-    async create(
-      @Body() createWarehouseRequest: CreateWarehouseRequest
-    ): Promise<IResponse<WarehouseResponse>> { 
-      const warehouse = await this.warehouseService.create(createWarehouseRequest);
-      return successResponse(warehouse); 
-    }
+  @Post()
+  @ApiBearerAuth("access_token")
+  async create(
+    @Body() createWarehouseRequest: CreateWarehouseRequest
+  ): Promise<IResponse<WarehouseResponse>> {
+    const warehouse = await this.warehouseService.create(
+      createWarehouseRequest
+    );
+    return successResponse(warehouse);
+  }
 
-    @Get('search')
-  async search(@Query()query:SearchWarehouseRequest){
+  @Get("search")
+  @ApiBearerAuth("access_token")
+  async search(@Query() query: SearchWarehouseRequest) {
     return this.warehouseService.search(query);
   }
 
   @Get()
+  @ApiBearerAuth("access_token")
   async findAll(): Promise<WarehouseResponse[]> {
     return this.warehouseService.findAll();
   }
 
-  @Get(':id')
-  async findOne(@Param('id') id: string): Promise<WarehouseResponse> {
+  @Get(":id")
+  @ApiBearerAuth("access_token")
+  async findOne(@Param("id") id: string): Promise<WarehouseResponse> {
     return this.warehouseService.findOne(id);
   }
 
-  @Put(':id')
+  @Put(":id")
+  @ApiBearerAuth("access_token")
   async update(
-    @Param('id')id:string,
-    @Body() updateWarehouseRequest:UpdateWarehouseRequest
-  ):Promise<WarehouseResponse>{
-    return this.warehouseService.update(id,updateWarehouseRequest);
+    @Param("id") id: string,
+    @Body() updateWarehouseRequest: UpdateWarehouseRequest
+  ): Promise<WarehouseResponse> {
+    return this.warehouseService.update(id, updateWarehouseRequest);
   }
 
-  @Delete(':id')
-  async delete(@Param('id')id:string):Promise<{message:string}>{
+  @Delete(":id")
+  @ApiBearerAuth("access_token")
+  async delete(@Param("id") id: string): Promise<{ message: string }> {
     await this.warehouseService.delete(id);
-    return {message:`Delete Successfully`};
+    return { message: `Delete Successfully` };
   }
-  }
+}

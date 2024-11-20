@@ -15,6 +15,7 @@ import {
   AuthRequest,
 } from "../../payload/request/auth.request";
 import { FilesInterceptor } from "@nestjs/platform-express";
+import { ApiBearerAuth } from "@nestjs/swagger";
 
 @Controller("auth")
 export class AuthController {
@@ -37,7 +38,7 @@ export class AuthController {
     const file = files && files.length > 0 ? files[0] : null;
     const result = await this.authService.registerUser(createUserRequest, file);
     return successResponse(result);
-  } 
+  }
 
   @SkipAuth()
   @Post("refresh-token")
@@ -48,6 +49,7 @@ export class AuthController {
   }
 
   @Post("logout")
+  @ApiBearerAuth("access_token")
   async logout(@Body() authLogoutRequest: AuthLogoutRequest) {
     await this.authService.logout(authLogoutRequest);
     return successResponse({ message: "Logged out successfully" });
