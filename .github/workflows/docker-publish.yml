@@ -96,6 +96,17 @@ jobs:
             -e JWT_REFRESH_SECRET="uniqlo-secret-refresh" \
             -e DATABASE_MONGO_SRC="mongodb+srv://uniqlo:uuPWdNenRssvmUfc@uniqlo.stdai.mongodb.net/uniqlo-database?retryWrites=true&w=majority&appName=uniqlo" \
             -e PORT=8200 \
+            -e FIREBASE_TYPE=service_account \
+            -e FIREBASE_PROJECT_ID=uniqlo-ba002 \
+            -e FIREBASE_PRIVATE_KEY_ID=6a08bc9567b346166597e8dac4889c40eb5f445f \
+            -e FIREBASE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDT+bvDyIuHrFNm\nxJiBenmxUpzB7MAGSMrpTwBIFoWKJCXERYBEHT7Cdh0FgDoD0f8oF1atbDpzmvPq\n+xg1tBr9JD2/bsQxsO4jcwbh9uKj2sUokC0hs9kgIxW/StfSMBG4MBgZ29PBFuns\nM20n+/0D9MS5/+9Ark9MZ58sRsZqd7XXuum7lpWdZ4D4wD2Zh9RZP5UOrkFoW2Yk\nK3mSrzCwkGyd69U+Iw4fiaZi0eoWDxYk9Ba6x0S5ow5wZ2aRIT1WYJS2RmyDh/VN\ndiRwcsZSA72TIHwun6/OXZNxWJO+dZQBwqw0POK5PH1KCAL2rkZtcpRFa/vocluE\nUEj4Hs3pAgMBAAECggEAFx27cA/3RlwAqtr62hjb+z5L9bpunOjUhvGccWASX0SO\noUsmgBcT3GNCyjIn8Xl1ur6jz0z3iVqfKbOI+fdKf6tTeAQ5bUVTDOba++qfX9jI\nSiKB53RcU9y7nwUniMaA8i39fNlsC9kmuKFJkLQSTRuE1hdO1SYFJAsDUNHlip/R\nTr3YtwTq15XbGtemALRv6BN8acAx6GhKshhHF/FPVznZbBgP4YjuJTDNdOR0Q7an\nB+ThMdMzh/2tVBCBriBm/g1M23z4QkPKjmmNaIrxAz0ZARysIWrwWvcdMcbY/7Fh\nxFA2mCcY2J+EpQPgdSGrXrFJwMd5ID6RUY9pWrYIYQKBgQDvwjnHz1WEEYiQEBkq\npJm0mcHTtsoOf+I/ee5TPyOlvEPOQj1yjdC0CWRfYLek0tr2or/UJ0qel3pUXMRl\nKZKp+lCL+M4JkEgskm66qjpdfdutop6nHaS2xuL3CGCsqOmnk8P0bPb8W1AcqrKG\ns4lfmfM7J/zl3Citnlwie1sVoQKBgQDiVbS7iWCwYoqFMP/pryIDl9eublCzUY/B\nD8MhsFFGsHe0XfKGU3cp7UbrnadNFm6IMwzJsv1eRsJvsnRWPlkEJiXTJvmRArZr\n366lAy/HhobFK+UFrx9davOnakUSNtvciVywqfzpmKHpa/Q9bfLkgwN3k80t57oK\nGA60cizDSQKBgCowNxKdvSJ8I1eWPZdvV0ycMasbYvqiLiGVRwaG+bLUKepFZaKe\nqbbEYFEYJ7htEfKMOM0QDOVTKkdl+3kBk7ktPrcilL7CELEnIyzdf1+sIdev4dLu\nOGmhHZbydnBrWJIQQk7kTaGiP7qLntZtCSM1Z8NlCe84ij/iubunkSOBAoGAQQ7N\nspJcfpb0pjBdfzheGJZO4s7G16R8I8x6FHbwBde3sNrIWaAoQp73ocZhTqFCCFhU\nNq4CclT4ks7C7f9h6vVkLfuoBOy4ru1O8BOoajvbBVYGsMmTxHB3tQmw7Plj3VKG\nmClkj2jWMZhcTkQKa3DVUEvl0GopablckLW49DECgYEA1WnO0BTvJBds1IpZk8Vw\nXVPkDzkBmMfA9Kiy1OAcHBKCVyODDz3xYP/QF6+5JbbVEU+qT7ZRBro7mFznMAh3\nBrfdKWjd1Hx8sY31ohpymU0pSNiMk8snrYR3tFIGytrgOrLXt23e8dp0s4Gr0lnf\n4Igsp2KozJA2pJZQYKI3af4=\n-----END PRIVATE KEY-----\n" \
+            -e FIREBASE_CLIENT_EMAIL=firebase-adminsdk-7eeb2@uniqlo-ba002.iam.gserviceaccount.com \
+            -e FIREBASE_CLIENT_ID=114586404355289427877 \
+            -e FIREBASE_AUTH_URI=https://accounts.google.com/o/oauth2/auth \
+            -e FIREBASE_TOKEN_URI=https://oauth2.googleapis.com/token \
+            -e FIREBASE_AUTH_PROVIDER_X509_CERT_URL=https://www.googleapis.com/oauth2/v1/certs \
+            -e FIREBASE_CLIENT_X509_CERT_URL=https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-7eeb2%40uniqlo-ba002.iam.gserviceaccount.com \
+            -e FIREBASE_UNIVERSE_DOMAIN=googleapis.com \
             --name uniqlo_container duynguyenhnue/uniqlo-api:latest
           EOF
           # Xóa file private key sau khi hoàn thành
