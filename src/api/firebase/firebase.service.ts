@@ -7,11 +7,13 @@ import * as firebaseConfig from "../../config/firebase.json";
 @Injectable()
 export class FirebaseService implements OnModuleInit {
   onModuleInit() {
-    const serviceAccount: ServiceAccount = firebaseConfig as ServiceAccount;
-
     admin.initializeApp({
-      credential: admin.credential.cert(serviceAccount),
-      storageBucket: "uniqlo-ba002.appspot.com",
+      credential: admin.credential.cert({
+        projectId: process.env.FIREBASE_PROJECT_ID,
+        privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, "\n"),
+        clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+      }),
+      storageBucket: "travel-vietnam-2cca2.appspot.com",
     });
   }
 
