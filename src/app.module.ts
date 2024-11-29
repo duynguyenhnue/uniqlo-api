@@ -37,14 +37,11 @@ import { FavouritesModel } from "./api/favourites/favourites.module";
     InventoriesModel,
     PromotionModel,
     ReviewModule,
-<<<<<<< HEAD
-=======
     ContactModule,
     BlogdetailModel,
     FavouritesModel,
     
 
->>>>>>> cba640d (update api filter product, xử lý tim trang chủ 29/11/2024)
   ],
   controllers: [],
   providers: [
