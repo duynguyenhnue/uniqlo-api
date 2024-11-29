@@ -32,6 +32,10 @@ export class JwtAuthGuard extends AuthGuard("jwt") {
       throw new UnauthorizedException(message);
     }
 
+    const request=context.switchToHttp().getRequest();
+     request.user=user;
+
+
     return user;
   }
 

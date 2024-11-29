@@ -10,6 +10,7 @@ import {
   ValidateNested,
   IsInt,
   IsPositive,
+  Min,
 } from "class-validator";
 
 export class Address {
@@ -107,13 +108,13 @@ export class UpdateUserRequest {
 export class SearchUserRequest {
   @IsOptional()
   @IsInt()
-  @IsPositive()
+  @Min(0)
   @Type(() => Number)
   page?: number;
 
   @IsOptional()
   @IsInt()
-  @IsPositive()  
+  @Min(1)
   @Type(() => Number)
   limit?: number;
 

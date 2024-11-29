@@ -1,5 +1,5 @@
-import { Type } from 'class-transformer';
-import { IsString, IsNumber, IsArray, IsBoolean, IsOptional, IsEnum, IsMongoId, IsInt, IsPositive } from 'class-validator';
+import { Transform, Type } from 'class-transformer';
+import { IsString, IsNumber, IsArray, IsBoolean, IsOptional, IsEnum, IsMongoId, IsInt, IsPositive, IsObject, Min } from 'class-validator';
 import { Types } from 'mongoose';
 
 export class ProductCreateRequest  {
@@ -10,16 +10,22 @@ export class ProductCreateRequest  {
   Product_sku: string;
 
   @IsString()
+  Product_brand: string;
+
+  @IsString()
+  Product_tag: string;
+
+  @IsString()
   Product_description: string;
 
   @IsString()
   Product_currency: string;
 
-  @IsString()
-  Product_color: string;
+  @IsArray()
+  Product_color: string[];
 
-  @IsString()
-  Product_size: string;
+  @IsArray()
+  Product_size: string[];
 
   @IsOptional()
   @IsString()
@@ -43,7 +49,7 @@ export class ProductCreateRequest  {
   @IsOptional()
   @IsArray()
   @IsString({ each: true })
-  Product_images?: string[];
+  Product_images?: string;
 
   @IsBoolean()
   Product_isNewArrival: boolean;
@@ -55,6 +61,7 @@ export class ProductCreateRequest  {
   Product_isOnSale: boolean;
 
   @IsMongoId()
+  @IsOptional()
   categoryId: Types.ObjectId;
 }
 export class ProductUpdateRequest {
@@ -68,6 +75,14 @@ export class ProductUpdateRequest {
 
   @IsOptional()
   @IsString()
+  Product_tag?: string;
+
+  @IsOptional()
+  @IsString()
+  Product_brand?: string;
+
+  @IsOptional()
+  @IsString()
   Product_description?: string;
 
   @IsOptional()
@@ -75,12 +90,12 @@ export class ProductUpdateRequest {
   Product_currency?: string;
 
   @IsOptional()
-  @IsString()
-  Product_color?: string;
+  @IsArray()
+  Product_color?: string[];
 
   @IsOptional()
-  @IsString()
-  Product_size?: string;
+  @IsArray()
+  Product_size?: string[];
 
   @IsOptional()
   @IsString()
@@ -109,31 +124,44 @@ export class ProductUpdateRequest {
 
   @IsOptional()
   @IsBoolean()
-  Product_isNewArrival?: boolean;
+  Product_isNewArrival?: string;
 
   @IsOptional()
   @IsBoolean()
-  Product_isBestSeller?: boolean;
+  Product_isBestSeller?: string;
 
   @IsOptional()
   @IsBoolean()
-  Product_isOnSale?: boolean;
+  Product_isOnSale?: string;
 
   @IsOptional()
   @IsMongoId()
-  categoryId?: Types.ObjectId;
+  categoryId?: string;
 }
+
+export class PriceRangeDto {
+  @IsOptional()
+  @Type(() => Number)
+  @IsNumber()
+  minPrice?: number;
+
+  @IsOptional()
+  @Type(() => Number)  
+  @IsNumber()
+  maxPrice?: number;
+}
+
 export class ProductSearchRequest {
   @IsOptional()
   @IsInt()
-  @IsPositive()
   @Type(() => Number)
+  @Min(0)
   page?: number;
 
   @IsOptional()
   @IsInt()
-  @IsPositive()  
   @Type(() => Number)
+  @Min(1)
   limit?: number;
 
 
@@ -143,6 +171,78 @@ export class ProductSearchRequest {
 
   @IsOptional()
   @IsString()
+  categoryId?: string;
+
+  @IsOptional()
+  @IsString()
+  Product_size?: string;
+
+  @IsOptional()
+  @IsString()
+  Product_color?: string;
+
+  @IsOptional()
+  @IsInt()
   @Type(() => Number)
-  Product_price?:number
+  minPrice?: number;
+
+  @IsOptional()
+  @IsInt()
+  @Type(() => Number)
+  maxPrice?: number;
+
+
+  @IsOptional()
+  @IsObject()
+  @Type(() => Number)
+  Product_price?:PriceRangeDto
+}
+
+
+export class fitlerProduct {
+  @IsOptional()
+  @Type(() => Number)
+  @IsInt()
+  @Min(0)
+  page?: number;
+
+  @IsOptional()
+  @Type(() => Number)
+  @IsInt()
+  @Min(1)
+  limit?: number;
+
+  @IsOptional()
+  @Type(() => Number)
+  @Min(0)
+  minPrice?: number;
+
+  @IsOptional()
+  @Type(() => Number)
+  @Min(0)
+  maxPrice?: number;
+
+  @IsOptional()
+  @Type(() => PriceRangeDto)
+  Product_price?: PriceRangeDto;
+
+  @IsOptional()
+  @IsString()
+  Product_brand?: string;
+
+  @IsOptional()
+  @IsString()
+  Product_tag?: string;
+
+  @IsOptional()
+  @IsString()
+  Product_size?: string;
+
+  @IsOptional()
+  @IsString()
+  Product_color?: string;
+
+  @IsOptional()
+  @IsMongoId()
+  categoryId?: string;
 }

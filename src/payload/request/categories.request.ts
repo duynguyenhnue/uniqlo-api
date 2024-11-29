@@ -10,7 +10,10 @@ import {
   ValidateNested,
   IsInt,
   IsPositive,
+  Min,
+  IsMongoId,
 } from "class-validator";
+import { Types } from "mongoose";
 export class CreateCategoryRequest {
     @IsString()
     @IsNotEmpty()
@@ -27,13 +30,13 @@ export class CreateCategoryRequest {
     @IsBoolean()
     featured: boolean;
   
-    @IsString()
-    @IsOptional()
-    size?: string;
+    // @IsString()
+    // @IsOptional()
+    // size?: string;
   
-    @IsString()
-    @IsOptional()
-    color?: string;
+    // @IsString()
+    // @IsOptional()
+    // color?: string;
   
     @IsString()
     @IsOptional()
@@ -42,6 +45,10 @@ export class CreateCategoryRequest {
     @IsString()
     @IsOptional()
     status?: string;
+
+    // @IsMongoId()
+    // @IsOptional()
+    // product_id:Types.ObjectId
   
   }
   
@@ -63,13 +70,13 @@ export class CreateCategoryRequest {
     @IsBoolean()
     featured?: boolean;
   
-    @IsOptional()
-    @IsString()
-    size?: string;
+    // @IsOptional()
+    // @IsString()
+    // size?: string;
   
-    @IsOptional()
-    @IsString()
-    color?: string;
+    // @IsOptional()
+    // @IsString()
+    // color?: string;
   
     @IsOptional()
     @IsString()
@@ -79,17 +86,22 @@ export class CreateCategoryRequest {
     @IsString()
     status?: string;
 
+    // @IsMongoId()
+    // @IsOptional()
+    // product_id?:Types.ObjectId
+
+
   }
   export class SearchCategorybyNameRequest{
     @IsOptional()
     @IsInt()
-    @IsPositive()
+    @Min(0)
     @Type(() => Number)
     page?: number;
   
     @IsOptional()
     @IsInt()
-    @IsPositive()  
+    @Min(1)
     @Type(() => Number)
     limit?: number;
     

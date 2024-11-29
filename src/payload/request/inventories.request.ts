@@ -8,6 +8,7 @@ import {
   IsPositive,
   IsMongoId,
   IsArray,
+  Min,
 } from "class-validator";
 
 export class CreateInventoryRequest {
@@ -100,13 +101,13 @@ export class UpdateInventoryRequest {
 export class SearchInventoryRequest {
   @IsOptional()
   @IsInt()
-  @IsPositive()
+  @Min(0)
   @Type(() => Number)
   page?: number;
 
   @IsOptional()
   @IsInt()
-  @IsPositive()
+  @Min(1)
   @Type(() => Number)
   limit?: number;
 
