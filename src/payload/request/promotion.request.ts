@@ -110,11 +110,13 @@ export class UpdatePromotionRequest {
 export class SearchPromotionRequest {
     @IsOptional()
     @IsInt()
+    @Min(0)
     @Type(() => Number)
     page?: number;
 
     @IsOptional()
     @IsInt()
+    @Min(1)
     @Type(() => Number)
     limit?: number;
 

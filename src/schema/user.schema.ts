@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import { Document, Types } from 'mongoose';
 
 @Schema()
  class Address {
@@ -33,16 +33,16 @@ export class User extends Document {
   @Prop({ required: true })
   password: string;
 
-  @Prop({ type:userPhone, required: true })
+  @Prop({ type:userPhone, required: true,default: null })
   phone: userPhone;
 
   @Prop({ required: true })
   fullName: string;
 
-  @Prop({ required: true })
+  @Prop({ required: true,default: null})
   birthdate: Date;
 
-  @Prop({ type: Address, required: true })
+  @Prop({ type: Address, required: true ,default: null})
   address: Address;
 
   @Prop({ type: [String], default: [] })
@@ -59,6 +59,9 @@ export class User extends Document {
 
   @Prop({ default: 'USER' })
   role: string;
+
+  @Prop({type:[Types.ObjectId],ref:'products',required:true,default:[]})
+  product_Id:Types.ObjectId[];
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

@@ -28,7 +28,7 @@ export class InventoriesService{
     async search(query:SearchInventoryRequest):Promise<{data:InventoryResponse[];total:number}>
     {
         const {limit=6,page=0,productId,warehouseLocation}=query;
-        const offset=(page-1)*limit;
+        const offset=(page)*limit;
         const filter: any = {};
     if(productId)
     {

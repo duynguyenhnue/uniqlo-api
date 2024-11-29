@@ -4,10 +4,12 @@ export class ProductResponse {
   id: string;
   Product_name: string;
   Product_sku: string;
+  Product_brand: string;
+  Product_tag: string;
   Product_description: string;
   Product_currency: string;
-  Product_color: string;
-  Product_size: string;
+  Product_color: string[];
+  Product_size: string[];
   Product_variantSku: string | null;
   Product_specifications: string | null;
   Product_price: number;

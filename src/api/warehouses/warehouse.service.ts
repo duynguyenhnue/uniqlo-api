@@ -28,7 +28,7 @@ export class WarehouseService{
     async search(query:SearchWarehouseRequest):Promise<{data:WarehouseResponse[];total:number}>
     {
         const {limit=6,page=0,name,code}=query;
-        const offset=(page-1)*limit;
+        const offset=(page)*limit;
         const filter: any = {};
     if(name)
     {

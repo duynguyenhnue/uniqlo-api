@@ -1,6 +1,6 @@
 
 import { Type } from 'class-transformer';
-import { IsOptional, IsString, IsBoolean, IsArray, IsMongoId, IsDate, IsPositive, IsInt } from 'class-validator';
+import { IsOptional, IsString, IsBoolean, IsArray, IsMongoId, IsDate, IsPositive, IsInt, Min } from 'class-validator';
 
 export class CreateWarehouseRequest {
   @IsString()
@@ -50,15 +50,13 @@ export class SearchWarehouseRequest {
   @IsString()
   code?: string;
 
-  @IsOptional()
-  @IsInt()
-  @IsPositive()
   @Type(() => Number)
+  @IsInt()
+  @Min(0)
   page?: number;
 
-  @IsOptional()
-  @IsInt()
-  @IsPositive()  
   @Type(() => Number)
+  @IsInt()
+  @Min(1)
   limit?: number;
 }

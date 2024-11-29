@@ -15,6 +15,9 @@ import { WarehouseModel } from "./api/warehouses/warehouse.module";
 import { InventoriesModel } from "./api/inventory/inventories.module";
 import { PromotionModel } from "./api/promotions/promotion.module";
 import { ReviewModule } from "./api/reviews/review.module";
+import { ContactModule } from "./api/contact/contact.module";
+import { BlogdetailModel } from "./api/blogdetails/blogdetails.module";
+import { FavouritesModel } from "./api/favourites/favourites.module";
 
 @Module({
   imports: [
@@ -34,6 +37,14 @@ import { ReviewModule } from "./api/reviews/review.module";
     InventoriesModel,
     PromotionModel,
     ReviewModule,
+<<<<<<< HEAD
+=======
+    ContactModule,
+    BlogdetailModel,
+    FavouritesModel,
+    
+
+>>>>>>> cba640d (update api filter product, xử lý tim trang chủ 29/11/2024)
   ],
   controllers: [],
   providers: [
