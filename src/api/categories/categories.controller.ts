@@ -18,49 +18,83 @@ import {
 import { successResponse } from "src/common/dto/response.dto";
 import { IResponse } from "src/common/interface/response.interface";
 import { CategoryResponse } from "src/payload/response/categories.respone";
-import { ApiBearerAuth } from "@nestjs/swagger";
+import { AuthJwtAccessProtected } from "src/common/guards/role.guard";
+import { AUTH_PERMISSIONS } from "src/enums/auth.enum";
 
 @Controller("categories")
 export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
 
   @Post()
-  @ApiBearerAuth("access_token")
+  @AuthJwtAccessProtected(AUTH_PERMISSIONS.CATEGORY_CREATE)
   async create(
     @Body() createCategoryRequest: CreateCategoryRequest
-  ): Promise<IResponse<CategoryResponse>> {
-    const category = await this.categoryService.create(createCategoryRequest);
+  ): Promise<IResponse<CategoryResponse>> { 
+    try{
+      const category = await this.categoryService.create(createCategoryRequest);
     return successResponse(category);
+    } catch(error)
+    {
+      throw new NotFoundException(`Error while create category`);
+    }
   }
-  //
-  @Get("search")
-  @ApiBearerAuth("access_token")
-  async search(@Query() query: SearchCategorybyNameRequest) {
-    return this.categoryService.searchCategory(query);
+  // 
+  @Get('search')
+  @AuthJwtAccessProtected(AUTH_PERMISSIONS.CATEGORY_VIEW)
+  async search(@Query() query:SearchCategorybyNameRequest){
+    try{
+      return this.categoryService.searchCategory(query);
+    }catch(error)
+    {
+      throw new NotFoundException(`Error while search category`)
+    }
   }
 
   @Get()
-  @ApiBearerAuth("access_token")
+  @AuthJwtAccessProtected(AUTH_PERMISSIONS.CATEGORY_VIEW)
   async findAll(): Promise<CategoryResponse[]> {
-    return this.categoryService.findAll();
+    try{
+      return this.categoryService.findAll();
+    }catch(error)
+    {
+      throw new NotFoundException(`Error while get all category`);
+    }
   }
-  @Get(":id")
-  @ApiBearerAuth("access_token")
-  async findOne(@Param("id") id: string): Promise<CategoryResponse> {
-    return this.categoryService.findOne(id);
+  @Get(':id')
+  @AuthJwtAccessProtected(AUTH_PERMISSIONS.CATEGORY_VIEW)
+  async findOne(@Param('id') id: string): Promise<CategoryResponse> {
+    try{
+      return this.categoryService.findOne(id);
+    }catch(error)
+    {
+      throw new NotFoundException( `Error while get category by id`);
+    }
   }
-  @Put(":id")
-  @ApiBearerAuth("access_token")
+
+  @Put(':id')
+  @AuthJwtAccessProtected(AUTH_PERMISSIONS.CATEGORY_UPDATE)
   async update(
-    @Param("id") id: string,
-    @Body() updateCategoryRequest: UpdateCategoryRequest
-  ): Promise<CategoryResponse> {
-    return this.categoryService.update(id, updateCategoryRequest);
+    @Param('id')id:string,
+    @Body() updateCategoryRequest:UpdateCategoryRequest
+  ):Promise<CategoryResponse>{
+    try{
+      return this.categoryService.update(id,updateCategoryRequest);
+
+    }catch(error)
+    {
+      throw new NotFoundException(`Error while update category`);
+    }
   }
-  @Delete(":id")
-  @ApiBearerAuth("access_token")
-  async delete(@Param("id") id: string): Promise<{ message: string }> {
-    await this.categoryService.delete(id);
-    return { message: `Delete Successfully` };
+
+  @Delete(':id')
+@AuthJwtAccessProtected(AUTH_PERMISSIONS.CATEGORY_DELETE)
+  async delete(@Param('id') id:string):Promise<{message:string}>{
+    try{
+      await this.categoryService.delete(id);
+    return {message:`Delete Successfully`};
+    }catch(error)
+    {
+      throw new NotFoundException(`Error while delete category`);
+    }
   }
 }

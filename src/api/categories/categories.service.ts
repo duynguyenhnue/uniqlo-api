@@ -21,8 +21,12 @@ async create(createCategoryRequest:CreateCategoryRequest):Promise<CategoryRespon
 }
 
 private async createCategoriesindb(createCategoryRequest:CreateCategoryRequest):Promise<Category>{
-    console.log("kq>>",createCategoryRequest);
-    return this.CategoryModel.create(createCategoryRequest);
+    try{
+        return this.CategoryModel.create(createCategoryRequest);
+    }catch(error)
+    {
+        throw error;
+    }
 
 }
 // async searchbyName(name:string):Promise<CategoryResponse[]>{
@@ -35,15 +39,15 @@ private async createCategoriesindb(createCategoryRequest:CreateCategoryRequest):
 // }
 async searchCategory(query:SearchCategorybyNameRequest):Promise<{data:CategoryResponse[];total:number}>
 {
-    const {limit=6,page=0,name}=query;
-    const offset=(page-1)*limit;
+    try{
+        const {limit=6,page=0,name}=query;
+    const offset=(page)*limit;
     const filter: any = {};
 if(name)
 {
     const value=String(name).trim();
     filter.name={ $regex: value, $options: "i"};
 }
-console.log("filter",filter)
 const data = await this.CategoryModel
       .find(filter)
       .sort({ createdAt: -1 })
@@ -55,36 +59,58 @@ const data = await this.CategoryModel
         data:data.map(this.mapCategoryToResponse),
       total,
       };
+    }catch(error)
+    {
+        throw error;
+    }
 }
 
-
 async findAll(): Promise<CategoryResponse[]> {
-    const categories = await this.CategoryModel.find().exec();
+    try{
+        const categories = await this.CategoryModel.find().exec();
     return categories.map(category => this.mapCategoryToResponse(category));
+    }catch(error)
+    {
+        throw error;
+    }
   }
 
 
 async findOne(id:string):Promise<CategoryResponse>{
+   try{
     const check=await this.CategoryModel.findById(id).exec();
     if(!check)
     {
         throw new NotFoundException(`Category with Id ${id} not found`);
     }
     return this.mapCategoryToResponse(check);
+   }catch(error)
+   {
+    throw error;
+   }
 }
 async update(id:string,updateCategoryRequest:UpdateCategoryRequest):Promise<CategoryResponse>{
-    console.log("ID:", id);
-    const update=await this.CategoryModel.findByIdAndUpdate(id,updateCategoryRequest,{new:true,}).exec();
+    try{
+        const update=await this.CategoryModel.findByIdAndUpdate(id,updateCategoryRequest,{new:true,}).exec();
     if (!update) {
         throw new NotFoundException(`Category with ID not found`);   
     }
     return this.mapCategoryToResponse(update);
+    }catch(error)
+    {
+        throw error;
+    }
 }
 async delete(id:string):Promise<void>{
+try{
     const kq=await this.CategoryModel.findByIdAndDelete(id).exec();
-if(!kq)
+    if(!kq)
+    {
+        throw new NotFoundException(`Category with ID not found`);
+    }
+}catch(error)
 {
-    throw new NotFoundException(`Category with ID not found`);
+    throw error;
 }
 }
 
@@ -95,10 +121,11 @@ private mapCategoryToResponse(category: Category): CategoryResponse {
       image: category.image,
       order: category.order,
       featured: category.featured,
-      size: category.size,
-      color: category.color,
+    //   size: category.size,
+    //   color: category.color,
       material: category.material,
       status: category.status,
+    //   product_id:category.product_id
     };
 }
 }

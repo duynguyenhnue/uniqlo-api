@@ -17,6 +17,9 @@ import { PromotionModel } from "./api/promotions/promotion.module";
 import { ReviewModule } from "./api/reviews/review.module";
 import { DiscountsModule } from "./api/discounts/discounts.module";
 import { VerificationCodeModule } from "./api/verification-code/verification-code.module";
+import { ContactModule } from "./api/contact/contact.module";
+import { BlogdetailModel } from "./api/blogdetails/blogdetails.module";
+import { FavouritesModel } from "./api/favourites/favourites.module";
 
 @Module({
   imports: [
@@ -38,6 +41,9 @@ import { VerificationCodeModule } from "./api/verification-code/verification-cod
     ReviewModule,
     DiscountsModule,
     VerificationCodeModule,
+    ContactModule,
+    BlogdetailModel,
+    FavouritesModel,
   ],
   controllers: [],
   providers: [

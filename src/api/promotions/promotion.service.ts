@@ -35,7 +35,7 @@ export class PromotionService{
     async search(query:SearchPromotionRequest):Promise<{data:PromotionResponse[];total:number}>
 {
     const {limit=6,page=0,code,name}=query;
-    const offset=(page-1)*limit;
+    const offset=(page)*limit;
     const filter: any = {};
 if(name)
 {

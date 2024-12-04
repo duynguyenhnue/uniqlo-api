@@ -29,8 +29,8 @@ private async createreviewindb(create:CreateReview):Promise<Review>{
 
 async search(query:SearchReview):Promise<{data:ReviewResponse[],total:number,page:number}>
 {
-    const {limit=6,page=1,title}=query;
-    const offset=(page-1)*limit;
+    const {limit=6,page=0,title}=query;
+    const offset=(page)*limit;
     const filter: any = {};
     if(!title||title.trim()==="")
         {

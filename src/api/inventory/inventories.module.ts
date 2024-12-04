@@ -2,11 +2,19 @@ import { Model } from "mongoose";
 import { InventoriesController } from "./inventories.controller";
 import { InventoriesService } from "./inventories.service";
 import { InventoriesSchema, Inventory } from "src/schema/inventories.schema";
-import { Module } from "@nestjs/common";
+import { forwardRef, Module } from "@nestjs/common";
 import { MongooseModule } from "@nestjs/mongoose";
+import { RefreshTokenModule } from "../refresh-token/refresh-token.module";
+import { AuthModule } from "../auth/auth.module";
+import { PermissionModule } from "../permission/permission.module";
+import { RoleModule } from "../roles/role.module";
 
 @Module({
     imports:[MongooseModule.forFeature([{name:Inventory.name,schema:InventoriesSchema}]),
+    forwardRef(()=>RefreshTokenModule),
+    forwardRef(()=>AuthModule),
+    forwardRef(()=>PermissionModule),
+    forwardRef(()=>RoleModule)
 
 ],
 providers:[InventoriesService],

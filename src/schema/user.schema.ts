@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import { Document, Types } from 'mongoose';
 
 @Schema()
 class Address {
@@ -38,7 +38,7 @@ export class User extends Document {
   @Prop({ required: true })
   dateOfBirth: Date;
 
-  @Prop({ type: Address, required: true })
+  @Prop({ type: Address, required: true ,default: null})
   address: Address;
 
   @Prop({ type: [String], default: [] })
@@ -53,6 +53,7 @@ export class User extends Document {
   @Prop({ default: 'USER' })
   role: string;
 
+  @Prop({ default: 'Male' })
   gender: string;
 }
 
