@@ -15,6 +15,8 @@ import { WarehouseModel } from "./api/warehouses/warehouse.module";
 import { InventoriesModel } from "./api/inventory/inventories.module";
 import { PromotionModel } from "./api/promotions/promotion.module";
 import { ReviewModule } from "./api/reviews/review.module";
+import { DiscountsModule } from "./api/discounts/discounts.module";
+import { VerificationCodeModule } from "./api/verification-code/verification-code.module";
 
 @Module({
   imports: [
@@ -34,6 +36,8 @@ import { ReviewModule } from "./api/reviews/review.module";
     InventoriesModel,
     PromotionModel,
     ReviewModule,
+    DiscountsModule,
+    VerificationCodeModule,
   ],
   controllers: [],
   providers: [

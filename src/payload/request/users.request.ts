@@ -4,7 +4,6 @@ import {
   IsString,
   IsNotEmpty,
   IsOptional,
-  IsBoolean,
   IsDateString,
   Length,
   ValidateNested,
@@ -14,30 +13,26 @@ import {
 
 export class Address {
   @IsString({message:"homenumber phải là dạng chuỗi"})
-  @IsNotEmpty({message:"homenumber không được để trống"})
-  homenumber: string;
+  @IsNotEmpty({message:"ward không được để trống"})
+  ward: string;
 
-  @IsString({message:"street phải là dạng chuỗi"})
-  @IsNotEmpty({message:"street không được để trống"})
-  street: string;
+  @IsString({message:"district phải là dạng chuỗi"})
+  @IsNotEmpty({message:"district không được để trống"})
+  district: string;
 
-  @IsString({message:"city phải là dạng chuỗi"})
-  @IsNotEmpty({message:"city không được để trống"})
-  city: string;
+  @IsString({message:"province phải là dạng chuỗi"})
+  @IsNotEmpty({message:"province không được để trống"})
+  province: string;
+}
 
+export class Phone {
   @IsString({message:"country phải là dạng chuỗi"})
   @IsNotEmpty({message:"country không được để trống"})
   country: string;
-}
 
-export class userPhone {
-  @IsString({message:"phoneCountry phải là dạng chuỗi"})
-  @IsNotEmpty({message:"phoneCountry không được để trống"})
-  phoneCountry: string;
-
-  @IsString({message:"phonenumber phải là dạng chuỗi"})
-  @IsNotEmpty({message:"phonenumber không được để trống"})
-  phoneNumber: string;
+  @IsString({message:"number phải là dạng chuỗi"})
+  @IsNotEmpty({message:"number không được để trống"})
+  number: string;
 }
 
 export class CreateUserRequest {
@@ -67,8 +62,8 @@ export class CreateUserRequest {
   @IsNotEmpty({message:"Số điện thoại không được để trống"})
   @IsString({message:"phone phải là dạng chuỗi"})
   @ValidateNested({each:true})   
-  @Type(()=>userPhone) 
-  phone: userPhone[];
+  @Type(()=>Phone) 
+  phone: Phone[];
 }
 
 export class UpdateUserRequest {
@@ -91,17 +86,21 @@ export class UpdateUserRequest {
 
   @IsDateString()
   @IsOptional()
-  birthday?: string | null;
+  dateOfBirth?: string | null;
 
   @IsOptional()
   address?: Address;
 
   @IsOptional()
-  phone?: userPhone;
+  phone?: Phone;
 
-  @IsString({message:"status phải là dạng chuỗi"})
+  @IsString()
   @IsOptional()
   status?: string;
+
+  @IsString()
+  @IsOptional()
+  gender?: string;
 }
 
 export class SearchUserRequest {
@@ -124,4 +123,15 @@ export class SearchUserRequest {
   @IsString({message:"email phải là dạng chuỗi"})
   @IsOptional()
   email?: string;
+}
+
+
+export class ChangePasswordRequest {
+  @IsString()
+  @IsNotEmpty()
+  oldPassword: string;
+
+  @IsString()
+  @IsNotEmpty()
+  newPassword: string;
 }

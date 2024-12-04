@@ -15,6 +15,7 @@ import {
 import { UserService } from "./users.service";
 import { User } from "../../schema/user.schema";
 import {
+  ChangePasswordRequest,
   CreateUserRequest,
   SearchUserRequest,
   UpdateUserRequest,
@@ -112,17 +113,8 @@ export class UserController {
     }
   }
 
-  @Put("change-password/:id")
-  @ApiBearerAuth("access_token")
-  @AuthJwtAccessProtected(AUTH_PERMISSIONS.CUSTOMER_UPDATE)
-  async changePassword(
-    @Param("id") id: string,
-    @Body() changePasswordRequest: { oldPassword: string; newPassword: string }
-  ) {
-    return this.userService.changePassword(
-      id,
-      changePasswordRequest.oldPassword,
-      changePasswordRequest.newPassword
-    );
+  @Post("change-password")
+  async changePassword(@Req() req, @Body() changePasswordRequest: ChangePasswordRequest) {    
+    return this.userService.changePassword(req.user._id, changePasswordRequest.oldPassword, changePasswordRequest.newPassword);
   }
 }

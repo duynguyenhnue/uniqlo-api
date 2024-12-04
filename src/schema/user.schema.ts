@@ -2,30 +2,26 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 
 @Schema()
- class Address {
+class Address {
   @Prop({ required: true })
-  homenumber: string;
+  province: string;
 
   @Prop({ required: true })
-  street: string;
+  district: string;
 
   @Prop({ required: true })
-  city: string;
-
-  @Prop({ required: true })
-  country: string;
+  ward: string;
 }
 
 @Schema()
-class userPhone{
+class Phone {
   @Prop({ required: true })
-  phoneCountry: string;
+  country: string;
 
   @Prop({ required: true })
-  phoneNumber: string;
+  number: string;
 }
-
-@Schema({ timestamps: { createdAt: 'createAt', updatedAt: 'updateAt' } })
+@Schema({ timestamps: true })
 export class User extends Document {
   @Prop({ required: true, unique: true })
   email: string;
@@ -33,14 +29,14 @@ export class User extends Document {
   @Prop({ required: true })
   password: string;
 
-  @Prop({ type:userPhone, required: true })
-  phone: userPhone;
+  @Prop({ type: Phone, required: true })
+  phone: Phone;
 
   @Prop({ required: true })
   fullName: string;
 
   @Prop({ required: true })
-  birthdate: Date;
+  dateOfBirth: Date;
 
   @Prop({ type: Address, required: true })
   address: Address;
@@ -51,14 +47,13 @@ export class User extends Document {
   @Prop({ default: '' })
   advice: string;
 
-  @Prop({ default: Date.now })
-  createAt: Date;
-
-  @Prop({ default: true })
-  status: boolean;
+  @Prop({ default: 'ACTIVE' })
+  status: string;
 
   @Prop({ default: 'USER' })
   role: string;
+
+  gender: string;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
