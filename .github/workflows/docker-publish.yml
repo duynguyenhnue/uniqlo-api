@@ -1,0 +1,102 @@
+name: Docker
+
+on:
+  push:
+    branches: ["master"] 
+    tags: ["v*.*.*"]
+
+env:
+  REGISTRY: docker.io
+  IMAGE_NAME: duynguyenhnue/${{ github.event.repository.name }}
+  JWT_SECRET: ${{ secrets.JWT_SECRET }}
+  JWT_REFRESH_SECRET: ${{ secrets.JWT_REFRESH_SECRET }}
+  DATABASE_MONGO_SRC: ${{ secrets.DATABASE_MONGO_SRC }}
+  PORT: 8000
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install cosign
+        if: github.event_name != 'pull_request'
+        uses: sigstore/cosign-installer@59acb6260d9c0ba8f4a2f9d9b48431a222b68e20 # v3.5.0
+        with:
+          cosign-release: "v2.2.4"
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@f95db51fddba0c2d1ec667646a06c2ce06100226 # v3.0.0
+
+      - name: Log into Docker Hub
+        if: github.event_name != 'pull_request'
+        uses: docker/login-action@343f7c4344506bcbf9b4de18042ae17996df046d # v3.0.0
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+      - name: Build and push Docker image
+        id: build-and-push
+        uses: docker/build-push-action@0565240e2d4ab88bba5387d719585280857ece09 # v5.0.0
+        with:
+          context: .
+          push: true
+          tags: |
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Sign the published Docker image
+        if: ${{ github.event_name != 'pull_request' }}
+        env:
+          TAGS: ${{ steps.build-and-push.outputs.tags }}
+          DIGEST: ${{ steps.build-and-push.outputs.digest }}
+        run: echo "${TAGS}" | xargs -I {} cosign sign --yes {}@${DIGEST}
+
+      - name: Deploy to server
+        env:
+          PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          SERVER_USER: ${{ secrets.SERVER_USER }}
+          SERVER_IP: ${{ secrets.SERVER_IP }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          JWT_REFRESH_SECRET: ${{ secrets.JWT_REFRESH_SECRET }}
+          DATABASE_MONGO_SRC: ${{ secrets.DATABASE_MONGO_SRC }}
+          PORT: 8000
+        
+        run: |
+          # Tạo file private key tạm thời
+          echo "${PRIVATE_KEY}" > private_key.pem
+          chmod 600 private_key.pem
+
+          # Kết nối tới server và triển khai Docker container
+          ssh -o StrictHostKeyChecking=no -i private_key.pem $SERVER_USER@$SERVER_IP << 'EOF'
+
+          export JWT_SECRET="${JWT_SECRET}"
+          export JWT_REFRESH_SECRET="${JWT_REFRESH_SECRET}"
+          export DATABASE_MONGO_SRC="${DATABASE_MONGO_SRC}"
+
+          # Pull image từ Docker Hub
+          docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+
+          # Stop and remove the old container if it exists
+          docker stop uniqlo_container || true
+          docker rm uniqlo_container || true
+
+          # Chạy container mới, bind port 8200
+          docker run -d --restart unless-stopped \
+            -p 8200:8200 \
+            -e JWT_SECRET="uniqlo-secret" \
+            -e JWT_REFRESH_SECRET="uniqlo-secret-refresh" \
+            -e DATABASE_MONGO_SRC="mongodb+srv://uniqlo:uuPWdNenRssvmUfc@uniqlo.stdai.mongodb.net/uniqlo-database?retryWrites=true&w=majority&appName=uniqlo" \
+            -e PORT=8200 \
+            --name uniqlo_container duynguyenhnue/uniqlo-api:latest
+          EOF
+          # Xóa file private key sau khi hoàn thành
+          rm private_key.pem
