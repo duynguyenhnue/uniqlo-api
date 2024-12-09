@@ -55,6 +55,9 @@ export class User extends Document {
 
   @Prop({ default: 'Male' })
   gender: string;
+
+  @Prop({ type: [Types.ObjectId], default: [] })
+  product_Id: Types.ObjectId[];
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
