@@ -6,7 +6,11 @@ export enum DiscountStatus {
 }
 
 export enum DiscountType {
-  TOUR = 'TOUR',
-  HOTEL = 'HOTEL',
-  ALL = 'ALL',
+  FREE_SHIP = 'FREE_SHIP',
+  SHIRT = 'SHIRT',
+  TROUSERS = 'TROUSERS',
+  ACCESSORIES = 'ACCESSORIES',
+  SHOES = 'SHOES',
+  BAG = 'BAG',
+  OTHER = 'OTHER',
 }

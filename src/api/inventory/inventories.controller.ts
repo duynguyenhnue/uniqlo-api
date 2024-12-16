@@ -8,11 +8,13 @@ import {
   Post,
   Put,
   Query,
+  Req,
 } from "@nestjs/common";
 import { InventoriesService } from "./inventories.service";
 import {
   CreateInventoryRequest,
   SearchInventoryRequest,
+  UpdateInventoryRequest,
 } from "src/payload/request/inventories.request";
 import { InventoryResponse } from "src/payload/response/inventories.respone";
 import { IResponse } from "src/common/interface/response.interface";
@@ -27,18 +29,20 @@ export class InventoriesController {
   @Post()
   @ApiBearerAuth("access_token")
   async create(
-    @Body() createInventoryRequest: CreateInventoryRequest
+    @Body() createInventoryRequest: CreateInventoryRequest,
+    @Req() req
   ): Promise<IResponse<InventoryResponse>> {
     const inventory = await this.inventoriesService.create(
-      createInventoryRequest
+      createInventoryRequest,
+      req.user
     );
     return successResponse(inventory);
   }
 
   @Get("search")
   @ApiBearerAuth("access_token")
-  async search(@Query() query: SearchInventoryRequest) {
-    return this.inventoriesService.search(query);
+  async search(@Query() query: SearchInventoryRequest, @Req() req) {
+    return this.inventoriesService.search(query, req.user);
   }
 
   @Get()
@@ -57,9 +61,9 @@ export class InventoriesController {
   @ApiBearerAuth("access_token")
   async update(
     @Param("id") id: string,
-    @Body() updateCategoryRequest: UpdateCategoryRequest
+    @Body() updateInventoryRequest: UpdateInventoryRequest
   ): Promise<InventoryResponse> {
-    return this.inventoriesService.update(id, updateCategoryRequest);
+    return this.inventoriesService.update(id, updateInventoryRequest);
   }
 
   @Delete(":id")

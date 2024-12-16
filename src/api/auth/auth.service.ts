@@ -4,10 +4,10 @@ import { Model } from "mongoose";
 import { JwtService } from "@nestjs/jwt";
 import * as bcrypt from "bcryptjs";
 import { RefreshTokenRequest } from "../../payload/request/refresh-token.request";
-import { User } from "../../schema/user.schema";
-import { RefreshToken } from "../../schema/refresh.schema";
+import { User } from "src/schema/user.schema";
+import { RefreshToken } from "src/schema/refresh.schema";
 import { UserService } from "../users/users.service";
-import { CreateUserRequest } from "../../payload/request/users.request";
+import { CreateUserRequest } from "src/payload/request/users.request";
 import {
   AuthLogoutRequest,
   AuthRequest,
@@ -54,7 +54,7 @@ export class AuthService {
     const payload = { email: user.email, sub: user._id, role: user.role };
     const access_token = this.jwtService.sign(payload, {
       secret: process.env.JWT_SECRET || "JWT_SECRET",
-      expiresIn: "15m",
+      expiresIn: "7d",
     });
     const refresh_token = crypto.randomBytes(16).toString("hex");
 

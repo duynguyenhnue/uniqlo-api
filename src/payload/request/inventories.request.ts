@@ -3,12 +3,10 @@ import {
   IsString,
   IsNotEmpty,
   IsOptional,
-  IsBoolean,
   IsInt,
-  IsPositive,
   IsMongoId,
-  IsArray,
   Min,
+  IsNumber,
 } from "class-validator";
 
 export class CreateInventoryRequest {
@@ -16,24 +14,13 @@ export class CreateInventoryRequest {
   @IsNotEmpty()
   productId: string;
 
-  @IsString()
-  @IsNotEmpty()
-  variantSku: string;
-
   @IsInt()
-  @IsPositive()
+  @IsNotEmpty()
   quantity: number;
 
-  @IsInt()
-  @IsPositive()
-  reservedQuantity: number;
-
-  @IsBoolean()
-  lowStockThreshold: boolean;
-
   @IsString()
-  @IsNotEmpty()
-  warehouseLocation: string;
+  @IsOptional()
+  userId?: string;
 
   @IsString()
   @IsOptional()
@@ -42,63 +29,16 @@ export class CreateInventoryRequest {
   @IsString()
   @IsOptional()
   size?: string;
-
-  @IsString()
-  @IsNotEmpty()
-  status: string;
-
-  @IsArray()
-  @IsString({ each: true })
-  @IsOptional()
-  history?: string[];
 }
 
-export class UpdateInventoryRequest {
-  @IsOptional()
-  @IsMongoId()
-  productId?: string;
-
-  @IsOptional()
-  @IsString()
-  variantSku?: string;
-
-  @IsOptional()
-  @IsInt()
-  @IsPositive()
-  quantity?: number;
-
-  @IsOptional()
-  @IsInt()
-  @IsPositive()
-  reservedQuantity?: number;
-
-  @IsOptional()
-  @IsBoolean()
-  lowStockThreshold?: boolean;
-
-  @IsOptional()
-  @IsString()
-  warehouseLocation?: string;
-
-  @IsOptional()
-  @IsString()
-  color?: string;
-
-  @IsOptional()
-  @IsString()
-  size?: string;
-
-  @IsOptional()
-  @IsString()
-  status?: string;
-
-  @IsOptional()
-  @IsArray()
-  @IsString({ each: true })
-  history?: string[];
+export class UpdateInventoryRequest extends CreateInventoryRequest {
 }
 
 export class SearchInventoryRequest {
+  @IsOptional()
+  @IsString()
+  productName?: string;
+
   @IsOptional()
   @IsInt()
   @Min(0)
@@ -110,10 +50,6 @@ export class SearchInventoryRequest {
   @Min(1)
   @Type(() => Number)
   limit?: number;
-
-  @IsOptional()
-  @IsMongoId()
-  productId?: string;
 
   @IsOptional()
   @IsString()

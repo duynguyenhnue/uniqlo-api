@@ -15,7 +15,7 @@ import { RoleModule } from "../roles/role.module";
     ]),
     JwtModule.register({
       secret: process.env.JWT_SECRET || "JWT_SECRET",
-      signOptions: { expiresIn: "15m" },
+      signOptions: { expiresIn: "7d" },
     }),
     forwardRef(() => RoleModule),
   ],

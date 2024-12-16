@@ -7,21 +7,25 @@ export class InventoryResponse {
 
   productId: Types.ObjectId;
 
-  variantSku: string;
-
   quantity: number;
-
-  reservedQuantity: number;
-
-  lowStockThreshold: boolean;
-
-  warehouseLocation: string;
 
   color: string;
 
   size: string;
 
-  status: string;
+  userId: string;
 
-  history: string[];
+  createdAt: Date;
+
+  updatedAt: Date;
+
+  name?: string;
+
+  price?: number;
+
+  image?: string;
+
+  sizes?: string[];
+
+  colors?: string[];
 }

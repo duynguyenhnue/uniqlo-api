@@ -6,12 +6,12 @@ import {
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 import * as bcrypt from "bcryptjs";
-import { User } from "../../schema/user.schema";
+import { User } from "src/schema/user.schema";
 import {
   CreateUserRequest,
   SearchUserRequest,
   UpdateUserRequest,
-} from "../../payload/request/users.request";
+} from "src/payload/request/users.request";
 import { UserResponse } from "src/payload/response/users.request";
 import { plainToInstance } from "class-transformer";
 

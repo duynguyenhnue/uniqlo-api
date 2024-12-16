@@ -13,19 +13,17 @@ import {
   Post,
 } from "@nestjs/common";
 import { UserService } from "./users.service";
-import { User } from "../../schema/user.schema";
 import {
   ChangePasswordRequest,
-  CreateUserRequest,
   SearchUserRequest,
   UpdateUserRequest,
-} from "../../payload/request/users.request";
+} from "src/payload/request/users.request";
 import { CommonException } from "../../common/exception/common.exception";
 import { successResponse } from "../../common/dto/response.dto";
 import { AUTH_PERMISSIONS } from "src/enums/auth.enum";
 import { AuthJwtAccessProtected } from "src/common/guards/role.guard";
 import { ApiBearerAuth } from "@nestjs/swagger";
-
+import { User } from "src/schema/user.schema";
 @Controller("users")
 export class UserController {
   constructor(private readonly userService: UserService) {}

@@ -4,34 +4,25 @@ import { Document, Types } from "mongoose";
 @Schema({ timestamps: { createdAt: 'createdAt', updatedAt: 'updatedAt' } })
 export class Inventory extends Document {
     @Prop({ type: Types.ObjectId, ref: 'Product', required: true })
-productId: Types.ObjectId;
-
-    @Prop({ required: true })
-    variantSku: string;
+    productId: Types.ObjectId;
 
     @Prop({ required: true })
     quantity: number;
 
-    @Prop({ required: true, default: 0 })
-    reservedQuantity: number;
-
-    @Prop({ required: true })
-    lowStockThreshold: boolean;
-
-    @Prop({ required: true })
-    warehouseLocation: string;
+    @Prop()
+    userId: string;
 
     @Prop()
     color: string;
 
     @Prop()
-    size: string;
+    size: string;   
 
-    @Prop({ required: true })
-    status: string;
+    @Prop()
+    createdAt: Date;
 
-    @Prop({ type: [String], default: [] })
-    history: string[];
+    @Prop()
+    updatedAt: Date;
 }
 
 export const InventoriesSchema = SchemaFactory.createForClass(Inventory);

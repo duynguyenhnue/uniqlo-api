@@ -8,13 +8,15 @@ import { RefreshTokenModule } from "../refresh-token/refresh-token.module";
 import { AuthModule } from "../auth/auth.module";
 import { PermissionModule } from "../permission/permission.module";
 import { RoleModule } from "../roles/role.module";
+import { ProductModel } from "../products/products.module";
 
 @Module({
     imports:[MongooseModule.forFeature([{name:Inventory.name,schema:InventoriesSchema}]),
     forwardRef(()=>RefreshTokenModule),
     forwardRef(()=>AuthModule),
     forwardRef(()=>PermissionModule),
-    forwardRef(()=>RoleModule)
+    forwardRef(()=>RoleModule),
+    forwardRef(()=>ProductModel),
 
 ],
 providers:[InventoriesService],

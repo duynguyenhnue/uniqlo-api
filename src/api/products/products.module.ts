@@ -20,5 +20,6 @@ import { User, UserSchema } from "src/schema/user.schema";
 ],
 providers:[ProductService],
 controllers:[ProductController],
+exports:[ProductService, MongooseModule]
 })
 export class ProductModel{}
