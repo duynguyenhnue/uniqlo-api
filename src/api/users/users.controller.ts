@@ -38,7 +38,6 @@ export class UserController {
 
   @Get()
   @ApiBearerAuth("access_token")
-        @SkipAuth()
   async getUser(@Req() req) {
     try {
       return successResponse(await this.userService.getUser(req.user));
