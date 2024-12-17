@@ -17,6 +17,7 @@ import { IResponse } from "src/common/interface/response.interface";
 import { successResponse } from "src/common/dto/response.dto";
 import { AuthJwtAccessProtected } from "src/common/guards/role.guard";
 import { AUTH_PERMISSIONS } from "src/enums/auth.enum";
+import { SkipAuth } from "src/config/skip.auth";
 
 @Controller("products")
 export class ProductController {
@@ -72,7 +73,8 @@ export class ProductController {
   }
 
   @Get()
-  @AuthJwtAccessProtected(AUTH_PERMISSIONS.PRODUCT_VIEW)
+  @SkipAuth()
+  // @AuthJwtAccessProtected(AUTH_PERMISSIONS.PRODUCT_VIEW)
   async findAll(): Promise<ProductResponse[]> {
     try {
       return this.service.findAll();
@@ -82,7 +84,8 @@ export class ProductController {
     }
   }
   @Get(':id')
-  @AuthJwtAccessProtected(AUTH_PERMISSIONS.PRODUCT_VIEW)
+  // @AuthJwtAccessProtected(AUTH_PERMISSIONS.PRODUCT_VIEW)
+  @SkipAuth()
   async findOne(@Param('id') id: string): Promise<ProductResponse> {
     try {
       return this.service.getSingleProduct(id);

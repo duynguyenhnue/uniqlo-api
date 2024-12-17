@@ -20,6 +20,7 @@ import { IResponse } from "src/common/interface/response.interface";
 import { CategoryResponse } from "src/payload/response/categories.respone";
 import { AuthJwtAccessProtected } from "src/common/guards/role.guard";
 import { AUTH_PERMISSIONS } from "src/enums/auth.enum";
+import { SkipAuth } from "src/config/skip.auth";
 
 @Controller("categories")
 export class CategoryController {
@@ -40,7 +41,8 @@ export class CategoryController {
   }
   // 
   @Get('search')
-  @AuthJwtAccessProtected(AUTH_PERMISSIONS.CATEGORY_VIEW)
+  // @AuthJwtAccessProtected(AUTH_PERMISSIONS.CATEGORY_VIEW)
+        @SkipAuth()
   async search(@Query() query:SearchCategorybyNameRequest){
     try{
       return this.categoryService.searchCategory(query);
@@ -51,7 +53,8 @@ export class CategoryController {
   }
 
   @Get()
-  @AuthJwtAccessProtected(AUTH_PERMISSIONS.CATEGORY_VIEW)
+  // @AuthJwtAccessProtected(AUTH_PERMISSIONS.CATEGORY_VIEW)
+  @SkipAuth()
   async findAll(): Promise<CategoryResponse[]> {
     try{
       return this.categoryService.findAll();
@@ -61,7 +64,8 @@ export class CategoryController {
     }
   }
   @Get(':id')
-  @AuthJwtAccessProtected(AUTH_PERMISSIONS.CATEGORY_VIEW)
+  @SkipAuth()
+  // @AuthJwtAccessProtected(AUTH_PERMISSIONS.CATEGORY_VIEW)
   async findOne(@Param('id') id: string): Promise<CategoryResponse> {
     try{
       return this.categoryService.findOne(id);

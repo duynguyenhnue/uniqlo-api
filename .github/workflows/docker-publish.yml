@@ -2,7 +2,7 @@ name: Docker
 
 on:
   push:
-    branches: ["master"] 
+    branches: ["change-password"] 
     tags: ["v*.*.*"]
 
 env:
@@ -107,6 +107,8 @@ jobs:
             -e FIREBASE_AUTH_PROVIDER_X509_CERT_URL=https://www.googleapis.com/oauth2/v1/certs \
             -e FIREBASE_CLIENT_X509_CERT_URL=https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-7eeb2%40uniqlo-ba002.iam.gserviceaccount.com \
             -e FIREBASE_UNIVERSE_DOMAIN=googleapis.com \
+            -e ACCOUNT_MAIL=stu715105031@hnue.edu.vn \
+            -e PASSWORD_MAIL=Chugg203 \
             --name uniqlo_container duynguyenhnue/uniqlo-api:latest
           EOF
           # Xóa file private key sau khi hoàn thành

@@ -16,6 +16,7 @@ import { AUTH_PERMISSIONS } from "src/enums/auth.enum";
 import { BlogDetailService } from "./blogdetails.service";
 import { CreateBlogdetailRequest, SearchBlogdetailRequest, UpdateBlogdetailRequest } from "src/payload/request/blog-details.request";
 import { BlogDetailRespone } from "src/payload/response/blogdetails.respone";
+import { SkipAuth } from "src/config/skip.auth";
   @Controller("blog-details")
   export class BlogDetailController{
     constructor(private readonly service:BlogDetailService){}
@@ -35,7 +36,8 @@ import { BlogDetailRespone } from "src/payload/response/blogdetails.respone";
       }
       
       @Get('search')
-      @AuthJwtAccessProtected(AUTH_PERMISSIONS.BLOGDETAIL_VIEW)
+      // @AuthJwtAccessProtected(AUTH_PERMISSIONS.BLOGDETAIL_VIEW)
+      @SkipAuth()
   async search(@Query() query:SearchBlogdetailRequest){
     try{
       return this.service.searchblogdetail(query);
@@ -47,7 +49,8 @@ import { BlogDetailRespone } from "src/payload/response/blogdetails.respone";
     }
   }  
   @Get()
-  @AuthJwtAccessProtected(AUTH_PERMISSIONS.BLOGDETAIL_VIEW)
+  @SkipAuth()
+  // @AuthJwtAccessProtected(AUTH_PERMISSIONS.BLOGDETAIL_VIEW)
   async findAll(): Promise<BlogDetailRespone[]> {
     try
     {
@@ -59,7 +62,8 @@ import { BlogDetailRespone } from "src/payload/response/blogdetails.respone";
     }
   }
   @Get(':id')
-  @AuthJwtAccessProtected(AUTH_PERMISSIONS.BLOGDETAIL_VIEW)
+  @SkipAuth()
+  // @AuthJwtAccessProtected(AUTH_PERMISSIONS.BLOGDETAIL_VIEW)
   async findOne(@Param('id') id: string): Promise<BlogDetailRespone> {
     try{
       return this.service.findOne(id);

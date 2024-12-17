@@ -17,6 +17,7 @@ import { AUTH_PERMISSIONS } from "src/enums/auth.enum";
 import { ContactService } from "./contact.service";
 import { CreateContactRequest, SearchContactRequest, UpdateContactRequest } from "src/payload/request/contact.request";
 import { ContactRespone } from "src/payload/response/contact.respone";
+import { SkipAuth } from "src/config/skip.auth";
   @Controller("contact")
   export class ContactController{
     constructor(private readonly service:ContactService){}
@@ -35,7 +36,8 @@ import { ContactRespone } from "src/payload/response/contact.respone";
        }
       }
       @Get('search')
-      @AuthJwtAccessProtected(AUTH_PERMISSIONS.CONTACT_VIEW)
+            @SkipAuth()
+      // @AuthJwtAccessProtected(AUTH_PERMISSIONS.CONTACT_VIEW)
   async search(@Query() query:SearchContactRequest){
     try{
       return this.service.searchcontact(query);
@@ -47,7 +49,8 @@ import { ContactRespone } from "src/payload/response/contact.respone";
     }
   }  
   @Get()
-  @AuthJwtAccessProtected(AUTH_PERMISSIONS.CONTACT_VIEW)
+  @SkipAuth()
+  // @AuthJwtAccessProtected(AUTH_PERMISSIONS.CONTACT_VIEW)
   async findAll(): Promise<ContactRespone[]> {
     try
     {
@@ -59,7 +62,9 @@ import { ContactRespone } from "src/payload/response/contact.respone";
     }
   }
   @Get(':id')
-  @AuthJwtAccessProtected(AUTH_PERMISSIONS.CONTACT_VIEW)
+  // @AuthJwtAccessProtected(AUTH_PERMISSIONS.CONTACT_VIEW)
+  @SkipAuth()
+
   async findOne(@Param('id') id: string): Promise<ContactRespone> {
     try{
       return this.service.findOne(id);

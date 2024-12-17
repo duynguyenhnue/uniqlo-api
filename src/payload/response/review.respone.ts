@@ -7,9 +7,6 @@ export class ReviewResponse {
     rating: number;             
     title: string;              
     content: string;             
-    image: string[];             
-    like: number;                
-    status: string;              
     size: string[];              
     color: string;                        
   }
