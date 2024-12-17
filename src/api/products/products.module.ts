@@ -9,13 +9,17 @@ import { PermissionModule } from "../permission/permission.module";
 import { RoleModule } from "../roles/role.module";
 import { UserModule } from "../users/users.module";
 import { User, UserSchema } from "src/schema/user.schema";
+import { ReviewSchema } from "src/schema/reviews.schema";
+import { Review } from "src/schema/reviews.schema";
 @Module({
     imports:[MongooseModule.forFeature([{name:Product.name,schema:ProductSchema}]),
     MongooseModule.forFeature([{name:User.name,schema:UserSchema}]),
+    MongooseModule.forFeature([{name:Review.name,schema:ReviewSchema}]),
     forwardRef(()=>RefreshTokenModule),
     forwardRef(()=>AuthModule),
     forwardRef(()=>PermissionModule),
-    forwardRef(()=>RoleModule),UserModule
+    forwardRef(()=>RoleModule),
+    UserModule
 
 ],
 providers:[ProductService],

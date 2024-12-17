@@ -1,4 +1,4 @@
-import { Types } from 'mongoose';
+import { Review } from 'src/schema/reviews.schema';
 
 export class ProductResponse {
   id: string;
@@ -19,5 +19,8 @@ export class ProductResponse {
   Product_isNewArrival: boolean;
   Product_isBestSeller: boolean;
   Product_isOnSale: boolean;
-  categoryId: Types.ObjectId;
+  categoryId: string;
+  userId?: string;
+  reviews: string[] | Review[];
+  favorite_users?: string[];
 }

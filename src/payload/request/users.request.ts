@@ -10,6 +10,8 @@ import {
   IsInt,
   IsPositive,
   Min,
+  IsArray,
+  IsMongoId,
 } from "class-validator";
 
 export class Address {
@@ -63,6 +65,10 @@ export class CreateUserRequest {
   @ValidateNested({ each: true })
   @Type(() => Phone)
   phone: Phone;
+
+  @IsString()
+  @IsOptional()
+  avatar?: string;
 }
 
 export class UpdateUserRequest {
@@ -100,6 +106,21 @@ export class UpdateUserRequest {
   @IsString()
   @IsOptional()
   gender?: string;
+
+  @IsArray()
+  @IsString({ each: true })
+  product_Id?: string[];
+
+  @IsString()
+  @IsOptional()
+  advice?: string;
+
+  @IsString()
+  @IsOptional()
+  role?: string;
+
+  @IsOptional()
+  deliveryAddress?: Address[];
 }
 
 export class SearchUserRequest {

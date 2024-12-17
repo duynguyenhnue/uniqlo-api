@@ -7,20 +7,21 @@ import { RefreshTokenModule } from "../refresh-token/refresh-token.module";
 import { AuthModule } from "../auth/auth.module";
 import { PermissionModule } from "../permission/permission.module";
 import { RoleModule } from "../roles/role.module";
-import { Product, ProductSchema } from "src/schema/product.schema";
-import { User, UserSchema } from "src/schema/user.schema";
+import { UserModule } from "../users/users.module";
+import { ProductModel } from "../products/products.module";
 
 @Module({
     imports:[MongooseModule.forFeature([{name:Review.name,schema:ReviewSchema}]),
-    MongooseModule.forFeature([{name:Product.name,schema:ProductSchema}]),
-    MongooseModule.forFeature([{name:User.name,schema:UserSchema}]),
     forwardRef(()=>RefreshTokenModule),
     forwardRef(()=>AuthModule),
+    forwardRef(()=>ProductModel),
     forwardRef(()=>PermissionModule),
-    forwardRef(()=>RoleModule)
+    forwardRef(()=>RoleModule),
+    UserModule,
 
 ],
 providers:[ReviewService],
 controllers:[ReviewController],
+exports:[ReviewService, MongooseModule]
 })
 export class ReviewModule{}
