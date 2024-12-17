@@ -3,61 +3,70 @@ import {
   Controller,
   Delete,
   Get,
+  HttpStatus,
   Param,
   Post,
   Put,
   Query,
+  Req,
 } from "@nestjs/common";
 import { ReviewService } from "./review.service";
 import {
-  CreateReview,
-  SearchReview,
-  UpdateReview,
+  CreateReviewRequest,
+  ReplyReviewRequest,
 } from "src/payload/request/review.request";
-import { IResponse } from "src/common/interface/response.interface";
-import { ReviewResponse } from "src/payload/response/review.respone";
 import { successResponse } from "src/common/dto/response.dto";
-import { ApiBearerAuth } from "@nestjs/swagger";
+import { ParseObjectIdPipe } from "src/config/parse-objectId-pipe";
+import { AuthJwtAccessProtected } from "src/common/guards/role.guard";
+import { AUTH_PERMISSIONS } from "src/enums/auth.enum";
+import { CommonException } from "src/common/exception/common.exception";
+import { SkipAuth } from "src/config/skip.auth";
 
 @Controller("reviews")
 export class ReviewController {
   constructor(private readonly reviewService: ReviewService) {}
 
-  @Post()
-  @ApiBearerAuth("access_token")
-  async create(
-    @Body() create: CreateReview
-  ): Promise<IResponse<ReviewResponse>> {
-    const review = await this.reviewService.create(create);
-    return successResponse(review);
-  }
-  @Get("search")
-  @ApiBearerAuth("access_token")
-  async search(@Query() query: SearchReview) {
-    return this.reviewService.search(query);
-  }
   @Get()
-  @ApiBearerAuth("access_token")
-  async findAll(): Promise<ReviewResponse[]> {
-    return this.reviewService.findAll();
+  @SkipAuth()
+  async getReview() {
+    return this.reviewService.getReviews();
   }
-  @Get(":id")
-  @ApiBearerAuth("access_token")
-  async findOne(@Param("id") id: string): Promise<ReviewResponse> {
-    return this.reviewService.findOne(id);
+
+  @Post("/reply/:id")
+  @AuthJwtAccessProtected(AUTH_PERMISSIONS.REVIEW_CREATE)
+  async createReply(
+    @Param("id", ParseObjectIdPipe) id: string,
+    @Body() replyReviewDto: ReplyReviewRequest,
+    @Req() req
+  ) {
+    return this.reviewService.createReply(replyReviewDto, req.user.id, id);
   }
-  @Put(":id")
-  @ApiBearerAuth("access_token")
-  async update(
-    @Param("id") id: string,
-    @Body() productUpdateRequest: UpdateReview
-  ): Promise<ReviewResponse> {
-    return this.reviewService.update(id, productUpdateRequest);
+
+  @Post("/:id")
+  @AuthJwtAccessProtected(AUTH_PERMISSIONS.REVIEW_CREATE)
+  async createReview(
+    @Param("id", ParseObjectIdPipe) id: string,
+    @Body() createReviewDto: CreateReviewRequest,
+    @Req() req
+  ) {
+    try {
+      const savedReview = await this.reviewService.createReview(
+        id,
+        createReviewDto,
+        req.user.id
+      );
+      return successResponse(savedReview);
+    } catch (error) {
+      throw new CommonException(
+        error.message,
+        error.status || HttpStatus.INTERNAL_SERVER_ERROR
+      );
+    }
   }
-  @Delete(":id")
-  @ApiBearerAuth("access_token")
-  async delete(@Param("id") id: string): Promise<{ message: string }> {
-    await this.reviewService.delete(id);
-    return { message: `Delete Successfully` };
+
+  @Delete("/:id")
+  @AuthJwtAccessProtected(AUTH_PERMISSIONS.REVIEW_DELETE)
+  async deleteReview(@Param("id", ParseObjectIdPipe) id: string, @Req() req) {
+    return this.reviewService.deleteReview(id, req.user.id);
   }
 }

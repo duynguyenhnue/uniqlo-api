@@ -5,7 +5,7 @@ const validProductTags=["PRODUCT","BAGS","SHOES","FASHIO","CLOTHING","HATS","ACC
 const validProductBrands=["Louis Vuitton","Chanel","Hermes","Gucci"];
 const validProductSizes=["XS","S","M","L","XL","2XL","3XL","4XL","Free Size"];
 const validProductColors=["White","Red","Green","Yellow","Blue","Gray","Orange","Brown","Beige","Purple","Pink","Black"]
-
+export type ProductDocument = Product & Document;
 @Schema({ timestamps: { createdAt: 'createdAt', updatedAt: 'updatedAt' } })
 export class Product extends Document {
   @Prop({ required: true })
@@ -47,7 +47,6 @@ export class Product extends Document {
   @Prop({ default: 0, type: Number })
   Product_count: number;
 
-
   @Prop({ default: "" ,type:[String]})
   Product_images: string[];
 
@@ -60,11 +59,17 @@ export class Product extends Document {
   @Prop({ default: false })
   Product_isOnSale: boolean;
   
-  @Prop({ type: Types.ObjectId, ref: 'Category', required: true })
-  categoryId: Types.ObjectId;
+  @Prop({ type: String, required: true })
+  categoryId: string;
 
-  @Prop({type:[Types.ObjectId],ref:'users',required:true})
-  user_Id:Types.ObjectId;
+  @Prop({type:String,required:true})
+  userId:string;
+
+  @Prop({ type: [{ type: Types.ObjectId, ref: "review" }] })
+  reviews: Types.ObjectId[];
+  
+  @Prop({ type: [{ type: String }] })
+  favorite_users: string[];
 }
 
 

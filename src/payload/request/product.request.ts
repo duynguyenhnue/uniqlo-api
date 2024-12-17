@@ -1,6 +1,6 @@
-import { Transform, Type } from 'class-transformer';
+import { PartialType } from '@nestjs/mapped-types';
+import { Type } from 'class-transformer';
 import { IsString, IsNumber, IsArray, IsBoolean, IsOptional, IsEnum, IsMongoId, IsInt, IsPositive, IsObject, Min } from 'class-validator';
-import { Types } from 'mongoose';
 
 export class ProductCreateRequest  {
   @IsString()
@@ -60,83 +60,19 @@ export class ProductCreateRequest  {
   @IsBoolean()
   Product_isOnSale: boolean;
 
-  @IsMongoId()
+  @IsString()
   @IsOptional()
-  categoryId: Types.ObjectId;
+  categoryId: string;
+
+  @IsArray()
+  @IsOptional()
+  favorite_users?: string[];  
 }
-export class ProductUpdateRequest {
-  @IsOptional()
-  @IsString()
-  Product_name?: string;
-
-  @IsOptional()
-  @IsString()
-  Product_sku?: string;
-
-  @IsOptional()
-  @IsString()
-  Product_tag?: string;
-
-  @IsOptional()
-  @IsString()
-  Product_brand?: string;
-
-  @IsOptional()
-  @IsString()
-  Product_description?: string;
-
-  @IsOptional()
-  @IsString()
-  Product_currency?: string;
-
-  @IsOptional()
-  @IsArray()
-  Product_color?: string[];
-
-  @IsOptional()
-  @IsArray()
-  Product_size?: string[];
-
-  @IsOptional()
-  @IsString()
-  Product_variantSku?: string;
-
-  @IsOptional()
-  @IsString()
-  Product_specifications?: string;
-
-  @IsOptional()
-  @IsNumber()
-  Product_price?: number;
-
-  @IsOptional()
-  @IsNumber()
-  Product_rating?: number;
-
-  @IsOptional()
-  @IsNumber()
-  Product_count?: number;
-
+export class ProductUpdateRequest extends PartialType(ProductCreateRequest) {
   @IsOptional()
   @IsArray()
   @IsString({ each: true })
-  Product_images?: string[];
-
-  @IsOptional()
-  @IsBoolean()
-  Product_isNewArrival?: string;
-
-  @IsOptional()
-  @IsBoolean()
-  Product_isBestSeller?: string;
-
-  @IsOptional()
-  @IsBoolean()
-  Product_isOnSale?: string;
-
-  @IsOptional()
-  @IsMongoId()
-  categoryId?: string;
+  reviews?: string[];
 }
 
 export class PriceRangeDto {

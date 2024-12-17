@@ -1,28 +1,40 @@
-import { Type } from "@nestjs/common";
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Document, Types } from "mongoose";
+import { ReplyReviewRequest } from "src/payload/request/review.request";
 
-@Schema({timestamps:{createdAt:'createdAt',updatedAt:'updatedAt'}})
-export class Review extends Document{
-    @Prop({required:true,type:Types.ObjectId,ref:'Product'})
-    productId:Types.ObjectId;
-    @Prop({type:Types.ObjectId,ref:'user',required:true})
-    userId:Types.ObjectId;
-    @Prop({required:true})
-    rating:number;
-    @Prop({required:true})
-    title:string;
-    @Prop({required:true})
-    content:string;
-    @Prop({required:true,type:[String],default:[]})
-    image:string[]
-    @Prop({required:true})
-    like:number
-    @Prop({required:true})
-    status:string;
-    @Prop({default:[],type:[String]})
-    size:string[];
-    @Prop({required:true})
-    color:string;
+export type ReviewDocument = Review & Document;
+
+@Schema({ timestamps: true })
+export class Review {
+  @Prop({ type: Types.ObjectId })
+  id: Types.ObjectId;
+
+  @Prop({ type: Types.ObjectId })
+  productId?: Types.ObjectId;
+
+  @Prop({ type: Types.ObjectId, ref: "user", required: true })
+  userId: string;
+
+  @Prop({ required: true })
+  reviewText: string;
+
+  @Prop({ required: true, min: 0, max: 5, default: 0 })
+  rating: number;
+
+  @Prop({ required: false })
+  avatar?: string;
+
+  @Prop({ required: false })
+  fullName?: string;
+
+  @Prop({ required: false })
+  createdAt?: Date;
+
+  @Prop({ required: false })
+  updatedAt?: Date;
+
+  @Prop({ type: [ReplyReviewRequest], required: false })
+  reply?: ReplyReviewRequest[];
 }
+
 export const ReviewSchema = SchemaFactory.createForClass(Review);

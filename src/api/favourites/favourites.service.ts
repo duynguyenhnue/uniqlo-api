@@ -101,6 +101,9 @@ private mapproductToResponse(product: Product): ProductResponse {
         Product_isBestSeller: product.Product_isBestSeller,
         Product_isOnSale: product.Product_isOnSale,
         categoryId: product.categoryId,
+        userId: product.userId,
+        reviews: product.reviews.map((review) => review.toString()),
+        favorite_users: product.favorite_users,
     };
 }
 }

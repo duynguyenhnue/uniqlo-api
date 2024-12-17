@@ -8,6 +8,7 @@ import {
   Delete,
   Query,
   NotFoundException,
+  Req,
 } from "@nestjs/common";
 import { ProductService } from "./products.service";
 import { fitlerProduct, ProductCreateRequest, ProductSearchRequest, ProductUpdateRequest } from "src/payload/request/product.request";
@@ -16,41 +17,40 @@ import { IResponse } from "src/common/interface/response.interface";
 import { successResponse } from "src/common/dto/response.dto";
 import { AuthJwtAccessProtected } from "src/common/guards/role.guard";
 import { AUTH_PERMISSIONS } from "src/enums/auth.enum";
-import { query } from "express";
-  @Controller("products")
-  export class ProductController{
-    constructor(private readonly service:ProductService){}
 
-    @Post()
-    @AuthJwtAccessProtected(AUTH_PERMISSIONS.PRODUCT_CREATE)
-    async create(
-        @Body() productcreaterequest: ProductCreateRequest
-      ): Promise<IResponse<ProductResponse>> { 
-       try{
-        const product = await this.service.create(productcreaterequest);
-        return successResponse(product);
-       }catch(error)
-       {
-        throw new NotFoundException(`Error while create product:${error.message}`);
-       }
-      }
+@Controller("products")
+export class ProductController {
+  constructor(private readonly service: ProductService) { }
 
-      @Get('search')
-      @AuthJwtAccessProtected(AUTH_PERMISSIONS.PRODUCT_VIEW)
-  async search(@Query() query:ProductSearchRequest){
-    try{
+  @Post()
+  @AuthJwtAccessProtected(AUTH_PERMISSIONS.PRODUCT_CREATE)
+  async create(
+    @Body() productcreaterequest: ProductCreateRequest,
+    @Req() req
+  ): Promise<IResponse<ProductResponse>> {
+    try {
+      const product = await this.service.create(productcreaterequest, req.user.id);
+      return successResponse(product);
+    } catch (error) {
+      throw new NotFoundException(`Error while create product:${error.message}`);
+    }
+  }
+
+  @Get('search')
+  @AuthJwtAccessProtected(AUTH_PERMISSIONS.PRODUCT_VIEW)
+  async search(@Query() query: ProductSearchRequest) {
+    try {
       return this.service.searchproduct(query);
 
-    }catch(error)
-    {
+    } catch (error) {
       throw new Error(`Error while search product`);
 
     }
-  } 
+  }
   @Get('filter')
   @AuthJwtAccessProtected(AUTH_PERMISSIONS.PRODUCT_VIEW)
-  async filter(@Query() query:fitlerProduct){
-    try{
+  async filter(@Query() query: fitlerProduct) {
+    try {
       // const processedQuery = {
       //   ...query,
       //   limit: query.limit ? Number(query.limit) : 6,
@@ -58,28 +58,25 @@ import { query } from "express";
       //   minPrice: query.minPrice ? Number(query.minPrice) : undefined,
       //   maxPrice: query.maxPrice ? Number(query.maxPrice) : undefined
       // };
-    
+
       // console.log('Processed Query:', processedQuery);
-      
+
       // Object.keys(query).forEach(key => {
       //   console.log(`${key} type: ${typeof query[key]}`);
       // });
-    
+
       return this.service.filterProduct(query);
-    }catch(error)
-    {
-      throw new NotFoundException(`Error while filter product`,error);
+    } catch (error) {
+      throw new NotFoundException(`Error while filter product`, error);
     }
-  } 
+  }
 
   @Get()
   @AuthJwtAccessProtected(AUTH_PERMISSIONS.PRODUCT_VIEW)
   async findAll(): Promise<ProductResponse[]> {
-    try
-    {
+    try {
       return this.service.findAll();
-    }catch(error)
-    {
+    } catch (error) {
       throw new Error(` Eror while find all product `)
 
     }
@@ -87,39 +84,46 @@ import { query } from "express";
   @Get(':id')
   @AuthJwtAccessProtected(AUTH_PERMISSIONS.PRODUCT_VIEW)
   async findOne(@Param('id') id: string): Promise<ProductResponse> {
-    try{
-      return this.service.findOne(id);
-    }catch(error)
-    {
+    try {
+      return this.service.getSingleProduct(id);
+    } catch (error) {
       throw new Error(`Error while find  product by id`);
     }
   }
-  @Put(':id')
-  @AuthJwtAccessProtected(AUTH_PERMISSIONS.PRODUCT_UPDATE)
-  async update(
-    @Param('id')id:string,
-    @Body() productUpdateRequest:ProductUpdateRequest
-  ):Promise<ProductResponse>{
-   try{
-    return this.service.update(id,productUpdateRequest);
-   }catch(error)
-   {
-    throw new Error(`Error while update product`)
 
-   }
-  }
   @Delete(':id')
   @AuthJwtAccessProtected(AUTH_PERMISSIONS.PRODUCT_DELETE)
-  async delete(@Param('id') id:string):Promise<{message:string}>{
-    try{
+  async delete(@Param('id') id: string): Promise<{ message: string }> {
+    try {
       await this.service.delete(id);
-    return {message:`Delete Successfully`};
-    }catch(error){
+      return { message: `Delete Successfully` };
+    } catch (error) {
       throw new Error(`Error while delete product`)
 
     }
   }
 
-
-  
+  @Put('favorite/:type/:id')
+  @AuthJwtAccessProtected(AUTH_PERMISSIONS.PRODUCT_VIEW)
+  async favorite(@Param('type') type: string, @Param('id') id: string, @Req() req): Promise<ProductResponse> {
+    try {
+      return this.service.updateFavorite(type, id, req.user.id);
+    } catch (error) {
+      throw new Error(`Error while find  product by id`);
+    }
   }
+
+  @Put(':id')
+  @AuthJwtAccessProtected(AUTH_PERMISSIONS.PRODUCT_UPDATE)
+  async update(
+    @Param('id') id: string,
+    @Body() productUpdateRequest: ProductUpdateRequest
+  ): Promise<ProductResponse> {
+    try {
+      return this.service.update(id, productUpdateRequest);
+    } catch (error) {
+      throw new Error(`Error while update product`)
+
+    }
+  }
+}

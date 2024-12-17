@@ -58,6 +58,12 @@ export class User extends Document {
 
   @Prop({ type: [Types.ObjectId], default: [] })
   product_Id: Types.ObjectId[];
+
+  @Prop({ default: '' })
+  avatar: string;
+
+  @Prop({ type: [Address], required: true, default: [] })
+  deliveryAddress: Address[];
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
