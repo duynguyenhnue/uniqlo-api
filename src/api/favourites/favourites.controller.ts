@@ -39,9 +39,7 @@ import { SkipAuth } from "src/config/skip.auth";
       }
 
       @Get()
-      // @AuthJwtAccessProtected(AUTH_PERMISSIONS.FAVOURITES_VIEW)
-            @SkipAuth()
-
+       @AuthJwtAccessProtected(AUTH_PERMISSIONS.FAVOURITES_VIEW)
   async getlist(@Req() req:any):Promise<{products: ProductResponse[];
     total: number;}>{
     try{

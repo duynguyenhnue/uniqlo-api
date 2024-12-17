@@ -4,9 +4,9 @@ import { Document, Types } from "mongoose";
 
 @Schema({timestamps:{createdAt:'createdAt',updatedAt:'updatedAt'}})
 export class Review extends Document{
-    @Prop({required:true,type:Types.ObjectId,ref:'Product'})
+    @Prop({required:true,type:Types.ObjectId,ref:'products'})
     productId:Types.ObjectId;
-    @Prop({type:Types.ObjectId,ref:'user',required:true})
+    @Prop({type:Types.ObjectId,ref:'users',required:true})
     userId:Types.ObjectId;
     @Prop({required:true})
     rating:number;
@@ -14,12 +14,6 @@ export class Review extends Document{
     title:string;
     @Prop({required:true})
     content:string;
-    @Prop({required:true,type:[String],default:[]})
-    image:string[]
-    @Prop({required:true})
-    like:number
-    @Prop({required:true})
-    status:string;
     @Prop({default:[],type:[String]})
     size:string[];
     @Prop({required:true})
