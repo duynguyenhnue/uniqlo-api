@@ -24,7 +24,6 @@ import { AUTH_PERMISSIONS } from "src/enums/auth.enum";
 import { AuthJwtAccessProtected } from "src/common/guards/role.guard";
 import { ApiBearerAuth } from "@nestjs/swagger";
 import { User } from "src/schema/user.schema";
-import { SkipAuth } from "src/config/skip.auth";
 @Controller("users")
 export class UserController {
   constructor(private readonly userService: UserService) {}
@@ -38,7 +37,6 @@ export class UserController {
 
   @Get()
   @ApiBearerAuth("access_token")
-        @SkipAuth()
   async getUser(@Req() req) {
     try {
       return successResponse(await this.userService.getUser(req.user));
@@ -52,8 +50,7 @@ export class UserController {
 
   @Get("find/:id")
   @ApiBearerAuth("access_token")
-  // @AuthJwtAccessProtected(AUTH_PERMISSIONS.CUSTOMER_VIEW)
-  @SkipAuth()
+  @AuthJwtAccessProtected(AUTH_PERMISSIONS.CUSTOMER_VIEW)
   async findUser(@Param("id") id: string) {
     try {
       return successResponse(await this.userService.findUserById(id));
@@ -67,8 +64,7 @@ export class UserController {
 
   @Get("search")
   @ApiBearerAuth("access_token")
-  @SkipAuth()
-  // @AuthJwtAccessProtected(AUTH_PERMISSIONS.CUSTOMER_VIEW)
+  @AuthJwtAccessProtected(AUTH_PERMISSIONS.CUSTOMER_VIEW)
   async search(@Query() query: SearchUserRequest) {
     try {
       return successResponse(await this.userService.searchUsers(query));
