@@ -19,6 +19,7 @@ import { WarehouseResponse } from "src/payload/response/warehouse.respone";
 import { IResponse } from "src/common/interface/response.interface";
 import { successResponse } from "src/common/dto/response.dto";
 import { ApiBearerAuth } from "@nestjs/swagger";
+import { SkipAuth } from "src/config/skip.auth";
 
 @Controller("warehouses")
 export class WarehouseController {
@@ -36,18 +37,21 @@ export class WarehouseController {
   }
 
   @Get("search")
+        @SkipAuth()
   @ApiBearerAuth("access_token")
   async search(@Query() query: SearchWarehouseRequest) {
     return this.warehouseService.search(query);
   }
 
   @Get()
+  @SkipAuth()
   @ApiBearerAuth("access_token")
   async findAll(): Promise<WarehouseResponse[]> {
     return this.warehouseService.findAll();
   }
 
   @Get(":id")
+  @SkipAuth()
   @ApiBearerAuth("access_token")
   async findOne(@Param("id") id: string): Promise<WarehouseResponse> {
     return this.warehouseService.findOne(id);

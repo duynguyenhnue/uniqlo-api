@@ -30,7 +30,8 @@ export class PermissionController {
 
   @Get()
   @ApiBearerAuth("access_token")
-  @AuthJwtAccessProtected(AUTH_PERMISSIONS.PERMISSION_VIEW)
+  // @AuthJwtAccessProtected(AUTH_PERMISSIONS.PERMISSION_VIEW)
+  @SkipAuth()
   async getListPermissions() {
     try {
       const permissions = await this.service.getListPermissions();
@@ -45,7 +46,8 @@ export class PermissionController {
 
   @Get("get/:permissionId")
   @ApiBearerAuth("access_token")
-  @AuthJwtAccessProtected(AUTH_PERMISSIONS.PERMISSION_VIEW)
+  // @AuthJwtAccessProtected(AUTH_PERMISSIONS.PERMISSION_VIEW)
+  @SkipAuth()
   async getPermissionDetail(@Param("permissionId") permissionId: string) {
     try {
       const permission = await this.service.getPermissionDetail(permissionId);

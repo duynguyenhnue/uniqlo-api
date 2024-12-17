@@ -19,6 +19,7 @@ import { AUTH_PERMISSIONS } from "src/enums/auth.enum";
 import { query } from "express";
 import { FavoutiesService } from "./favourites.service";
 import { FavoriteResponseDto } from "src/payload/response/favourites.respone";
+import { SkipAuth } from "src/config/skip.auth";
   @Controller("favourites")
   export class FavoutiesController{
     constructor(private readonly service:FavoutiesService){}
@@ -38,7 +39,9 @@ import { FavoriteResponseDto } from "src/payload/response/favourites.respone";
       }
 
       @Get()
-      @AuthJwtAccessProtected(AUTH_PERMISSIONS.FAVOURITES_VIEW)
+      // @AuthJwtAccessProtected(AUTH_PERMISSIONS.FAVOURITES_VIEW)
+            @SkipAuth()
+
   async getlist(@Req() req:any):Promise<{products: ProductResponse[];
     total: number;}>{
     try{

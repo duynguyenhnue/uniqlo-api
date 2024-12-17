@@ -17,6 +17,7 @@ import { successResponse } from "src/common/dto/response.dto";
 import { AuthJwtAccessProtected } from "src/common/guards/role.guard";
 import { AUTH_PERMISSIONS } from "src/enums/auth.enum";
 import { query } from "express";
+import { SkipAuth } from "src/config/skip.auth";
   @Controller("products")
   export class ProductController{
     constructor(private readonly service:ProductService){}
@@ -36,7 +37,8 @@ import { query } from "express";
       }
 
       @Get('search')
-      @AuthJwtAccessProtected(AUTH_PERMISSIONS.PRODUCT_VIEW)
+            @SkipAuth()
+      // @AuthJwtAccessProtected(AUTH_PERMISSIONS.PRODUCT_VIEW)
   async search(@Query() query:ProductSearchRequest){
     try{
       return this.service.searchproduct(query);
@@ -48,7 +50,8 @@ import { query } from "express";
     }
   } 
   @Get('filter')
-  @AuthJwtAccessProtected(AUTH_PERMISSIONS.PRODUCT_VIEW)
+  @SkipAuth()
+  // @AuthJwtAccessProtected(AUTH_PERMISSIONS.PRODUCT_VIEW)
   async filter(@Query() query:fitlerProduct){
     try{
       // const processedQuery = {
@@ -73,7 +76,8 @@ import { query } from "express";
   } 
 
   @Get()
-  @AuthJwtAccessProtected(AUTH_PERMISSIONS.PRODUCT_VIEW)
+  @SkipAuth()
+  // @AuthJwtAccessProtected(AUTH_PERMISSIONS.PRODUCT_VIEW)
   async findAll(): Promise<ProductResponse[]> {
     try
     {
@@ -85,7 +89,8 @@ import { query } from "express";
     }
   }
   @Get(':id')
-  @AuthJwtAccessProtected(AUTH_PERMISSIONS.PRODUCT_VIEW)
+  // @AuthJwtAccessProtected(AUTH_PERMISSIONS.PRODUCT_VIEW)
+  @SkipAuth()
   async findOne(@Param('id') id: string): Promise<ProductResponse> {
     try{
       return this.service.findOne(id);

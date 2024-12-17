@@ -21,6 +21,7 @@ import { IResponse } from "src/common/interface/response.interface";
 import { successResponse } from "src/common/dto/response.dto";
 import { UpdateCategoryRequest } from "src/payload/request/categories.request";
 import { ApiBearerAuth } from "@nestjs/swagger";
+import { SkipAuth } from "src/config/skip.auth";
 
 @Controller("inventories")
 export class InventoriesController {
@@ -41,17 +42,20 @@ export class InventoriesController {
 
   @Get("search")
   @ApiBearerAuth("access_token")
+        @SkipAuth()
   async search(@Query() query: SearchInventoryRequest, @Req() req) {
     return this.inventoriesService.search(query, req.user);
   }
 
   @Get()
   @ApiBearerAuth("access_token")
+  @SkipAuth()
   async findAll(): Promise<InventoryResponse[]> {
     return this.inventoriesService.findAll();
   }
 
   @Get(":id")
+  @SkipAuth()
   @ApiBearerAuth("access_token")
   async findOne(@Param("id") id: string): Promise<InventoryResponse> {
     return this.inventoriesService.findOne(id);

@@ -18,6 +18,7 @@ import { IResponse } from "src/common/interface/response.interface";
 import { ReviewResponse } from "src/payload/response/review.respone";
 import { successResponse } from "src/common/dto/response.dto";
 import { ApiBearerAuth } from "@nestjs/swagger";
+import { SkipAuth } from "src/config/skip.auth";
 
 @Controller("reviews")
 export class ReviewController {
@@ -25,6 +26,7 @@ export class ReviewController {
 
   @Post()
   @ApiBearerAuth("access_token")
+        @SkipAuth()
   async create(
     @Body() create: CreateReview
   ): Promise<IResponse<ReviewResponse>> {
@@ -32,16 +34,19 @@ export class ReviewController {
     return successResponse(review);
   }
   @Get("search")
+  @SkipAuth()
   @ApiBearerAuth("access_token")
   async search(@Query() query: SearchReview) {
     return this.reviewService.search(query);
   }
   @Get()
+  @SkipAuth()
   @ApiBearerAuth("access_token")
   async findAll(): Promise<ReviewResponse[]> {
     return this.reviewService.findAll();
   }
   @Get(":id")
+  @SkipAuth()
   @ApiBearerAuth("access_token")
   async findOne(@Param("id") id: string): Promise<ReviewResponse> {
     return this.reviewService.findOne(id);

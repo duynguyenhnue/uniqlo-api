@@ -20,6 +20,7 @@ import { IResponse } from "src/common/interface/response.interface";
 import { successResponse } from "src/common/dto/response.dto";
 import { PromotionResponse } from "src/payload/response/promotion.respone";
 import { ApiBearerAuth } from "@nestjs/swagger";
+import { SkipAuth } from "src/config/skip.auth";
 
 @Controller("promotions")
 export class PromotionController {
@@ -37,15 +38,18 @@ export class PromotionController {
     return successResponse(promotion);
   }
   @Get("search")
+        @SkipAuth()
   @ApiBearerAuth("access_token")
   async search(@Query() query: SearchPromotionRequest) {
     return this.promotionService.search(query);
   }
   @Get()
+  @SkipAuth()
   async findAll(): Promise<PromotionResponse[]> {
     return this.promotionService.findAll();
   }
   @Get(":id")
+  @SkipAuth()
   @ApiBearerAuth("access_token")
   async findOne(@Param("id") id: string): Promise<PromotionResponse> {
     return this.promotionService.findOne(id);
