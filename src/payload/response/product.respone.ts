@@ -10,7 +10,6 @@ export class ProductResponse {
   Product_currency: string;
   Product_color: string[];
   Product_size: string[];
-  Product_variantSku: string | null;
   Product_specifications: string | null;
   Product_price: number;
   Product_count: number;

@@ -1,33 +1,77 @@
 import { Type } from "class-transformer";
-import { IsInt, IsOptional, IsPositive, IsString, Min } from "class-validator";
+import { IsEmail, IsInt, IsNotEmpty, IsOptional, IsPhoneNumber, IsPositive, IsString, Min } from "class-validator";
 
+
+export class CreateCommemtRequest{
+    @IsNotEmpty()
+    @IsString()
+    name: string;
+  
+    @IsNotEmpty()
+    @IsEmail()
+    email: string;
+  
+    @IsNotEmpty()
+    @IsString()
+    phone: string;
+  
+    @IsNotEmpty()
+    @IsString()
+    comment: string;
+}
+
+export class UpdateCommentRequest{
+    @IsNotEmpty()
+    @IsString()
+    name?: string;
+  
+    @IsNotEmpty()
+    @IsEmail()
+    email?: string;
+  
+    @IsNotEmpty()
+    @IsString()
+    phone?: string;
+  
+    @IsNotEmpty()
+    @IsString()
+    comment?: string;
+}
 
 export class CreateBlogdetailRequest{
-    @IsOptional()
-    @IsString()
-    Name:string;
+    @IsNotEmpty()
+  @IsString()
+  title: string;
 
-    @IsOptional()
-    @IsString()
-    Phone:string;
+  @IsNotEmpty()
+  @IsString()
+  image: string;
 
-    @IsOptional()
-    @IsString()
-    Comment:string;
+  @IsNotEmpty()
+  @IsString()
+  content: string;
+
+  @IsNotEmpty()
+  @IsString()
+  author: string;
     
 }
 export class UpdateBlogdetailRequest{
-    @IsOptional()
-    @IsString()
-    Name?:string;
+    @IsNotEmpty()
+  @IsString()
+  title?: string;
 
-    @IsOptional()
-    @IsString()
-    Phone?:string;
+  @IsNotEmpty()
+  @IsString()
+  image?: string;
 
-    @IsOptional()
-    @IsString()
-    Comment?:string; 
+  @IsNotEmpty()
+  @IsString()
+  content?: string;
+
+  @IsNotEmpty()
+  @IsString()
+  author?: string; 
 }
 export class SearchBlogdetailRequest{
     @IsOptional()
@@ -44,5 +88,5 @@ export class SearchBlogdetailRequest{
 
   @IsOptional()
   @IsString()
-  Comment?: string;
+  title?: string;
 }

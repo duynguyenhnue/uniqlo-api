@@ -14,7 +14,7 @@ import { successResponse } from "src/common/dto/response.dto";
 import { AuthJwtAccessProtected } from "src/common/guards/role.guard";
 import { AUTH_PERMISSIONS } from "src/enums/auth.enum";
 import { BlogDetailService } from "./blogdetails.service";
-import { CreateBlogdetailRequest, SearchBlogdetailRequest, UpdateBlogdetailRequest } from "src/payload/request/blog-details.request";
+import { CreateBlogdetailRequest, CreateCommemtRequest, SearchBlogdetailRequest, UpdateBlogdetailRequest, UpdateCommentRequest } from "src/payload/request/blog-details.request";
 import { BlogDetailRespone } from "src/payload/response/blogdetails.respone";
 import { SkipAuth } from "src/config/skip.auth";
   @Controller("blog-details")
@@ -34,20 +34,32 @@ import { SkipAuth } from "src/config/skip.auth";
         throw new Error(`Error while create blogdetail`);
        }
       }
-      
+
+
       @Get('search')
-      // @AuthJwtAccessProtected(AUTH_PERMISSIONS.BLOGDETAIL_VIEW)
       @SkipAuth()
+      // @AuthJwtAccessProtected(AUTH_PERMISSIONS.BLOGDETAIL_VIEW)
   async search(@Query() query:SearchBlogdetailRequest){
     try{
       return this.service.searchblogdetail(query);
-
     }catch(error)
     {
       throw new Error(`Error while search blogdetail`);
-
     }
   }  
+  
+      @Post(':blogId/comments')
+      async addCommenttoBlog(@Param('blogId') blogId:string,@Body()create:CreateCommemtRequest):Promise<BlogDetailRespone>
+      {
+        try{
+          return this.service.addCommenttoBlog(blogId,create);
+
+        }catch(error)
+        {
+          throw new Error(`${error.message}`);
+        }
+      }
+
   @Get()
   @SkipAuth()
   // @AuthJwtAccessProtected(AUTH_PERMISSIONS.BLOGDETAIL_VIEW)
@@ -57,7 +69,7 @@ import { SkipAuth } from "src/config/skip.auth";
       return this.service.findAll();
     }catch(error)
     {
-      throw new Error(` Eror while find all blogdetail `)
+      throw new Error(` Eror while find all blogdetail ${error.message} `)
 
     }
   }
@@ -69,7 +81,7 @@ import { SkipAuth } from "src/config/skip.auth";
       return this.service.findOne(id);
     }catch(error)
     {
-      throw new Error(`Error while find  blogdetail by id`);
+      throw new Error(`Error while find  blogdetail by id ${error.message}`);
     }
   }
   @Put(':id')
@@ -82,10 +94,22 @@ import { SkipAuth } from "src/config/skip.auth";
     return this.service.update(id,blogdetailUpdateRequest);
    }catch(error)
    {
-    throw new Error(`Error while update blogdetail`)
+    throw new Error(`Error while update blogdetail ${error.message}`)
 
    }
   }
+
+  @Put(':blogId/comments/:commentId')
+  @AuthJwtAccessProtected(AUTH_PERMISSIONS.BLOGDETAIL_UPDATE)
+  async updatecomment(
+    @Param('blogId')blogId:string,
+    @Param('commentId')commentId:string,
+    @Body()updatecmt:UpdateCommentRequest
+  ):Promise<BlogDetailRespone>
+  {
+    return this.service.updateComment(blogId,commentId,updatecmt);
+  }
+
   @Delete(':id')
   @AuthJwtAccessProtected(AUTH_PERMISSIONS.BLOGDETAIL_DELETE)
   async delete(@Param('id') id:string):Promise<{message:string}>{
@@ -93,8 +117,15 @@ import { SkipAuth } from "src/config/skip.auth";
       await this.service.delete(id);
     return {message:`Delete Successfully`};
     }catch(error){
-      throw new Error(`Error while delete blogdetail`)
+      throw new Error(`Error while delete blogdetail ${error.message}`)
 
     }
   }
+
+  @Delete(':blogId/comments/:commentId')
+  @AuthJwtAccessProtected(AUTH_PERMISSIONS.BLOGDETAIL_DELETE)
+async removeComment(@Param('blogId') blogId: string, @Param('commentId') commentId: string) {
+  return this.service.removeCommentFromBlog(blogId, commentId);
+}
+
   }

@@ -243,7 +243,6 @@ export class ProductService {
       Product_currency: product.Product_currency,
       Product_color: product.Product_color,
       Product_size: product.Product_size,
-      Product_variantSku: product.Product_variantSku,
       Product_specifications: product.Product_specifications,
       Product_price: product.Product_price,
       Product_count: product.Product_count,

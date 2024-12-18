@@ -33,9 +33,6 @@ export class Product extends Document {
   Product_size: string[];
 
   @Prop()
-  Product_variantSku: string;
-
-  @Prop()
   Product_specifications: string;
 
   @Prop({ required: true, type: Number })
