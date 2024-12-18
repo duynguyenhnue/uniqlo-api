@@ -73,20 +73,20 @@ export class UpdateBlogdetailRequest{
   @IsString()
   author?: string; 
 }
-// export class SearchBlogdetailRequest{
-//     @IsOptional()
-//   @IsInt()
-//   @Min(0)
-//   @Type(() => Number)
-//   page?: number;
+export class SearchBlogdetailRequest{
+    @IsOptional()
+  @IsInt()
+  @Min(0)
+  @Type(() => Number)
+  page?: number;
 
-//   @IsOptional()
-//   @IsInt()
-//   @Min(1)
-//   @Type(() => Number)
-//   limit?: number;
+  @IsOptional()
+  @IsInt()
+  @Min(1)
+  @Type(() => Number)
+  limit?: number;
 
-//   @IsOptional()
-//   @IsString()
-//   Comment?: string;
-// }
+  @IsOptional()
+  @IsString()
+  title?: string;
+}

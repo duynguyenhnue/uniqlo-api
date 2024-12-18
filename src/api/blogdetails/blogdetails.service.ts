@@ -3,7 +3,7 @@ import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 import { BlogDetailRespone } from "src/payload/response/blogdetails.respone";
 import { Blogdetails, Comments } from "src/schema/blog-details.schema";
-import { CreateBlogdetailRequest, CreateCommemtRequest, UpdateBlogdetailRequest, UpdateCommentRequest } from "src/payload/request/blog-details.request";
+import { CreateBlogdetailRequest, CreateCommemtRequest, SearchBlogdetailRequest, UpdateBlogdetailRequest, UpdateCommentRequest } from "src/payload/request/blog-details.request";
 import { Types } from "mongoose";
 
 @Injectable()
@@ -54,37 +54,37 @@ async addCommenttoBlog(blogId:string,create:CreateCommemtRequest):Promise<BlogDe
 
 }
 
-// async searchblogdetail(
-//     query: SearchBlogdetailRequest
-//   ): Promise<{ data: BlogDetailRespone[]; total: number }> {
-//     try{
-//         const {
-//             limit = 6,
-//             page = 0,
-//             Comment
-//           } = query;
-//           const offset = (page) * limit;
-//           const filter: any = {};
-//           if (Comment) {
-//             const value = String(Comment).trim();
-//             filter.Comment = { $regex: value, $options: "i" };
-//           }
-//           const data = await this.blogdetailModel
-//             .find(filter)
-//             .sort({ createdAt: -1 })
-//             .skip(offset)
-//             .limit(limit)
-//             .exec();
-//           const total = await this.blogdetailModel.countDocuments(filter).exec();
-//           return {
-//             data: data.map(this.mapblogdetailToResponse),
-//             total,
-//           };
-//     }catch(error)
-//     {
-//         throw error;
-//     }
-//   }
+async searchblogdetail(
+    query: SearchBlogdetailRequest
+  ): Promise<{ data: BlogDetailRespone[]; total: number }> {
+    try{
+        const {
+            limit = 6,
+            page = 0,
+            title
+          } = query;
+          const offset = (page) * limit;
+          const filter: any = {};
+          if (title) {
+            const value = String(title).trim();
+            filter.Comment = { $regex: value, $options: "i" };
+          }
+          const data = await this.blogdetailModel
+            .find(filter)
+            .sort({ createdAt: -1 })
+            .skip(offset)
+            .limit(limit)
+            .exec();
+          const total = await this.blogdetailModel.countDocuments(filter).exec();
+          return {
+            data: data.map(this.mapblogdetailToResponse),
+            total,
+          };
+    }catch(error)
+    {
+        throw error;
+    }
+  }
 
 async findAll(): Promise<BlogDetailRespone[]> {
     try{

@@ -14,7 +14,7 @@ import { successResponse } from "src/common/dto/response.dto";
 import { AuthJwtAccessProtected } from "src/common/guards/role.guard";
 import { AUTH_PERMISSIONS } from "src/enums/auth.enum";
 import { BlogDetailService } from "./blogdetails.service";
-import { CreateBlogdetailRequest, CreateCommemtRequest, UpdateBlogdetailRequest, UpdateCommentRequest } from "src/payload/request/blog-details.request";
+import { CreateBlogdetailRequest, CreateCommemtRequest, SearchBlogdetailRequest, UpdateBlogdetailRequest, UpdateCommentRequest } from "src/payload/request/blog-details.request";
 import { BlogDetailRespone } from "src/payload/response/blogdetails.respone";
 import { SkipAuth } from "src/config/skip.auth";
   @Controller("blog-details")
@@ -35,6 +35,19 @@ import { SkipAuth } from "src/config/skip.auth";
        }
       }
 
+
+      @Get('search')
+      @SkipAuth()
+      // @AuthJwtAccessProtected(AUTH_PERMISSIONS.BLOGDETAIL_VIEW)
+  async search(@Query() query:SearchBlogdetailRequest){
+    try{
+      return this.service.searchblogdetail(query);
+    }catch(error)
+    {
+      throw new Error(`Error while search blogdetail`);
+    }
+  }  
+  
       @Post(':blogId/comments')
       async addCommenttoBlog(@Param('blogId') blogId:string,@Body()create:CreateCommemtRequest):Promise<BlogDetailRespone>
       {
