@@ -31,13 +31,13 @@ export class ReviewService {
     ): Promise<Review> {
         await this.productService.getSingleProduct(id);
         await this.userService.findUserById(userId);
-        let newReview = {
+    
+        const createReview = new this.reviewModel({
             ...createReviewDto,
             userId: userId,
             productId: id,
-        };
+        });
 
-        const createReview = new this.reviewModel(newReview);
         const savedReview = await createReview.save();
 
         const updatedProduct = await this.productModel
@@ -47,9 +47,11 @@ export class ReviewService {
                 { new: true }
             )
             .exec();
+    
         if (!updatedProduct) {
-            throw new NotFoundException("Product not found");
+            throw new NotFoundException('Product not found');
         }
+    
         return savedReview;
     }
 
@@ -113,6 +115,8 @@ export class ReviewService {
     async deleteReview(id: string, userId: string): Promise<string> {
         await this.userService.findUserById(userId);
         const review = await this.reviewModel.findById(id);
+       
+        await this.productModel.findByIdAndUpdate(review.productId, { $pull: { reviews: id } }, { new: true });
 
         if (!review) {
             throw new NotFoundException("Review not found");

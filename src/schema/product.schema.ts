@@ -42,9 +42,6 @@ export class Product extends Document {
   Product_price: number;
 
   @Prop({ default: 0, type: Number })
-  Product_rating: number;
-
-  @Prop({ default: 0, type: Number })
   Product_count: number;
 
   @Prop({ default: "" ,type:[String]})
@@ -67,7 +64,7 @@ export class Product extends Document {
 
   @Prop({ type: [{ type: Types.ObjectId, ref: "review" }] })
   reviews: Types.ObjectId[];
-  
+
   @Prop({ type: [{ type: String }] })
   favorite_users: string[];
 }

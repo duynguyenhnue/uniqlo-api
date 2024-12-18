@@ -94,7 +94,6 @@ private mapproductToResponse(product: Product): ProductResponse {
         Product_variantSku: product.Product_variantSku,
         Product_specifications: product.Product_specifications,
         Product_price: product.Product_price,
-        Product_rating: product.Product_rating,
         Product_count: product.Product_count,
         Product_images: product.Product_images,
         Product_isNewArrival: product.Product_isNewArrival,

@@ -13,7 +13,6 @@ export class ProductResponse {
   Product_variantSku: string | null;
   Product_specifications: string | null;
   Product_price: number;
-  Product_rating: number;
   Product_count: number;
   Product_images: string[];
   Product_isNewArrival: boolean;

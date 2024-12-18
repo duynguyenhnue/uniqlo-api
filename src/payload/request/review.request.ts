@@ -27,10 +27,6 @@ export class CreateReviewRequest {
   @Max(5)
   rating: number;
 
-  @IsString()
-  @IsOptional()
-  productId?: string;
-
   @ValidateNested()
   @Type(() => ReplyReviewRequest)
   @IsOptional()

@@ -3,16 +3,15 @@ import { InjectModel } from "@nestjs/mongoose";
 import { Model, Types } from "mongoose";
 import { fitlerProduct, ProductCreateRequest, ProductSearchRequest, ProductUpdateRequest } from "src/payload/request/product.request";
 import { ProductResponse } from "src/payload/response/product.respone";
-import { Product } from "src/schema/product.schema";
-import { User } from "src/schema/user.schema";
+import { Product } from "src/schema/product.schema"
 import { UserService } from "../users/users.service";
 import { Review } from "src/schema/reviews.schema";
 
 @Injectable()
 export class ProductService {
   constructor(@InjectModel(Product.name) private readonly productModel: Model<Product>,
-  @InjectModel(Review.name) private reviewModel: Model<Review>,
-  private readonly userService: UserService,) { }
+    @InjectModel(Review.name) private reviewModel: Model<Review>,
+    private readonly userService: UserService,) { }
 
   async create(create: ProductCreateRequest, userId: string): Promise<ProductResponse> {
     try {
@@ -247,7 +246,6 @@ export class ProductService {
       Product_variantSku: product.Product_variantSku,
       Product_specifications: product.Product_specifications,
       Product_price: product.Product_price,
-      Product_rating: product.Product_rating,
       Product_count: product.Product_count,
       Product_images: product.Product_images,
       Product_isNewArrival: product.Product_isNewArrival,
@@ -256,7 +254,7 @@ export class ProductService {
       categoryId: product.categoryId,
       userId: product.userId,
       reviews: product.reviews.map((review) => review.toString()),
-      favorite_users: product.favorite_users,
+      favorite_users: product.favorite_users.map((user) => user.toString()),
     };
   }
 
@@ -282,7 +280,7 @@ export class ProductService {
       reviews.map(async (review) => {
         const user = await this.userService.findUserById(review.userId);
         return {
-          id: review.id,
+          id: review._id,
           userId: review.userId,
           avatar: user.avatar,
           fullName: user.fullName,
@@ -290,6 +288,7 @@ export class ProductService {
           reviewText: review.reviewText,
           createdAt: review.createdAt,
           updatedAt: review.updatedAt,
+          reply: review.reply,
         };
       })
     );
