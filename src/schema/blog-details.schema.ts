@@ -1,14 +1,51 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
+import { IsEmail, IsPhoneNumber, IsString } from "class-validator";
 import { Document, Types } from "mongoose";
-@Schema({timestamps:{createdAt:'createdAt',updatedAt:'updatedAt'}})
+
+@Schema({timestamps:true})
+export class Comments extends Document{
+    @Prop({required:true})
+    @IsString()
+    name:string;
+
+    @Prop({required:true})
+    @IsEmail()
+    email:string;
+
+    @Prop({required:true})
+    @IsString()
+    phone:string;
+
+    @Prop({required:true})
+    @IsString()
+    comment:string;
+
+    createdAt: Date;
+    updatedAt: Date;
+}
+
+@Schema({timestamps:true})
 export class Blogdetails extends Document{
     @Prop({required:true})
-    Name:string;
+    title:string;
+
     @Prop({required:true})
-    Email:string;
+    image:string;
+
     @Prop({required:true})
-    Phone:string;
+    content:string;
+
     @Prop({required:true})
-    Comment:string;
+    author:string;
+
+    @Prop({default:0,min:0})
+    commentcount:number;
+
+    @Prop({type:[{type:Types.ObjectId,ref:'Comments'}],default:[]})
+    comment:Comments[];
+
+    createdAt: Date;
+    updatedAt: Date;
 }
 export const BlogdetailsSchema=SchemaFactory.createForClass(Blogdetails)
+export const CommentSchema = SchemaFactory.createForClass(Comments);

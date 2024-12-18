@@ -1,48 +1,92 @@
 import { Type } from "class-transformer";
-import { IsInt, IsOptional, IsPositive, IsString, Min } from "class-validator";
+import { IsEmail, IsInt, IsNotEmpty, IsOptional, IsPhoneNumber, IsPositive, IsString, Min } from "class-validator";
 
+
+export class CreateCommemtRequest{
+    @IsNotEmpty()
+    @IsString()
+    name: string;
+  
+    @IsNotEmpty()
+    @IsEmail()
+    email: string;
+  
+    @IsNotEmpty()
+    @IsString()
+    phone: string;
+  
+    @IsNotEmpty()
+    @IsString()
+    comment: string;
+}
+
+export class UpdateCommentRequest{
+    @IsNotEmpty()
+    @IsString()
+    name?: string;
+  
+    @IsNotEmpty()
+    @IsEmail()
+    email?: string;
+  
+    @IsNotEmpty()
+    @IsString()
+    phone?: string;
+  
+    @IsNotEmpty()
+    @IsString()
+    comment?: string;
+}
 
 export class CreateBlogdetailRequest{
-    @IsOptional()
-    @IsString()
-    Name:string;
+    @IsNotEmpty()
+  @IsString()
+  title: string;
 
-    @IsOptional()
-    @IsString()
-    Phone:string;
+  @IsNotEmpty()
+  @IsString()
+  image: string;
 
-    @IsOptional()
-    @IsString()
-    Comment:string;
+  @IsNotEmpty()
+  @IsString()
+  content: string;
+
+  @IsNotEmpty()
+  @IsString()
+  author: string;
     
 }
 export class UpdateBlogdetailRequest{
-    @IsOptional()
-    @IsString()
-    Name?:string;
-
-    @IsOptional()
-    @IsString()
-    Phone?:string;
-
-    @IsOptional()
-    @IsString()
-    Comment?:string; 
-}
-export class SearchBlogdetailRequest{
-    @IsOptional()
-  @IsInt()
-  @Min(0)
-  @Type(() => Number)
-  page?: number;
-
-  @IsOptional()
-  @IsInt()
-  @Min(1)
-  @Type(() => Number)
-  limit?: number;
-
-  @IsOptional()
+    @IsNotEmpty()
   @IsString()
-  Comment?: string;
+  title?: string;
+
+  @IsNotEmpty()
+  @IsString()
+  image?: string;
+
+  @IsNotEmpty()
+  @IsString()
+  content?: string;
+
+  @IsNotEmpty()
+  @IsString()
+  author?: string; 
 }
+// export class SearchBlogdetailRequest{
+//     @IsOptional()
+//   @IsInt()
+//   @Min(0)
+//   @Type(() => Number)
+//   page?: number;
+
+//   @IsOptional()
+//   @IsInt()
+//   @Min(1)
+//   @Type(() => Number)
+//   limit?: number;
+
+//   @IsOptional()
+//   @IsString()
+//   Comment?: string;
+// }
