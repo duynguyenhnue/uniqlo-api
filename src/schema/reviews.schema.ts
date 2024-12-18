@@ -5,15 +5,12 @@ import { ReplyReviewRequest } from "src/payload/request/review.request";
 export type ReviewDocument = Review & Document;
 
 @Schema({ timestamps: true })
-export class Review {
-  @Prop({ type: Types.ObjectId })
-  id: Types.ObjectId;
-
-  @Prop({ type: Types.ObjectId })
-  productId?: Types.ObjectId;
+export class Review extends Document {
+  @Prop({ type: Types.ObjectId, ref: "product", required: true })
+  productId: Types.ObjectId;
 
   @Prop({ type: Types.ObjectId, ref: "user", required: true })
-  userId: string;
+  userId: Types.ObjectId;
 
   @Prop({ required: true })
   reviewText: string;

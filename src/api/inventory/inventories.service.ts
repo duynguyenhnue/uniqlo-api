@@ -12,12 +12,12 @@ export class InventoriesService {
     constructor(@InjectModel(Inventory.name) private readonly InventoriesModel: Model<Inventory>,
         @InjectModel(Product.name) private readonly ProductModel: Model<Product>) { }
 
-    async create(createInventoryRequest: CreateInventoryRequest, user: User): Promise<InventoryResponse> {
+    async create(createInventoryRequest: CreateInventoryRequest, userId: string): Promise<InventoryResponse> {
         try {
             // Tìm sản phẩm trùng productId, userId, size, và color
             const check = await this.InventoriesModel.findOne({
                 productId: createInventoryRequest.productId,
-                userId: user.id,
+                userId: userId,
                 size: createInventoryRequest.size,
                 color: createInventoryRequest.color,
             }).exec();
@@ -32,7 +32,7 @@ export class InventoriesService {
             // Nếu không tìm thấy, tạo mới sản phẩm
             const cart = {
                 ...createInventoryRequest,
-                userId: user.id,
+                userId: userId,
             };
             const inventory = await this.createInventoriesindb(cart);
             return this.mapInventoryToResponse(inventory);
@@ -47,7 +47,7 @@ export class InventoriesService {
 
     }
 
-    async search(query: SearchInventoryRequest, user: User): Promise<{ data: InventoryResponse[]; total: number }> {
+    async search(query: SearchInventoryRequest, userId: string): Promise<{ data: InventoryResponse[]; total: number }> {
         const { limit = 6, page = 0, productName, warehouseLocation } = query;
         const offset = (page) * limit;
         const filter: any = {};
@@ -66,13 +66,17 @@ export class InventoriesService {
             .limit(limit)
             .exec();
 
-        const dataNew = data.filter(item => item.userId == user.id);
+        const dataNew = data.filter(item => item.userId == userId);
 
         const result = await Promise.all(dataNew.map(async (item) => {
             if (!item.productId) {
                 return null;
             }
             const product = await this.ProductModel.findById(item.productId).exec();
+            if (!product) {
+                await this.InventoriesModel.findByIdAndDelete(item._id).exec();
+                return null;
+            }
             return {
                 ...item.toObject(),
                 name: product.Product_name,

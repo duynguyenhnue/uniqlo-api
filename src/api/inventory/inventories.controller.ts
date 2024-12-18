@@ -25,7 +25,7 @@ import { SkipAuth } from "src/config/skip.auth";
 
 @Controller("inventories")
 export class InventoriesController {
-  constructor(private readonly inventoriesService: InventoriesService) {}
+  constructor(private readonly inventoriesService: InventoriesService) { }
 
   @Post()
   @ApiBearerAuth("access_token")
@@ -35,16 +35,15 @@ export class InventoriesController {
   ): Promise<IResponse<InventoryResponse>> {
     const inventory = await this.inventoriesService.create(
       createInventoryRequest,
-      req.user
+      req.user.id
     );
     return successResponse(inventory);
   }
 
   @Get("search")
   @ApiBearerAuth("access_token")
-        @SkipAuth()
   async search(@Query() query: SearchInventoryRequest, @Req() req) {
-    return this.inventoriesService.search(query, req.user);
+    return this.inventoriesService.search(query, req.user.id);
   }
 
   @Get()

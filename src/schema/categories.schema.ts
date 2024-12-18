@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Document, Types } from "mongoose";
+import { Product } from "./product.schema";
 
 
 const validCategoryTags=["PRODUCT","BAGS","SHOES","FASHIO","CLOTHING","HATS","ACCESSORIES"];
@@ -37,7 +38,6 @@ export class Category extends Document {
   status: string;
   
   @Prop({required:true,type:Types.ObjectId,ref:'Product'})
-  product_id:Types.ObjectId
+  product_id:Types.ObjectId;
 }
 export const CategoriesSchema = SchemaFactory.createForClass(Category);
-
