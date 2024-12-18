@@ -13,13 +13,13 @@ import { CategoryModel } from "./api/categories/categories.module";
 import { ProductModel } from "./api/products/products.module";
 import { WarehouseModel } from "./api/warehouses/warehouse.module";
 import { InventoriesModel } from "./api/inventory/inventories.module";
-import { PromotionModel } from "./api/promotions/promotion.module";
 import { ReviewModule } from "./api/reviews/review.module";
 import { DiscountsModule } from "./api/discounts/discounts.module";
 import { VerificationCodeModule } from "./api/verification-code/verification-code.module";
 import { ContactModule } from "./api/contact/contact.module";
 import { BlogdetailModel } from "./api/blogdetails/blogdetails.module";
 import { FavouritesModel } from "./api/favourites/favourites.module";
+import { OrderModule } from "./api/orders/order.module";
 
 @Module({
   imports: [
@@ -37,13 +37,13 @@ import { FavouritesModel } from "./api/favourites/favourites.module";
     ProductModel,
     WarehouseModel,
     InventoriesModel,
-    PromotionModel,
     ReviewModule,
     DiscountsModule,
     VerificationCodeModule,
     ContactModule,
     BlogdetailModel,
     FavouritesModel,
+    OrderModule
   ],
   controllers: [],
   providers: [
