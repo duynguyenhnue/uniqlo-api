@@ -1,19 +1,13 @@
 import { Type } from "class-transformer";
 import {
-  IsEmail,
   IsString,
   IsNotEmpty,
   IsOptional,
   IsBoolean,
-  IsDateString,
-  Length,
-  ValidateNested,
   IsInt,
   IsPositive,
   Min,
-  IsMongoId,
 } from "class-validator";
-import { Types } from "mongoose";
 export class CreateCategoryRequest {
     @IsString()
     @IsNotEmpty()
@@ -30,29 +24,16 @@ export class CreateCategoryRequest {
     @IsBoolean()
     featured: boolean;
   
-    // @IsString()
-    // @IsOptional()
-    // size?: string;
-  
-    // @IsString()
-    // @IsOptional()
-    // color?: string;
-  
     @IsString()
     @IsOptional()
     material?: string;
   
     @IsString()
     @IsOptional()
-    status?: string;
-
-    // @IsMongoId()
-    // @IsOptional()
-    // product_id:Types.ObjectId
-  
+    status?: string;  
   }
   
-  export class UpdateCategoryRequest {
+  export class UpdateCategoryRequest{
     @IsOptional()
     @IsString()
     name?: string;
@@ -70,14 +51,6 @@ export class CreateCategoryRequest {
     @IsBoolean()
     featured?: boolean;
   
-    // @IsOptional()
-    // @IsString()
-    // size?: string;
-  
-    // @IsOptional()
-    // @IsString()
-    // color?: string;
-  
     @IsOptional()
     @IsString()
     material?: string;
@@ -85,12 +58,6 @@ export class CreateCategoryRequest {
     @IsOptional()
     @IsString()
     status?: string;
-
-    // @IsMongoId()
-    // @IsOptional()
-    // product_id?:Types.ObjectId
-
-
   }
   export class SearchCategorybyNameRequest{
     @IsOptional()

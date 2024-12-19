@@ -32,6 +32,9 @@ export class Review extends Document {
 
   @Prop({ type: [ReplyReviewRequest], required: false })
   reply?: ReplyReviewRequest[];
+
+  @Prop({ type: String, required: false })
+  productName?: string;
 }
 
 export const ReviewSchema = SchemaFactory.createForClass(Review);

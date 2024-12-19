@@ -13,6 +13,7 @@ import { ReviewDocument } from "src/schema/reviews.schema";
 import { CreateReviewRequest, ReplyReviewRequest } from "src/payload/request/review.request";
 import { Product, ProductDocument } from "src/schema/product.schema";
 import { ProductService } from "../products/products.service";
+import { ReviewResponse } from "src/payload/response/review.respone";
 
 @Injectable()
 export class ReviewService {
@@ -90,15 +91,36 @@ export class ReviewService {
         return reviews;
     }
 
-    async getReviews(): Promise<Review[]> {
-        const reviews = await this.reviewModel
-            .find()
-            .exec();
+    async getReviews(): Promise<any[]> {
+        const reviews = await this.reviewModel.find().exec();
+    
         if (!reviews || reviews.length === 0) {
             throw new NotFoundException("Review not found");
         }
-        return reviews;
-    }
+    
+        const reviewsResponse = await Promise.all(
+            reviews.map(async (review) => {
+                const product = await this.productModel.findById(review.productId).lean().exec();
+                const user = await this.userService.findUserById(review.userId);
+    
+                return {
+                    _id: review._id,
+                    productId: review.productId,
+                    userId: review.userId,
+                    reviewText: review.reviewText,
+                    rating: review.rating,
+                    reply: review.reply || [],
+                    createdAt: review.createdAt,
+                    updatedAt: review.updatedAt,
+                    productName: product?.Product_name || "Unknown Product",
+                    fullName: user?.fullName || "Unknown User",
+                    avatar: user?.avatar || "",
+                };
+            })
+        );
+    
+        return reviewsResponse;
+    }    
 
     async getReviewsRating(id: string[]): Promise<Review[]> {
         const reviews = await this.reviewModel

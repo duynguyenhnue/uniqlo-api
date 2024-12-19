@@ -24,30 +24,28 @@ import { SkipAuth } from "src/config/skip.auth";
 
 @Controller("categories")
 export class CategoryController {
-  constructor(private readonly categoryService: CategoryService) {}
+  constructor(private readonly categoryService: CategoryService) { }
 
   @Post()
   @AuthJwtAccessProtected(AUTH_PERMISSIONS.CATEGORY_CREATE)
   async create(
     @Body() createCategoryRequest: CreateCategoryRequest
-  ): Promise<IResponse<CategoryResponse>> { 
-    try{
+  ): Promise<IResponse<CategoryResponse>> {
+    try {
       const category = await this.categoryService.create(createCategoryRequest);
-    return successResponse(category);
-    } catch(error)
-    {
+      return successResponse(category);
+    } catch (error) {
       throw new NotFoundException(`Error while create category`);
     }
   }
   // 
   @Get('search')
   // @AuthJwtAccessProtected(AUTH_PERMISSIONS.CATEGORY_VIEW)
-        @SkipAuth()
-  async search(@Query() query:SearchCategorybyNameRequest){
-    try{
+  @SkipAuth()
+  async search(@Query() query: SearchCategorybyNameRequest) {
+    try {
       return this.categoryService.searchCategory(query);
-    }catch(error)
-    {
+    } catch (error) {
       throw new NotFoundException(`Error while search category`)
     }
   }
@@ -56,10 +54,9 @@ export class CategoryController {
   // @AuthJwtAccessProtected(AUTH_PERMISSIONS.CATEGORY_VIEW)
   @SkipAuth()
   async findAll(): Promise<CategoryResponse[]> {
-    try{
+    try {
       return this.categoryService.findAll();
-    }catch(error)
-    {
+    } catch (error) {
       throw new NotFoundException(`Error while get all category`);
     }
   }
@@ -67,37 +64,34 @@ export class CategoryController {
   @SkipAuth()
   // @AuthJwtAccessProtected(AUTH_PERMISSIONS.CATEGORY_VIEW)
   async findOne(@Param('id') id: string): Promise<CategoryResponse> {
-    try{
+    try {
       return this.categoryService.findOne(id);
-    }catch(error)
-    {
-      throw new NotFoundException( `Error while get category by id`);
+    } catch (error) {
+      throw new NotFoundException(`Error while get category by id`);
     }
   }
 
   @Put(':id')
   @AuthJwtAccessProtected(AUTH_PERMISSIONS.CATEGORY_UPDATE)
   async update(
-    @Param('id')id:string,
-    @Body() updateCategoryRequest:UpdateCategoryRequest
-  ):Promise<CategoryResponse>{
-    try{
-      return this.categoryService.update(id,updateCategoryRequest);
+    @Param('id') id: string,
+    @Body() updateCategoryRequest: UpdateCategoryRequest
+  ): Promise<CategoryResponse> {
+    try {
+      return this.categoryService.update(id, updateCategoryRequest);
 
-    }catch(error)
-    {
+    } catch (error) {
       throw new NotFoundException(`Error while update category`);
     }
   }
 
   @Delete(':id')
-@AuthJwtAccessProtected(AUTH_PERMISSIONS.CATEGORY_DELETE)
-  async delete(@Param('id') id:string):Promise<{message:string}>{
-    try{
+  @AuthJwtAccessProtected(AUTH_PERMISSIONS.CATEGORY_DELETE)
+  async delete(@Param('id') id: string): Promise<{ message: string }> {
+    try {
       await this.categoryService.delete(id);
-    return {message:`Delete Successfully`};
-    }catch(error)
-    {
+      return { message: `Delete Successfully` };
+    } catch (error) {
       throw new NotFoundException(`Error while delete category`);
     }
   }
