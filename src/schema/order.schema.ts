@@ -4,7 +4,8 @@ import { Types,Document } from "mongoose";
 
 
 
-
+const validProductSizes=["XS","S","M","L","XL","2XL","3XL","4XL","Free Size"];
+const validProductColors=["White","Red","Green","Yellow","Blue","Gray","Orange","Brown","Beige","Purple","Pink","Black"]
 @Schema({timestamps:true})
 export class Order extends Document{
 
@@ -15,6 +16,8 @@ export class Order extends Document{
         type:[{
             productId:{ type: Types.ObjectId, ref: 'Products', required: true },
             count:{type:Number,required:true,default:1},
+            size:{type:String,require:true,enum:validProductSizes},
+            color:{type:String,require:true,enum:validProductColors},
             totalPrice:{type:Number,require:true,default:0}
         }],require:true
     })
@@ -23,6 +26,8 @@ export class Order extends Document{
         productId: Types.ObjectId;
         count: number;
         totalPrice: number;
+        size:string;
+        color:string;
       }[];
 
       @Prop({type:Number,required:true})

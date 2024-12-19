@@ -58,13 +58,23 @@ export class OrderController{
     @Get()
     @SkipAuth()
     async findAll(): Promise<OrderRespone[]> {
-      return this.services.findAll();
+      try{
+        return await this.services.findAll();
+      }catch(error)
+      {
+        throw new BadRequestException(`Error ${error.message}`);
+      }
     }
 
     @Get(":orderId")
     @SkipAuth()
     async findOne(@Param("orderId") orderId: string): Promise<OrderRespone> {
-      return this.services.findOne(orderId);
+      try{
+        return await this.services.findOne(orderId);
+      }catch(error)
+      {
+        throw new BadRequestException(`Error ${error.message}`);
+      }
     }
 
     @Put(":orderId")
@@ -74,11 +84,16 @@ export class OrderController{
     @Param("orderId") orderId: string,
     @Body() update: UpdateOrderRequest
   ): Promise<OrderRespone> {
-    const userId = req.user?._id;
+        try{
+      const userId = req.user?._id;
             if (!userId) {
               throw new BadRequestException('User ID is required');
             }
-    return this.services.updateOrder(userId,orderId, update);
+      return await this.services.updateOrder(userId,orderId, update);
+    }catch(error)
+    {
+      throw new BadRequestException(`Error ${error.message}`);
+    }
   }
 
     @Put(':orderId/status')

@@ -8,6 +8,7 @@ import {
     Delete,
     Query,
     NotFoundException,
+    BadRequestException,
   } from "@nestjs/common";
 import { IResponse } from "src/common/interface/response.interface";
 import { successResponse } from "src/common/dto/response.dto";
@@ -31,7 +32,7 @@ import { SkipAuth } from "src/config/skip.auth";
         return successResponse(blogdetail);
        }catch(error)
        {
-        throw new Error(`Error while create blogdetail`);
+        throw new BadRequestException(`Error while create blogdetail ${error.message}`);
        }
       }
 
@@ -44,19 +45,19 @@ import { SkipAuth } from "src/config/skip.auth";
       return this.service.searchblogdetail(query);
     }catch(error)
     {
-      throw new Error(`Error while search blogdetail`);
+      throw new BadRequestException(`Error while search blogdetail ${error.message}`);
     }
   }  
   
       @Post(':blogId/comments')
-      async addCommenttoBlog(@Param('blogId') blogId:string,@Body()create:CreateCommemtRequest):Promise<BlogDetailRespone>
+      async addCommenttoBlog(@Param('blogId') blogId:string,@Body() create:CreateCommemtRequest):Promise<BlogDetailRespone>
       {
         try{
           return this.service.addCommenttoBlog(blogId,create);
 
         }catch(error)
         {
-          throw new Error(`${error.message}`);
+          throw new BadRequestException(`error while add comment ${error.message}`);
         }
       }
 
@@ -69,7 +70,7 @@ import { SkipAuth } from "src/config/skip.auth";
       return this.service.findAll();
     }catch(error)
     {
-      throw new Error(` Eror while find all blogdetail ${error.message} `)
+      throw new BadRequestException(` Eror while find all blogdetail ${error.message} `)
 
     }
   }
@@ -81,7 +82,7 @@ import { SkipAuth } from "src/config/skip.auth";
       return this.service.findOne(id);
     }catch(error)
     {
-      throw new Error(`Error while find  blogdetail by id ${error.message}`);
+      throw new BadRequestException(`Error while find  blogdetail by id ${error.message}`);
     }
   }
   @Put(':id')
@@ -94,7 +95,7 @@ import { SkipAuth } from "src/config/skip.auth";
     return this.service.update(id,blogdetailUpdateRequest);
    }catch(error)
    {
-    throw new Error(`Error while update blogdetail ${error.message}`)
+    throw new BadRequestException(`Error while update blogdetail ${error.message}`)
 
    }
   }
@@ -107,7 +108,13 @@ import { SkipAuth } from "src/config/skip.auth";
     @Body()updatecmt:UpdateCommentRequest
   ):Promise<BlogDetailRespone>
   {
-    return this.service.updateComment(blogId,commentId,updatecmt);
+    try{
+      return this.service.updateComment(blogId,commentId,updatecmt);
+    }catch(error)
+    {
+      throw new BadRequestException(`Error while update comment blogdetail ${error.message}`)
+
+    }
   }
 
   @Delete(':id')
@@ -117,7 +124,7 @@ import { SkipAuth } from "src/config/skip.auth";
       await this.service.delete(id);
     return {message:`Delete Successfully`};
     }catch(error){
-      throw new Error(`Error while delete blogdetail ${error.message}`)
+      throw new BadRequestException(`Error while delete blogdetail ${error.message}`)
 
     }
   }
@@ -125,7 +132,12 @@ import { SkipAuth } from "src/config/skip.auth";
   @Delete(':blogId/comments/:commentId')
   @AuthJwtAccessProtected(AUTH_PERMISSIONS.BLOGDETAIL_DELETE)
 async removeComment(@Param('blogId') blogId: string, @Param('commentId') commentId: string) {
-  return this.service.removeCommentFromBlog(blogId, commentId);
+  try{
+    return this.service.removeCommentFromBlog(blogId, commentId);
+  }catch(error)
+  {
+    throw new BadRequestException(`Error while delete comment blogdetail ${error.message}`)
+  }
 }
 
   }

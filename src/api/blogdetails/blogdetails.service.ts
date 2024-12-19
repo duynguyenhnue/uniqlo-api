@@ -1,4 +1,4 @@
-import { Injectable, InternalServerErrorException, NotFoundException } from "@nestjs/common";
+import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 import { BlogDetailRespone } from "src/payload/response/blogdetails.respone";
@@ -27,7 +27,7 @@ private async createblogdetailindb(create:CreateBlogdetailRequest):Promise<Blogd
    }
    catch(error)
    {
-    throw new Error(`Error while create blogdetail in database ${error.message}`);
+    throw new BadRequestException(`Error while create blogdetail in database ${error.message}`);
    }
 
 }
@@ -49,7 +49,7 @@ async addCommenttoBlog(blogId:string,create:CreateCommemtRequest):Promise<BlogDe
   return this.mapblogdetailToResponse(blog);
   }catch(error)
   {
-    throw new Error(`Error while add comment ${error.message}`);
+    throw new BadRequestException(`Error while add comment ${error.message}`);
   }
 
 }
@@ -121,39 +121,58 @@ async update(id:string,updateblogdetail:UpdateBlogdetailRequest):Promise<BlogDet
     }
     catch(error)
     {
-        throw new Error(`Error while update blogdetail ${error.message}`)
+        throw new BadRequestException(`Error while update blogdetail ${error.message}`)
     }
 }
 
-async updateComment(blogId:string,commentId:string,updateComment:UpdateCommentRequest):Promise<BlogDetailRespone>{
-  try{
-    const blog= await this.blogdetailModel.findById(blogId).populate('comment').exec();
-    if(!blog)
-    {
+async updateComment(blogId: string, commentId: string, updateComment: UpdateCommentRequest): Promise<BlogDetailRespone> {
+  try {
+    const blog = await this.blogdetailModel.findById(blogId).populate('comment').exec();
+    console.log("blog>>", blog);
+    if (!blog) {
       throw new NotFoundException(`Blog with ID ${blogId} not found`);
     }
-    const cmt=blog.comment.find(comment=>comment._id.toString()===commentId)
-    if(!cmt)
-    {
+
+    const cmt = blog.comment.find(comment => comment._id.toString() === commentId);
+    console.log("cmt>>", cmt);
+    if (!cmt) {
       throw new NotFoundException(`Comment with ID ${commentId} not found in this blog`);
     }
-    cmt.name=updateComment.name||cmt.name;
-    cmt.email=updateComment.name||cmt.email;
-    cmt.phone=updateComment.name||cmt.phone;
-    cmt.comment=updateComment.name||cmt.comment;
-    await this.commentModule.findByIdAndUpdate(commentId, {
-      name: cmt.name,
-      email: cmt.email,
-      phone: cmt.phone,
-      comment: cmt.comment,
-    });
-    return this.mapblogdetailToResponse(blog);
 
-  }catch(error)
-  {
-    throw new Error(`${error.message}`);
+    const updatedComment = await this.commentModule.findByIdAndUpdate(commentId, {
+      $set: {
+        name: updateComment.name || cmt.name,
+        email: updateComment.email || cmt.email,
+        phone: updateComment.phone || cmt.phone,
+        comment: updateComment.comment || cmt.comment,
+      }
+    }, { new: true }).exec();
+
+    console.log('Updating comment with the following data:', {
+      name: updateComment.name || cmt.name,
+      email: updateComment.email || cmt.email,
+      phone: updateComment.phone || cmt.phone,
+      comment: updateComment.comment || cmt.comment,
+    });
+
+    if (!updatedComment) {
+      throw new Error("Failed to update comment");
+    }
+
+    const updatedBlog = await this.blogdetailModel
+      .findById(blogId)
+      .populate('comment')
+      .exec();
+
+    console.log("updateblog>>", updatedBlog);
+    
+    return this.mapblogdetailToResponse(updatedBlog);
+
+  } catch (error) {
+    throw new BadRequestException(`${error.message}`);
   }
 }
+
 
 async delete(id:string):Promise<void>{
   try{
@@ -165,7 +184,7 @@ async delete(id:string):Promise<void>{
     await this.commentModule.deleteMany({blog:id})
   }catch(error)
   {
-    throw new Error(`Error while delete blogdetail ${error.message}`)
+    throw new BadRequestException(`Error while delete blogdetail ${error.message}`)
   }
 }
 
