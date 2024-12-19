@@ -311,4 +311,9 @@ export class ProductService {
     await product.save();
     return this.mapproductToResponse(product);
   }
+
+  async getFavorite(userId: string): Promise<ProductResponse[]> {
+    const product = await this.productModel.find({ favorite_users: userId }).exec();
+    return product.map(this.mapproductToResponse);
+  }
 }

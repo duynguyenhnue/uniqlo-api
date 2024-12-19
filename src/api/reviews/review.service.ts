@@ -134,6 +134,14 @@ export class ReviewService {
         return reviews;
     }
 
+    async getReviewById(id: string): Promise<Review> {
+        const review = await this.reviewModel.findById(id);
+        if (!review) {
+            throw new NotFoundException("Review not found");
+        }
+        return review;
+    }
+
     async deleteReview(id: string, userId: string): Promise<string> {
         await this.userService.findUserById(userId);
         const review = await this.reviewModel.findById(id);

@@ -32,6 +32,12 @@ export class ReviewController {
     return this.reviewService.getReviews();
   }
 
+  @Get("/:id")
+  @SkipAuth()
+  async getReviewById(@Param("id", ParseObjectIdPipe) id: string) {
+    return this.reviewService.getReviewById(id);
+  }
+
   @Post("/reply/:id")
   @AuthJwtAccessProtected(AUTH_PERMISSIONS.REVIEW_CREATE)
   async createReply(

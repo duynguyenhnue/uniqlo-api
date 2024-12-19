@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Document, Types } from "mongoose";
 
-const validProductTags=["PRODUCT","BAGS","SHOES","FASHIO","CLOTHING","HATS","ACCESSORIES"];
+const validProductTags=["PRODUCT","BAGS","SHOES","FASHION","CLOTHING","HATS","ACCESSORIES"];
 const validProductBrands=["Louis Vuitton","Chanel","Hermes","Gucci"];
 const validProductSizes=["XS","S","M","L","XL","2XL","3XL","4XL","Free Size"];
 const validProductColors=["White","Red","Green","Yellow","Blue","Gray","Orange","Brown","Beige","Purple","Pink","Black"]
