@@ -1,6 +1,5 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import { Document, Types } from "mongoose";
-import { Product } from "./product.schema";
+import { Document } from "mongoose";
 
 
 const validCategoryTags=["PRODUCT","BAGS","SHOES","FASHIO","CLOTHING","HATS","ACCESSORIES"];
@@ -10,10 +9,10 @@ export class Category extends Document {
   @Prop({ required: true })
   name: string;
 
-  @Prop({ required: true,type:String,enum:validCategoryTags })
+  @Prop({ required: false,type:String,enum:validCategoryTags })
   tags: string[];
 
-  @Prop({ required: true,type:String,enum:validCategoryBrands })
+  @Prop({ required: false,type:String,enum:validCategoryBrands })
   brands: string[];
 
   @Prop({ required: true })
@@ -26,18 +25,9 @@ export class Category extends Document {
   featured: boolean;
 
   @Prop({ required: true })
-  size: string;
-
-  @Prop({ required: true })
-  color: string;
-
-  @Prop({ required: true })
   material: string;
 
   @Prop({ required: true })
   status: string;
-  
-  @Prop({required:true,type:Types.ObjectId,ref:'Product'})
-  product_id:Types.ObjectId;
 }
 export const CategoriesSchema = SchemaFactory.createForClass(Category);

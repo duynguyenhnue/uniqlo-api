@@ -12,22 +12,11 @@ export class CategoryService {
     }
     async create(createCategoryRequest: CreateCategoryRequest): Promise<CategoryResponse> {
         try {
-            const category = await this.createCategoriesindb(createCategoryRequest);
+            const category = await this.CategoryModel.create(createCategoryRequest);
             return this.mapCategoryToResponse(category);
         } catch (error) {
             throw error;
         }
-
-
-    }
-
-    private async createCategoriesindb(createCategoryRequest: CreateCategoryRequest): Promise<Category> {
-        try {
-            return this.CategoryModel.create(createCategoryRequest);
-        } catch (error) {
-            throw error;
-        }
-
     }
     // async searchbyName(name:string):Promise<CategoryResponse[]>{
     //     const kq=await this.CategoryModel.find({name:{$regex:name,$options:'i'}}).exec();
