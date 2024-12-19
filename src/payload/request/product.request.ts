@@ -27,7 +27,6 @@ export class ProductCreateRequest  {
   @IsArray()
   Product_size: string[];
 
-
   @IsOptional()
   @IsString()
   Product_specifications?: string;
