@@ -29,7 +29,7 @@ export class ProductController {
   constructor(private readonly service: ProductService) {}
 
   @Post()
-  @AuthJwtAccessProtected(AUTH_PERMISSIONS.PRODUCT_CREATE)
+  // @AuthJwtAccessProtected(AUTH_PERMISSIONS.PRODUCT_CREATE)
   async create(
     @Body() productcreaterequest: ProductCreateRequest,
     @Req() req
@@ -104,7 +104,7 @@ export class ProductController {
   }
 
   @Delete(":id")
-  @AuthJwtAccessProtected(AUTH_PERMISSIONS.PRODUCT_DELETE)
+  // @AuthJwtAccessProtected(AUTH_PERMISSIONS.PRODUCT_DELETE)
   async delete(@Param("id") id: string): Promise<{ message: string }> {
     try {
       await this.service.delete(id);
@@ -115,7 +115,7 @@ export class ProductController {
   }
 
   @Put("favorite/:type/:id")
-  @AuthJwtAccessProtected(AUTH_PERMISSIONS.PRODUCT_VIEW)
+  // @AuthJwtAccessProtected(AUTH_PERMISSIONS.PRODUCT_VIEW)
   async favorite(
     @Param("type") type: string,
     @Param("id") id: string,
@@ -129,7 +129,7 @@ export class ProductController {
   }
 
   @Put(":id")
-  @AuthJwtAccessProtected(AUTH_PERMISSIONS.PRODUCT_UPDATE)
+  // @AuthJwtAccessProtected(AUTH_PERMISSIONS.PRODUCT_UPDATE)
   async update(
     @Param("id") id: string,
     @Body() productUpdateRequest: ProductUpdateRequest

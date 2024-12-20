@@ -30,7 +30,7 @@ export class OrderController {
   constructor(private readonly services: OrderService) {}
 
   @Post()
-  @AuthJwtAccessProtected(AUTH_PERMISSIONS.ORDERS_CREATE)
+  // @AuthJwtAccessProtected(AUTH_PERMISSIONS.ORDERS_CREATE)
   async create(
     @Req() req: any,
     @Body() createOrderRequest: CreateOrderRequest
@@ -87,7 +87,8 @@ export class OrderController {
   }
 
   @Put(":orderId")
-  @AuthJwtAccessProtected(AUTH_PERMISSIONS.ORDERS_UPDATE)
+  // @AuthJwtAccessProtected(AUTH_PERMISSIONS.ORDERS_UPDATE)
+  @SkipAuth()
   async update(
     @Req() req: any,
     @Param("orderId") orderId: string,
@@ -105,7 +106,8 @@ export class OrderController {
   }
 
   @Put(":orderId/status")
-  @AuthJwtAccessProtected(AUTH_PERMISSIONS.ORDERS_UPDATE)
+  // @AuthJwtAccessProtected(AUTH_PERMISSIONS.ORDERS_UPDATE)
+  @SkipAuth()
   async updateOrderstatus(
     @Param("orderId") orderId: string,
     @Body("status") status: string

@@ -51,7 +51,7 @@ export class UserController {
 
   @Get("find/:id")
   @ApiBearerAuth("access_token")
-  @AuthJwtAccessProtected(AUTH_PERMISSIONS.CUSTOMER_VIEW)
+  // @AuthJwtAccessProtected(AUTH_PERMISSIONS.CUSTOMER_VIEW)
   async findUser(@Param("id") id: string) {
     try {
       return successResponse(await this.userService.findUserById(id));
@@ -80,7 +80,7 @@ export class UserController {
 
   @Put(":id")
   @ApiBearerAuth("access_token")
-  @AuthJwtAccessProtected(AUTH_PERMISSIONS.CUSTOMER_UPDATE)
+  // @AuthJwtAccessProtected(AUTH_PERMISSIONS.CUSTOMER_UPDATE)
   async updateUser(
     @Param("id") id: string,
     @Body() updateUserRequest: UpdateUserRequest
@@ -101,7 +101,7 @@ export class UserController {
 
   @Delete(":id")
   @ApiBearerAuth("access_token")
-  @AuthJwtAccessProtected(AUTH_PERMISSIONS.CUSTOMER_DELETE)
+  // @AuthJwtAccessProtected(AUTH_PERMISSIONS.CUSTOMER_DELETE)
   async deleteUser(@Param("id") id: string): Promise<void> {
     try {
       await this.userService.deleteUser(id);
