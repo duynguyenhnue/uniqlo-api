@@ -66,6 +66,15 @@ export class OrderController {
     }
   }
 
+  @Get("search/history")
+  async history(@Req() req) {
+    try {
+      return this.services.findAllHistory(req.user._id);
+    } catch (error) {
+      throw new Error(`Error ${error.message}`);
+    }
+  }
+
   @Get()
   @SkipAuth()
   async findAll(): Promise<OrderRespone[]> {

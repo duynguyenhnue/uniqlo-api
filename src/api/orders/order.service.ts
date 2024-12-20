@@ -135,6 +135,38 @@ export class OrderService {
     }
   }
 
+  async findAllHistory(id: string): Promise<OrderRespone[]> {
+    try {
+      const order = await this.orderModel.find({ userId: id }).exec();
+
+      const userIds = [
+        ...new Set(order.map((order) => order.userId.toString())),
+      ];
+      const users = await this.userModel.find({ _id: { $in: userIds } }).exec();
+
+      const productIds = [
+        ...new Set(
+          order.flatMap((order) =>
+            order.orderItems.map((item) => item.productId.toString())
+          )
+        ),
+      ];
+
+      const products = await this.productModel
+        .find({ _id: { $in: productIds } })
+        .exec();
+      return order.map((o) =>
+        this.mapOrderToResponse(
+          o,
+          users.find((user) => user._id.toString() === o.userId.toString()),
+          products
+        )
+      );
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
+  }
+
   async findAll(): Promise<OrderRespone[]> {
     try {
       const order = await this.orderModel.find().exec();
