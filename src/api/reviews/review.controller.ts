@@ -33,7 +33,7 @@ export class ReviewController {
   }
 
   @Post("/reply/:id")
-  @AuthJwtAccessProtected(AUTH_PERMISSIONS.REVIEW_CREATE)
+  // @AuthJwtAccessProtected(AUTH_PERMISSIONS.REVIEW_CREATE)
   async createReply(
     @Param("id", ParseObjectIdPipe) id: string,
     @Body() replyReviewDto: ReplyReviewRequest,
@@ -43,7 +43,7 @@ export class ReviewController {
   }
 
   @Post("/:id")
-  @AuthJwtAccessProtected(AUTH_PERMISSIONS.REVIEW_CREATE)
+  // @AuthJwtAccessProtected(AUTH_PERMISSIONS.REVIEW_CREATE)
   async createReview(
     @Param("id", ParseObjectIdPipe) id: string,
     @Body() createReviewDto: CreateReviewRequest,
@@ -65,7 +65,7 @@ export class ReviewController {
   }
 
   @Delete("/:id")
-  @AuthJwtAccessProtected(AUTH_PERMISSIONS.REVIEW_DELETE)
+  // @AuthJwtAccessProtected(AUTH_PERMISSIONS.REVIEW_DELETE)
   async deleteReview(@Param("id", ParseObjectIdPipe) id: string, @Req() req) {
     return this.reviewService.deleteReview(id, req.user.id);
   }
