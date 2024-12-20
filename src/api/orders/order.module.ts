@@ -9,6 +9,7 @@ import { RefreshTokenModule } from '../refresh-token/refresh-token.module';
 import { AuthModule } from '../auth/auth.module';
 import { PermissionModule } from '../permission/permission.module';
 import { RoleModule } from '../roles/role.module';
+import { User, UserSchema } from 'src/schema/user.schema';
 
 
 @Module({
@@ -17,6 +18,7 @@ import { RoleModule } from '../roles/role.module';
       { name: Order.name, schema: OrderSchema },
       { name: Product.name, schema: ProductSchema }, 
       { name: Discount.name, schema: DiscountSchema },
+      { name: User.name, schema: UserSchema },
     ]),
     forwardRef(()=>RefreshTokenModule),
     forwardRef(()=>AuthModule),

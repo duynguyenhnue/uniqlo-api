@@ -24,6 +24,7 @@ import { AUTH_PERMISSIONS } from "src/enums/auth.enum";
 import { AuthJwtAccessProtected } from "src/common/guards/role.guard";
 import { ApiBearerAuth } from "@nestjs/swagger";
 import { User } from "src/schema/user.schema";
+import { SkipAuth } from "src/config/skip.auth";
 @Controller("users")
 export class UserController {
   constructor(private readonly userService: UserService) {}
@@ -50,7 +51,7 @@ export class UserController {
 
   @Get("find/:id")
   @ApiBearerAuth("access_token")
-  @AuthJwtAccessProtected(AUTH_PERMISSIONS.CUSTOMER_VIEW)
+  // @AuthJwtAccessProtected(AUTH_PERMISSIONS.CUSTOMER_VIEW)
   async findUser(@Param("id") id: string) {
     try {
       return successResponse(await this.userService.findUserById(id));
@@ -64,7 +65,8 @@ export class UserController {
 
   @Get("search")
   @ApiBearerAuth("access_token")
-  @AuthJwtAccessProtected(AUTH_PERMISSIONS.CUSTOMER_VIEW)
+  // @AuthJwtAccessProtected(AUTH_PERMISSIONS.CUSTOMER_VIEW)
+  @SkipAuth()
   async search(@Query() query: SearchUserRequest) {
     try {
       return successResponse(await this.userService.searchUsers(query));
@@ -78,7 +80,7 @@ export class UserController {
 
   @Put(":id")
   @ApiBearerAuth("access_token")
-  @AuthJwtAccessProtected(AUTH_PERMISSIONS.CUSTOMER_UPDATE)
+  // @AuthJwtAccessProtected(AUTH_PERMISSIONS.CUSTOMER_UPDATE)
   async updateUser(
     @Param("id") id: string,
     @Body() updateUserRequest: UpdateUserRequest
@@ -99,7 +101,7 @@ export class UserController {
 
   @Delete(":id")
   @ApiBearerAuth("access_token")
-  @AuthJwtAccessProtected(AUTH_PERMISSIONS.CUSTOMER_DELETE)
+  // @AuthJwtAccessProtected(AUTH_PERMISSIONS.CUSTOMER_DELETE)
   async deleteUser(@Param("id") id: string): Promise<void> {
     try {
       await this.userService.deleteUser(id);
@@ -112,7 +114,14 @@ export class UserController {
   }
 
   @Post("change-password")
-  async changePassword(@Req() req, @Body() changePasswordRequest: ChangePasswordRequest) {    
-    return this.userService.changePassword(req.user._id, changePasswordRequest.oldPassword, changePasswordRequest.newPassword);
+  async changePassword(
+    @Req() req,
+    @Body() changePasswordRequest: ChangePasswordRequest
+  ) {
+    return this.userService.changePassword(
+      req.user._id,
+      changePasswordRequest.oldPassword,
+      changePasswordRequest.newPassword
+    );
   }
 }

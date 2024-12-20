@@ -10,6 +10,14 @@ export class CreateOrderItemRequest{
   @IsNotEmpty()
   count: number;
 
+  @IsString()
+  @IsNotEmpty()
+  size: number;
+
+  @IsString()
+  @IsNotEmpty()
+  color: number;
+
   @IsNumber()
   @IsNotEmpty()
   totalPrice: number;

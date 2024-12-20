@@ -11,7 +11,12 @@ import {
   Req,
 } from "@nestjs/common";
 import { ProductService } from "./products.service";
-import { fitlerProduct, ProductCreateRequest, ProductSearchRequest, ProductUpdateRequest } from "src/payload/request/product.request";
+import {
+  fitlerProduct,
+  ProductCreateRequest,
+  ProductSearchRequest,
+  ProductUpdateRequest,
+} from "src/payload/request/product.request";
 import { ProductResponse } from "src/payload/response/product.respone";
 import { IResponse } from "src/common/interface/response.interface";
 import { successResponse } from "src/common/dto/response.dto";
@@ -21,31 +26,35 @@ import { SkipAuth } from "src/config/skip.auth";
 
 @Controller("products")
 export class ProductController {
-  constructor(private readonly service: ProductService) { }
+  constructor(private readonly service: ProductService) {}
 
   @Post()
-  @AuthJwtAccessProtected(AUTH_PERMISSIONS.PRODUCT_CREATE)
+  // @AuthJwtAccessProtected(AUTH_PERMISSIONS.PRODUCT_CREATE)
   async create(
     @Body() productcreaterequest: ProductCreateRequest,
     @Req() req
   ): Promise<IResponse<ProductResponse>> {
     try {
-      const product = await this.service.create(productcreaterequest, req.user.id);
+      const product = await this.service.create(
+        productcreaterequest,
+        req.user.id
+      );
       return successResponse(product);
     } catch (error) {
-      throw new NotFoundException(`Error while create product:${error.message}`);
+      throw new NotFoundException(
+        `Error while create product:${error.message}`
+      );
     }
   }
 
-  @Get('search')
-  @AuthJwtAccessProtected(AUTH_PERMISSIONS.PRODUCT_VIEW)
+  @Get("search")
+  // @AuthJwtAccessProtected(AUTH_PERMISSIONS.PRODUCT_VIEW)
+  @SkipAuth()
   async search(@Query() query: ProductSearchRequest) {
     try {
       return this.service.searchproduct(query);
-
     } catch (error) {
       throw new Error(`Error while search product`);
-
     }
   }
   @Get('favorite')
@@ -88,14 +97,13 @@ export class ProductController {
     try {
       return this.service.findAll();
     } catch (error) {
-      throw new Error(` Eror while find all product `)
-
+      throw new Error(` Eror while find all product `);
     }
   }
-  @Get(':id')
+  @Get(":id")
   // @AuthJwtAccessProtected(AUTH_PERMISSIONS.PRODUCT_VIEW)
   @SkipAuth()
-  async findOne(@Param('id') id: string): Promise<ProductResponse> {
+  async findOne(@Param("id") id: string): Promise<ProductResponse> {
     try {
       return this.service.getSingleProduct(id);
     } catch (error) {
@@ -103,21 +111,24 @@ export class ProductController {
     }
   }
 
-  @Delete(':id')
-  @AuthJwtAccessProtected(AUTH_PERMISSIONS.PRODUCT_DELETE)
-  async delete(@Param('id') id: string): Promise<{ message: string }> {
+  @Delete(":id")
+  // @AuthJwtAccessProtected(AUTH_PERMISSIONS.PRODUCT_DELETE)
+  async delete(@Param("id") id: string): Promise<{ message: string }> {
     try {
       await this.service.delete(id);
       return { message: `Delete Successfully` };
     } catch (error) {
-      throw new Error(`Error while delete product`)
-
+      throw new Error(`Error while delete product`);
     }
   }
 
-  @Put('favorite/:type/:id')
-  @AuthJwtAccessProtected(AUTH_PERMISSIONS.PRODUCT_VIEW)
-  async favorite(@Param('type') type: string, @Param('id') id: string, @Req() req): Promise<ProductResponse> {
+  @Put("favorite/:type/:id")
+  // @AuthJwtAccessProtected(AUTH_PERMISSIONS.PRODUCT_VIEW)
+  async favorite(
+    @Param("type") type: string,
+    @Param("id") id: string,
+    @Req() req
+  ): Promise<ProductResponse> {
     try {
       return this.service.updateFavorite(type, id, req.user.id);
     } catch (error) {
@@ -125,17 +136,16 @@ export class ProductController {
     }
   }
 
-  @Put(':id')
-  @AuthJwtAccessProtected(AUTH_PERMISSIONS.PRODUCT_UPDATE)
+  @Put(":id")
+  // @AuthJwtAccessProtected(AUTH_PERMISSIONS.PRODUCT_UPDATE)
   async update(
-    @Param('id') id: string,
+    @Param("id") id: string,
     @Body() productUpdateRequest: ProductUpdateRequest
   ): Promise<ProductResponse> {
     try {
       return this.service.update(id, productUpdateRequest);
     } catch (error) {
-      throw new Error(`Error while update product`)
-
+      throw new Error(`Error while update product`);
     }
   }
 }

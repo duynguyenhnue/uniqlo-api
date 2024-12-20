@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
 
-@Schema({ timestamps: true })  // Tự động tạo trường createdAt và updatedAt
+@Schema({ timestamps: true })  
 export class Warehouse extends Document {
   @Prop({ required: true })
   name: string;
