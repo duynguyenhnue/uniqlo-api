@@ -57,9 +57,17 @@ export class ProductController {
       throw new Error(`Error while search product`);
     }
   }
-  @Get("filter")
-  // @AuthJwtAccessProtected(AUTH_PERMISSIONS.PRODUCT_VIEW)
-  @SkipAuth()
+  @Get('favorite')
+  @AuthJwtAccessProtected(AUTH_PERMISSIONS.PRODUCT_VIEW)
+  async getFavorite(@Req() req): Promise<ProductResponse[]> {
+    try {
+      return this.service.getFavorite(req.user.id);
+    } catch (error) {
+      throw new Error(`Error while get favorite product`)
+    }
+  }
+  @Get('filter')
+  @AuthJwtAccessProtected(AUTH_PERMISSIONS.PRODUCT_VIEW)
   async filter(@Query() query: fitlerProduct) {
     try {
       // const processedQuery = {
