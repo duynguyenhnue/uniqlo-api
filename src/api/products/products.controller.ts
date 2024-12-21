@@ -58,7 +58,7 @@ export class ProductController {
     }
   }
   @Get("favorite")
-  @AuthJwtAccessProtected(AUTH_PERMISSIONS.PRODUCT_VIEW)
+  // @AuthJwtAccessProtected(AUTH_PERMISSIONS.PRODUCT_VIEW)
   async getFavorite(@Req() req): Promise<ProductResponse[]> {
     try {
       return this.service.getFavorite(req.user.id);
@@ -67,7 +67,7 @@ export class ProductController {
     }
   }
   @Get("filter")
-  @AuthJwtAccessProtected(AUTH_PERMISSIONS.PRODUCT_VIEW)
+  // @AuthJwtAccessProtected(AUTH_PERMISSIONS.PRODUCT_VIEW)
   async filter(@Query() query: fitlerProduct) {
     try {
       // const processedQuery = {
