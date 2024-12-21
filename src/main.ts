@@ -39,4 +39,12 @@ async function bootstrap() {
 
   await app.listen(process.env.PORT || 8200);
 }
+
+export const handler = async (event: any, context: any) => {
+  const app = await NestFactory.create(AppModule);
+  app.enableCors();
+  const server = await app.getHttpAdapter().getInstance();
+  return server(event, context);
+};
+
 bootstrap();
