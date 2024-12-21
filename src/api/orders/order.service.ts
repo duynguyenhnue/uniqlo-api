@@ -353,6 +353,7 @@ export class OrderService {
                 Product_tag: product ? product.Product_tag : "",
                 Product_description: product ? product.Product_description : "",
                 Product_currency: product ? product.Product_currency : "",
+                Product_images: product ? product.Product_images : [],
                 Product_color: product ? product.Product_color : [],
                 Product_size: product ? product.Product_size : [],
                 Product_specifications: product

@@ -13,6 +13,7 @@ export class OrderItemRespone {
     Product_currency: string;
     Product_color: string[];
     Product_size: string[];
+    Product_images:string[];
     Product_specifications: string | null;
     Product_price: number;
     Product_count: number;
