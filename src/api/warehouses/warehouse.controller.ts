@@ -14,12 +14,12 @@ import {
   CreateWarehouseRequest,
   SearchWarehouseRequest,
   UpdateWarehouseRequest,
-} from "src/payload/request/warehouse.request";
-import { WarehouseResponse } from "src/payload/response/warehouse.respone";
-import { IResponse } from "src/common/interface/response.interface";
-import { successResponse } from "src/common/dto/response.dto";
+} from "../../payload/request/warehouse.request";
+import { WarehouseResponse } from "../../payload/response/warehouse.respone";
+import { IResponse } from "../../common/interface/response.interface";
+import { successResponse } from "../../common/dto/response.dto";
 import { ApiBearerAuth } from "@nestjs/swagger";
-import { SkipAuth } from "src/config/skip.auth";
+import { SkipAuth } from "../../config/skip.auth";
 
 @Controller("warehouses")
 export class WarehouseController {
@@ -37,7 +37,7 @@ export class WarehouseController {
   }
 
   @Get("search")
-        @SkipAuth()
+  @SkipAuth()
   @ApiBearerAuth("access_token")
   async search(@Query() query: SearchWarehouseRequest) {
     return this.warehouseService.search(query);

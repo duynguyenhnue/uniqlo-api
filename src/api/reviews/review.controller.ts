@@ -14,13 +14,13 @@ import { ReviewService } from "./review.service";
 import {
   CreateReviewRequest,
   ReplyReviewRequest,
-} from "src/payload/request/review.request";
-import { successResponse } from "src/common/dto/response.dto";
-import { ParseObjectIdPipe } from "src/config/parse-objectId-pipe";
-import { AuthJwtAccessProtected } from "src/common/guards/role.guard";
-import { AUTH_PERMISSIONS } from "src/enums/auth.enum";
-import { CommonException } from "src/common/exception/common.exception";
-import { SkipAuth } from "src/config/skip.auth";
+} from "../../payload/request/review.request";
+import { successResponse } from "../../common/dto/response.dto";
+import { ParseObjectIdPipe } from "../../config/parse-objectId-pipe";
+import { AuthJwtAccessProtected } from "../../common/guards/role.guard";
+import { AUTH_PERMISSIONS } from "../../enums/auth.enum";
+import { CommonException } from "../../common/exception/common.exception";
+import { SkipAuth } from "../../config/skip.auth";
 
 @Controller("reviews")
 export class ReviewController {

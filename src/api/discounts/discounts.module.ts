@@ -4,12 +4,14 @@ import { DiscountController } from "./discounts.controller";
 import { MongooseModule } from "@nestjs/mongoose";
 import { RoleModule } from "../roles/role.module";
 import { PermissionModule } from "../permission/permission.module";
-import { Discount } from "src/schema/discount.schema";
-import { DiscountSchema } from "src/schema/discount.schema";
+import { Discount } from "../../schema/discount.schema";
+import { DiscountSchema } from "../../schema/discount.schema";
 
 @Module({
   imports: [
-    MongooseModule.forFeature([{ name: Discount.name, schema: DiscountSchema }]),
+    MongooseModule.forFeature([
+      { name: Discount.name, schema: DiscountSchema },
+    ]),
     forwardRef(() => RoleModule),
     forwardRef(() => PermissionModule),
   ],

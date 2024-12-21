@@ -7,7 +7,7 @@ import {
   Min,
 } from "class-validator";
 import { Type } from "class-transformer";
-import { Status } from "src/enums/role.enum";
+import { Status } from "../../enums/role.enum";
 
 export class CreateAndUpdateRoleRequest {
   @IsString()

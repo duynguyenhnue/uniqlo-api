@@ -10,10 +10,10 @@ import {
   NotFoundException,
   BadRequestException,
 } from "@nestjs/common";
-import { IResponse } from "src/common/interface/response.interface";
-import { successResponse } from "src/common/dto/response.dto";
-import { AuthJwtAccessProtected } from "src/common/guards/role.guard";
-import { AUTH_PERMISSIONS } from "src/enums/auth.enum";
+import { IResponse } from "../../common/interface/response.interface";
+import { successResponse } from "../../common/dto/response.dto";
+import { AuthJwtAccessProtected } from "../../common/guards/role.guard";
+import { AUTH_PERMISSIONS } from "../../enums/auth.enum";
 import { BlogDetailService } from "./blogdetails.service";
 import {
   CreateBlogdetailRequest,
@@ -21,9 +21,9 @@ import {
   SearchBlogdetailRequest,
   UpdateBlogdetailRequest,
   UpdateCommentRequest,
-} from "src/payload/request/blog-details.request";
-import { BlogDetailRespone } from "src/payload/response/blogdetails.respone";
-import { SkipAuth } from "src/config/skip.auth";
+} from "../../payload/request/blog-details.request";
+import { BlogDetailRespone } from "../../payload/response/blogdetails.respone";
+import { SkipAuth } from "../../config/skip.auth";
 @Controller("blog-details")
 export class BlogDetailController {
   constructor(private readonly service: BlogDetailService) {}

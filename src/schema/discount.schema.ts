@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Document } from "mongoose";
-import { DiscountStatus, DiscountType } from "src/enums/discount.enum";
+import { DiscountStatus, DiscountType } from "../enums/discount.enum";
 
 export type DiscountDocument = Discount & Document;
 
@@ -13,30 +13,30 @@ export class Discount extends Document {
   description: string;
 
   @Prop({ required: true })
-  value: number; 
+  value: number;
 
   @Prop({ required: true })
   type: DiscountType;
 
   @Prop({ required: false })
-  min_order_value: number; 
+  min_order_value: number;
 
   @Prop({ required: false })
-  max_discount_value: number; 
+  max_discount_value: number;
 
   @Prop({ required: true })
-  startDate: Date; 
+  startDate: Date;
 
   @Prop({ required: true })
-  endDate: Date; 
+  endDate: Date;
 
   @Prop({ required: false })
   usage_limit: number;
 
   @Prop({ required: false })
-  used_count: number; 
+  used_count: number;
   @Prop({ required: false })
-  status: DiscountStatus; 
+  status: DiscountStatus;
 }
 
 export const DiscountSchema = SchemaFactory.createForClass(Discount);

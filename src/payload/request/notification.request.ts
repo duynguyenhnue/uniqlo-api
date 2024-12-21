@@ -1,4 +1,4 @@
-// src/notification/notification.dto.ts
+// ../../notification/notification.dto.ts
 
 import { IsString, IsNotEmpty } from "class-validator";
 

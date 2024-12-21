@@ -1,4 +1,4 @@
-import { DiscountType } from "src/enums/discount.enum";
+import { DiscountType } from "../../enums/discount.enum";
 
 export class DiscountResponseDto {
   code: string;

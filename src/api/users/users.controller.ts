@@ -17,14 +17,14 @@ import {
   ChangePasswordRequest,
   SearchUserRequest,
   UpdateUserRequest,
-} from "src/payload/request/users.request";
+} from "../../payload/request/users.request";
 import { CommonException } from "../../common/exception/common.exception";
 import { successResponse } from "../../common/dto/response.dto";
-import { AUTH_PERMISSIONS } from "src/enums/auth.enum";
-import { AuthJwtAccessProtected } from "src/common/guards/role.guard";
+import { AUTH_PERMISSIONS } from "../../enums/auth.enum";
+import { AuthJwtAccessProtected } from "../../common/guards/role.guard";
 import { ApiBearerAuth } from "@nestjs/swagger";
-import { User } from "src/schema/user.schema";
-import { SkipAuth } from "src/config/skip.auth";
+import { User } from "../../schema/user.schema";
+import { SkipAuth } from "../../config/skip.auth";
 @Controller("users")
 export class UserController {
   constructor(private readonly userService: UserService) {}

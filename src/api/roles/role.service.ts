@@ -3,9 +3,9 @@ import { CreateAndUpdateRoleRequest } from "../../payload/request/role.request";
 import { GetListRoleResponse } from "../../payload/response/role.response";
 import { RoleRepository } from "../../repositories/role.repository";
 import { RoleDocument } from "../../schema/role.schema";
-import { USER_PERMISSIONS } from "src/enums/auth.enum";
-import { PermissionRepository } from "src/repositories/permission.repository";
-import { Status } from "src/enums/role.enum";
+import { USER_PERMISSIONS } from "../../enums/auth.enum";
+import { PermissionRepository } from "../../repositories/permission.repository";
+import { Status } from "../../enums/role.enum";
 
 @Injectable()
 export class RoleService {

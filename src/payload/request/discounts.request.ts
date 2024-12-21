@@ -8,7 +8,7 @@ import {
   IsDateString,
   IsEnum,
 } from "class-validator";
-import { DiscountType } from "src/enums/discount.enum";
+import { DiscountType } from "../../enums/discount.enum";
 
 export class GetDiscountRequestDto {
   @Type(() => Number)
@@ -51,7 +51,9 @@ export class CreateDiscountRequestDto {
   endDate: Date;
 }
 
-export class UpdateDiscountRequestDto extends PartialType(CreateDiscountRequestDto) {
+export class UpdateDiscountRequestDto extends PartialType(
+  CreateDiscountRequestDto
+) {
   @IsOptional()
   @Type(() => Number)
   usage_limit?: number;

@@ -15,16 +15,16 @@ import {
   ProductCreateRequest,
   ProductSearchRequest,
   ProductUpdateRequest,
-} from "src/payload/request/product.request";
-import { ProductResponse } from "src/payload/response/product.respone";
-import { IResponse } from "src/common/interface/response.interface";
-import { successResponse } from "src/common/dto/response.dto";
-import { AuthJwtAccessProtected } from "src/common/guards/role.guard";
-import { AUTH_PERMISSIONS } from "src/enums/auth.enum";
+} from "../../payload/request/product.request";
+import { ProductResponse } from "../../payload/response/product.respone";
+import { IResponse } from "../../common/interface/response.interface";
+import { successResponse } from "../../common/dto/response.dto";
+import { AuthJwtAccessProtected } from "../../common/guards/role.guard";
+import { AUTH_PERMISSIONS } from "../../enums/auth.enum";
 import { query } from "express";
 import { FavoutiesService } from "./favourites.service";
-import { FavoriteResponseDto } from "src/payload/response/favourites.respone";
-import { SkipAuth } from "src/config/skip.auth";
+import { FavoriteResponseDto } from "../../payload/response/favourites.respone";
+import { SkipAuth } from "../../config/skip.auth";
 @Controller("favourites")
 export class FavoutiesController {
   constructor(private readonly service: FavoutiesService) {}

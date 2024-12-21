@@ -3,8 +3,8 @@ import { UpdateStatusPermissionRequest } from "../../payload/request/permission.
 import { GetListPermissionResponse } from "../../payload/response/permission.response";
 import { PermissionRepository } from "../../repositories/permission.repository";
 import { PermissionDocument } from "../../schema/permission.schema";
-import { AUTH_ROLES } from "src/enums/auth.enum";
-import { Status } from "src/enums/role.enum";
+import { AUTH_ROLES } from "../../enums/auth.enum";
+import { Status } from "../../enums/role.enum";
 
 @Injectable()
 export class PermissionService {

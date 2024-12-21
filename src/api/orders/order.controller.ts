@@ -11,18 +11,18 @@ import {
   Req,
   BadRequestException,
 } from "@nestjs/common";
-import { IResponse } from "src/common/interface/response.interface";
-import { successResponse } from "src/common/dto/response.dto";
-import { AuthJwtAccessProtected } from "src/common/guards/role.guard";
-import { AUTH_PERMISSIONS } from "src/enums/auth.enum";
-import { SkipAuth } from "src/config/skip.auth";
+import { IResponse } from "../../common/interface/response.interface";
+import { successResponse } from "../../common/dto/response.dto";
+import { AuthJwtAccessProtected } from "../../common/guards/role.guard";
+import { AUTH_PERMISSIONS } from "../../enums/auth.enum";
+import { SkipAuth } from "../../config/skip.auth";
 import { OrderService } from "./order.service";
 import {
   CreateOrderRequest,
   SearchOrderbyIdRequest,
   UpdateOrderRequest,
-} from "src/payload/request/order.request";
-import { OrderRespone } from "src/payload/response/order.respone";
+} from "../../payload/request/order.request";
+import { OrderRespone } from "../../payload/response/order.respone";
 import { query } from "express";
 import { Auth } from "firebase-admin/lib/auth/auth";
 @Controller("orders")

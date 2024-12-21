@@ -19,8 +19,8 @@ import {
   UpdateStatusPermissionRequest,
 } from "../../payload/request/permission.request";
 import { SkipAuth } from "../../config/skip.auth";
-import { AuthJwtAccessProtected } from "src/common/guards/role.guard";
-import { AUTH_PERMISSIONS } from "src/enums/auth.enum";
+import { AuthJwtAccessProtected } from "../../common/guards/role.guard";
+import { AUTH_PERMISSIONS } from "../../enums/auth.enum";
 import { ApiBearerAuth } from "@nestjs/swagger";
 
 @Controller("permissions")

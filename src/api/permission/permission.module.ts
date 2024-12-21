@@ -5,7 +5,7 @@ import { Permission, PermissionSchema } from "../../schema/permission.schema";
 import { PermissionController } from "./permission.controller";
 import { PermissionService } from "./permission.service";
 import { PermissionRepository } from "../../repositories/permission.repository";
-import { RoleRepository } from "src/repositories/role.repository";
+import { RoleRepository } from "../../repositories/role.repository";
 import { RoleModule } from "../roles/role.module";
 
 @Module({

@@ -12,12 +12,12 @@ import {
   CreateOrderRequest,
   SearchOrderbyIdRequest,
   UpdateOrderRequest,
-} from "src/payload/request/order.request";
-import { OrderRespone } from "src/payload/response/order.respone";
-import { Discount } from "src/schema/discount.schema";
-import { Order } from "src/schema/order.schema";
-import { Product } from "src/schema/product.schema";
-import { User } from "src/schema/user.schema";
+} from "../../payload/request/order.request";
+import { OrderRespone } from "../../payload/response/order.respone";
+import { Discount } from "../../schema/discount.schema";
+import { Order } from "../../schema/order.schema";
+import { Product } from "../../schema/product.schema";
+import { User } from "../../schema/user.schema";
 @Injectable()
 export class OrderService {
   constructor(

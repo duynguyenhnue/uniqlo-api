@@ -2,19 +2,23 @@ import { HttpStatus, Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model, ObjectId } from "mongoose";
 import { plainToInstance } from "class-transformer";
-import { CommonException } from "src/common/exception/common.exception";
-import { Discount } from "src/schema/discount.schema";
-import { DiscountResponseDto } from "src/payload/response/discounts.response";
-import { CreateDiscountRequestDto, SearchDiscountRequestDto, UpdateDiscountRequestDto } from "src/payload/request/discounts.request";
+import { CommonException } from "../../common/exception/common.exception";
+import { Discount } from "../../schema/discount.schema";
+import { DiscountResponseDto } from "../../payload/response/discounts.response";
+import {
+  CreateDiscountRequestDto,
+  SearchDiscountRequestDto,
+  UpdateDiscountRequestDto,
+} from "../../payload/request/discounts.request";
 
 @Injectable()
 export class DiscountService {
   constructor(
-    @InjectModel(Discount.name) private discountModel: Model<Discount>,
+    @InjectModel(Discount.name) private discountModel: Model<Discount>
   ) {}
 
   async create(
-    createDiscountDto: CreateDiscountRequestDto,
+    createDiscountDto: CreateDiscountRequestDto
   ): Promise<DiscountResponseDto> {
     const data = {
       ...createDiscountDto,
@@ -65,7 +69,7 @@ export class DiscountService {
 
   async update(
     id: ObjectId,
-    updateDiscountDto: UpdateDiscountRequestDto,
+    updateDiscountDto: UpdateDiscountRequestDto
   ): Promise<DiscountResponseDto> {
     await this.findOne(id);
     const newData = updateDiscountDto;
@@ -80,5 +84,4 @@ export class DiscountService {
     await this.discountModel.findByIdAndDelete(id).exec();
     return "Deleted successfully";
   }
-
 }

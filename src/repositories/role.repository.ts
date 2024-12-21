@@ -4,7 +4,7 @@ import { Model, Types } from "mongoose";
 import { Role } from "../schema/role.schema";
 import { RoleDocument } from "../schema/role.schema";
 import { PermissionRepository } from "./permission.repository";
-import { CommonException } from "src/common/exception/common.exception";
+import { CommonException } from "../common/exception/common.exception";
 
 @Injectable()
 export class RoleRepository {

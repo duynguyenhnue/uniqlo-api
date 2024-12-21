@@ -16,13 +16,13 @@ import {
   ProductCreateRequest,
   ProductSearchRequest,
   ProductUpdateRequest,
-} from "src/payload/request/product.request";
-import { ProductResponse } from "src/payload/response/product.respone";
-import { IResponse } from "src/common/interface/response.interface";
-import { successResponse } from "src/common/dto/response.dto";
-import { AuthJwtAccessProtected } from "src/common/guards/role.guard";
-import { AUTH_PERMISSIONS } from "src/enums/auth.enum";
-import { SkipAuth } from "src/config/skip.auth";
+} from "../../payload/request/product.request";
+import { ProductResponse } from "../../payload/response/product.respone";
+import { IResponse } from "../../common/interface/response.interface";
+import { successResponse } from "../../common/dto/response.dto";
+import { AuthJwtAccessProtected } from "../../common/guards/role.guard";
+import { AUTH_PERMISSIONS } from "../../enums/auth.enum";
+import { SkipAuth } from "../../config/skip.auth";
 
 @Controller("products")
 export class ProductController {
@@ -57,16 +57,16 @@ export class ProductController {
       throw new Error(`Error while search product`);
     }
   }
-  @Get('favorite')
+  @Get("favorite")
   @AuthJwtAccessProtected(AUTH_PERMISSIONS.PRODUCT_VIEW)
   async getFavorite(@Req() req): Promise<ProductResponse[]> {
     try {
       return this.service.getFavorite(req.user.id);
     } catch (error) {
-      throw new Error(`Error while get favorite product`)
+      throw new Error(`Error while get favorite product`);
     }
   }
-  @Get('filter')
+  @Get("filter")
   @AuthJwtAccessProtected(AUTH_PERMISSIONS.PRODUCT_VIEW)
   async filter(@Query() query: fitlerProduct) {
     try {

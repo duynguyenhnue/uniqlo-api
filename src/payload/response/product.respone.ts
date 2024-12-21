@@ -1,4 +1,4 @@
-import { Review } from 'src/schema/reviews.schema';
+import { Review } from "../../schema/reviews.schema";
 
 export class ProductResponse {
   id: string;

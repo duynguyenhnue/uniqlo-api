@@ -1,19 +1,33 @@
-import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model, Types } from "mongoose";
-import { fitlerProduct, ProductCreateRequest, ProductSearchRequest, ProductUpdateRequest } from "src/payload/request/product.request";
-import { ProductResponse } from "src/payload/response/product.respone";
-import { Product } from "src/schema/product.schema"
+import {
+  fitlerProduct,
+  ProductCreateRequest,
+  ProductSearchRequest,
+  ProductUpdateRequest,
+} from "../../payload/request/product.request";
+import { ProductResponse } from "../../payload/response/product.respone";
+import { Product } from "../../schema/product.schema";
 import { UserService } from "../users/users.service";
-import { Review } from "src/schema/reviews.schema";
+import { Review } from "../../schema/reviews.schema";
 
 @Injectable()
 export class ProductService {
-  constructor(@InjectModel(Product.name) private readonly productModel: Model<Product>,
+  constructor(
+    @InjectModel(Product.name) private readonly productModel: Model<Product>,
     @InjectModel(Review.name) private reviewModel: Model<Review>,
-    private readonly userService: UserService,) { }
+    private readonly userService: UserService
+  ) {}
 
-  async create(create: ProductCreateRequest, userId: string): Promise<ProductResponse> {
+  async create(
+    create: ProductCreateRequest,
+    userId: string
+  ): Promise<ProductResponse> {
     try {
       const product = await this.createproductindb(create, userId);
       return this.mapproductToResponse(product);
@@ -21,26 +35,22 @@ export class ProductService {
       throw error;
     }
   }
-  private async createproductindb(create: ProductCreateRequest, userId: string): Promise<Product> {
+  private async createproductindb(
+    create: ProductCreateRequest,
+    userId: string
+  ): Promise<Product> {
     try {
       return this.productModel.create({ ...create, userId });
-    }
-    catch (error) {
+    } catch (error) {
       throw new Error(`Error while create product in database`);
     }
-
   }
   async searchproduct(
     query: ProductSearchRequest
   ): Promise<{ data: ProductResponse[]; total: number }> {
     try {
-      const {
-        limit = 6,
-        page = 0,
-        Product_name,
-        categoryId
-      } = query;
-      const offset = (page) * limit;
+      const { limit = 6, page = 0, Product_name, categoryId } = query;
+      const offset = page * limit;
       const filter: any = {};
       if (Product_name) {
         const value = String(Product_name).trim();
@@ -67,10 +77,22 @@ export class ProductService {
     }
   }
 
-  async filterProduct(query: fitlerProduct): Promise<{ data: ProductResponse[]; total: number }> {
+  async filterProduct(
+    query: fitlerProduct
+  ): Promise<{ data: ProductResponse[]; total: number }> {
     try {
-      const { limit = 6, page = 0, Product_brand, Product_color, Product_tag, Product_size, Product_price, maxPrice, minPrice } = query;
-      const offset = (page) * limit;
+      const {
+        limit = 6,
+        page = 0,
+        Product_brand,
+        Product_color,
+        Product_tag,
+        Product_size,
+        Product_price,
+        maxPrice,
+        minPrice,
+      } = query;
+      const offset = page * limit;
       const filter: any = {};
       // Lọc theo giá
       if (minPrice !== undefined || maxPrice !== undefined) {
@@ -89,23 +111,23 @@ export class ProductService {
         filter.Product_brand = { $regex: value, $options: "i" };
       }
 
-      if
-        (Array.isArray(Product_color)) {
-        filter.Product_color = { $in: Product_color.map(color => new RegExp(color.trim(), 'i')) };
-      }
-      else {
+      if (Array.isArray(Product_color)) {
+        filter.Product_color = {
+          $in: Product_color.map((color) => new RegExp(color.trim(), "i")),
+        };
+      } else {
         const value = String(Product_color).trim();
         filter.Product_color = { $regex: value, $options: "i" };
       }
 
-      if
-        (Array.isArray(Product_size)) {
-        filter.Product_size = { $in: Product_size.map(size => new RegExp(size.trim(), 'i')) }
+      if (Array.isArray(Product_size)) {
+        filter.Product_size = {
+          $in: Product_size.map((size) => new RegExp(size.trim(), "i")),
+        };
       } else {
         const value = String(Product_size).trim();
         filter.Product_size = { $regex: value, $options: "i" };
       }
-
 
       if (Product_tag) {
         const value = String(Product_tag).trim();
@@ -138,7 +160,6 @@ export class ProductService {
         data: data.map(this.mapproductToResponse),
         total,
       };
-
     } catch (error) {
       throw error;
     }
@@ -147,7 +168,7 @@ export class ProductService {
   async findAll(): Promise<ProductResponse[]> {
     try {
       const product = await this.productModel.find().exec();
-      return product.map(products => this.mapproductToResponse(products));
+      return product.map((products) => this.mapproductToResponse(products));
     } catch (error) {
       throw error;
     }
@@ -165,16 +186,20 @@ export class ProductService {
     }
   }
 
-  async update(id: string, updateproduct: ProductUpdateRequest): Promise<ProductResponse> {
+  async update(
+    id: string,
+    updateproduct: ProductUpdateRequest
+  ): Promise<ProductResponse> {
     try {
-      const update = await this.productModel.findByIdAndUpdate(id, updateproduct, { new: true, }).exec();
+      const update = await this.productModel
+        .findByIdAndUpdate(id, updateproduct, { new: true })
+        .exec();
       if (!update) {
         throw new NotFoundException(`Category with ID not found`);
       }
       return this.mapproductToResponse(update);
-    }
-    catch (error) {
-      throw new Error(`Error while update product`)
+    } catch (error) {
+      throw new Error(`Error while update product`);
     }
   }
 
@@ -185,7 +210,7 @@ export class ProductService {
         throw new NotFoundException(`Category with ID not found`);
       }
     } catch (error) {
-      throw new Error(`Error while delete product`)
+      throw new Error(`Error while delete product`);
     }
   }
 
@@ -202,16 +227,18 @@ export class ProductService {
       let product;
       if (productIndex !== -1) {
         user.product_Id.splice(productIndex, 1);
-      }
-      else {
+      } else {
         user.product_Id.push(productObjectId);
       }
       await user.save();
 
       product = await this.productModel.findById(product_Id);
       return {
-        message: productIndex === -1 ? 'Added to favourites' : 'Remove from favourites',
-        product: this.mapproductToResponse(product)
+        message:
+          productIndex === -1
+            ? "Added to favourites"
+            : "Remove from favourites",
+        product: this.mapproductToResponse(product),
       };
     } catch (error) {
       throw new Error(error.message);
@@ -221,11 +248,14 @@ export class ProductService {
     try {
       const user = await this.userService.findUserById(user_Id);
       if (!user) {
-        throw new NotFoundException('User not found');
-
+        throw new NotFoundException("User not found");
       }
-      const productObjectIds = user.product_Id.map(id => new Types.ObjectId(id));
-      const list = await this.productModel.find({ id: { $in: productObjectIds } });
+      const productObjectIds = user.product_Id.map(
+        (id) => new Types.ObjectId(id)
+      );
+      const list = await this.productModel.find({
+        id: { $in: productObjectIds },
+      });
       return list.map(this.mapproductToResponse);
     } catch (error) {
       throw new Error(error.message);
@@ -268,12 +298,17 @@ export class ProductService {
   }
 
   async getSingleProduct(id: string): Promise<any> {
-    const product = await this.productModel.findById(id).populate("reviews").exec();
+    const product = await this.productModel
+      .findById(id)
+      .populate("reviews")
+      .exec();
     if (!product) {
       throw new NotFoundException("Product not found");
     }
 
-    const reviews = await this.getReviews(product.reviews as unknown as string[]);
+    const reviews = await this.getReviews(
+      product.reviews as unknown as string[]
+    );
 
     const reviewsWithUserDetails = await Promise.all(
       reviews.map(async (review) => {
@@ -294,7 +329,11 @@ export class ProductService {
     return { ...product.toObject(), reviews: reviewsWithUserDetails };
   }
 
-  async updateFavorite(type: string, id: string, userId: string): Promise<ProductResponse> {
+  async updateFavorite(
+    type: string,
+    id: string,
+    userId: string
+  ): Promise<ProductResponse> {
     const product = await this.productModel.findById(id).exec();
     if (!product) {
       throw new NotFoundException("Product not found");
@@ -313,7 +352,9 @@ export class ProductService {
   }
 
   async getFavorite(userId: string): Promise<ProductResponse[]> {
-    const product = await this.productModel.find({ favorite_users: userId }).exec();
+    const product = await this.productModel
+      .find({ favorite_users: userId })
+      .exec();
     return product.map(this.mapproductToResponse);
   }
 }

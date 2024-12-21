@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Document, Types } from "mongoose";
-import { ReplyReviewRequest } from "src/payload/request/review.request";
+import { ReplyReviewRequest } from "../payload/request/review.request";
 
 export type ReviewDocument = Review & Document;
 

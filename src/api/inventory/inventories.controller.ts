@@ -15,17 +15,17 @@ import {
   CreateInventoryRequest,
   SearchInventoryRequest,
   UpdateInventoryRequest,
-} from "src/payload/request/inventories.request";
-import { InventoryResponse } from "src/payload/response/inventories.respone";
-import { IResponse } from "src/common/interface/response.interface";
-import { successResponse } from "src/common/dto/response.dto";
-import { UpdateCategoryRequest } from "src/payload/request/categories.request";
+} from "../../payload/request/inventories.request";
+import { InventoryResponse } from "../../payload/response/inventories.respone";
+import { IResponse } from "../../common/interface/response.interface";
+import { successResponse } from "../../common/dto/response.dto";
+import { UpdateCategoryRequest } from "../../payload/request/categories.request";
 import { ApiBearerAuth } from "@nestjs/swagger";
-import { SkipAuth } from "src/config/skip.auth";
+import { SkipAuth } from "../../config/skip.auth";
 
 @Controller("inventories")
 export class InventoriesController {
-  constructor(private readonly inventoriesService: InventoriesService) { }
+  constructor(private readonly inventoriesService: InventoriesService) {}
 
   @Post()
   @ApiBearerAuth("access_token")

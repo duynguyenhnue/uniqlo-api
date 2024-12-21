@@ -6,13 +6,13 @@ import {
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 import * as bcrypt from "bcryptjs";
-import { User } from "src/schema/user.schema";
+import { User } from "../../schema/user.schema";
 import {
   CreateUserRequest,
   SearchUserRequest,
   UpdateUserRequest,
-} from "src/payload/request/users.request";
-import { UserResponse } from "src/payload/response/users.request";
+} from "../../payload/request/users.request";
+import { UserResponse } from "../../payload/response/users.request";
 import { plainToInstance } from "class-transformer";
 
 @Injectable()
@@ -24,7 +24,6 @@ export class UserService {
   async onModuleInit() {
     await this.createDefaultUser();
   }
-  
 
   async createDefaultUser(): Promise<User> {
     const defaultUser = {
@@ -47,7 +46,6 @@ export class UserService {
     if (existingUser) {
       return existingUser;
     }
-
 
     const newUser = new this.userModel(defaultUser);
     return await newUser.save();
@@ -74,7 +72,7 @@ export class UserService {
   async searchUsers(
     query: SearchUserRequest
   ): Promise<{ data: User[]; total: number }> {
-    const { limit = 6, page = 0 } = query; 
+    const { limit = 6, page = 0 } = query;
     const offset = page * limit;
     const filter: any = {};
 
@@ -136,7 +134,11 @@ export class UserService {
     }
   }
 
-  async changePassword(id: string, oldPassword: string, newPassword: string): Promise<string> {
+  async changePassword(
+    id: string,
+    oldPassword: string,
+    newPassword: string
+  ): Promise<string> {
     const user = await this.userModel.findById(id).exec();
     if (!user) {
       throw new NotFoundException(`User with ID ${id} not found`);

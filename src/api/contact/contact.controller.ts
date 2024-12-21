@@ -10,18 +10,18 @@ import {
   NotFoundException,
 } from "@nestjs/common";
 
-import { IResponse } from "src/common/interface/response.interface";
-import { successResponse } from "src/common/dto/response.dto";
-import { AuthJwtAccessProtected } from "src/common/guards/role.guard";
-import { AUTH_PERMISSIONS } from "src/enums/auth.enum";
+import { IResponse } from "../../common/interface/response.interface";
+import { successResponse } from "../../common/dto/response.dto";
+import { AuthJwtAccessProtected } from "../../common/guards/role.guard";
+import { AUTH_PERMISSIONS } from "../../enums/auth.enum";
 import { ContactService } from "./contact.service";
 import {
   CreateContactRequest,
   SearchContactRequest,
   UpdateContactRequest,
-} from "src/payload/request/contact.request";
-import { ContactRespone } from "src/payload/response/contact.respone";
-import { SkipAuth } from "src/config/skip.auth";
+} from "../../payload/request/contact.request";
+import { ContactRespone } from "../../payload/response/contact.respone";
+import { SkipAuth } from "../../config/skip.auth";
 @Controller("contact")
 export class ContactController {
   constructor(private readonly service: ContactService) {}
