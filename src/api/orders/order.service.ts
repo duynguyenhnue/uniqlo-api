@@ -64,7 +64,9 @@ export class OrderService {
         // }
       }
       const finalAmount =
-        totalAmount - discountAmount + Number(create.shippingFee);
+        totalAmount -
+        discountAmount +
+        (create.shippingFee ? Number(create.shippingFee) : 0);
 
       const order = new this.orderModel({
         userId,
