@@ -1,12 +1,22 @@
-import { IsArray, IsNotEmpty, IsNumber, IsString, IsObject, IsOptional, IsMongoId, IsInt, Min } from 'class-validator';
-import { Type } from 'class-transformer';
+import {
+  IsArray,
+  IsNotEmpty,
+  IsNumber,
+  IsString,
+  IsObject,
+  IsOptional,
+  IsMongoId,
+  IsInt,
+  Min,
+} from "class-validator";
+import { Type } from "class-transformer";
 
-export class CreateOrderItemRequest{
-    @IsMongoId()
-    @IsNotEmpty()
-    productId:string;
+export class CreateOrderItemRequest {
+  @IsMongoId()
+  @IsNotEmpty()
+  productId: string;
 
-    @IsNumber()
+  @IsNumber()
   @IsNotEmpty()
   count: number;
 
@@ -21,16 +31,14 @@ export class CreateOrderItemRequest{
   @IsNumber()
   @IsNotEmpty()
   totalPrice: number;
-
 }
 
-export class CreateOrderRequest{
+export class CreateOrderRequest {
+  // @IsMongoId()
+  // @IsNotEmpty()
+  // userId: string;
 
-    // @IsMongoId()
-    // @IsNotEmpty()
-    // userId: string;
-
-    @IsArray()
+  @IsArray()
   @IsNotEmpty()
   @Type(() => CreateOrderItemRequest)
   orderItems: CreateOrderItemRequest[];
@@ -39,27 +47,29 @@ export class CreateOrderRequest{
   @IsMongoId()
   discountId?: string;
 
-//   @IsOptional()
-//   @IsNumber()
-//   discountAmount?: number;
+  @IsOptional()
+  shippingFee?: string;
 
-//   @IsNumber()
-//   totalAmount?: number;
+  //   @IsOptional()
+  //   @IsNumber()
+  //   discountAmount?: number;
 
-//   @IsNumber()
-//   finalAmount?: number;
+  //   @IsNumber()
+  //   totalAmount?: number;
 
-//   @IsString()
-//   status?: string;
+  //   @IsNumber()
+  //   finalAmount?: number;
+
+  //   @IsString()
+  //   status?: string;
 }
 
-export class UpdateOrderRequest{
+export class UpdateOrderRequest {
+  // @IsMongoId()
+  // @IsNotEmpty()
+  // userId: string;
 
-    // @IsMongoId()
-    // @IsNotEmpty()
-    // userId: string;
-
-    @IsArray()
+  @IsArray()
   @IsNotEmpty()
   @Type(() => CreateOrderItemRequest)
   orderItems?: CreateOrderItemRequest[];
@@ -68,38 +78,36 @@ export class UpdateOrderRequest{
   @IsMongoId()
   discountId?: string;
 
-//   @IsOptional()
-//   @IsNumber()
-//   discountAmount?: number;
+  //   @IsOptional()
+  //   @IsNumber()
+  //   discountAmount?: number;
 
-//   @IsNumber()
-//   @IsNotEmpty()
-//   totalAmount: number;
+  //   @IsNumber()
+  //   @IsNotEmpty()
+  //   totalAmount: number;
 
-//   @IsNumber()
-//   @IsNotEmpty()
-//   finalAmount: number;
+  //   @IsNumber()
+  //   @IsNotEmpty()
+  //   finalAmount: number;
 
-//   @IsString()
-//   @IsNotEmpty()
-//   status: string;
+  //   @IsString()
+  //   @IsNotEmpty()
+  //   status: string;
 }
-export class SearchOrderbyIdRequest{
-    @IsOptional()
-    @IsInt()
-    @Min(0)
-    @Type(() => Number)
-    page?: number;
-  
-    @IsOptional()
-    @IsInt()
-    @Min(1)
-    @Type(() => Number)
-    limit?: number;
-    
-    @IsOptional()
-    @IsString()
-    orderId?: string;
-  
-    
-  }
+export class SearchOrderbyIdRequest {
+  @IsOptional()
+  @IsInt()
+  @Min(0)
+  @Type(() => Number)
+  page?: number;
+
+  @IsOptional()
+  @IsInt()
+  @Min(1)
+  @Type(() => Number)
+  limit?: number;
+
+  @IsOptional()
+  @IsString()
+  orderId?: string;
+}

@@ -54,15 +54,17 @@ export class OrderService {
       let discountAmount = 0;
       if (discountId) {
         const discount = await this.discountModel.findById(discountId).exec();
-        if (discount) {
-          if (discount.type.toString() === "percent") {
-            discountAmount = (discount.value / 100) * totalAmount;
-          } else if (discount.type.toString() === "fixed") {
-            discountAmount = discount.value;
-          }
-        }
+        discountAmount = discount?.value || 0;
+        // if (discount) {
+        //   if (discount.type.toString() === "percent") {
+        //     discountAmount = (discount.value / 100) * totalAmount;
+        //   } else if (discount.type.toString() === "fixed") {
+        //     discountAmount = discount.value;
+        //   }
+        // }
       }
-      const finalAmount = totalAmount - discountAmount;
+      const finalAmount =
+        totalAmount - discountAmount + Number(create.shippingFee);
 
       const order = new this.orderModel({
         userId,
@@ -354,6 +356,7 @@ export class OrderService {
                 Product_description: product ? product.Product_description : "",
                 Product_currency: product ? product.Product_currency : "",
                 Product_color: product ? product.Product_color : [],
+                product_images: product ? product.Product_images : [],
                 Product_size: product ? product.Product_size : [],
                 Product_specifications: product
                   ? product.Product_specifications
